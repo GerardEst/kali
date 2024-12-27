@@ -1,45 +1,51 @@
-import { SimpleCaroussel } from '@/components/ui/Carousel';
-import { StyleSheet, View} from 'react-native';
-import { useCameraDevice, useCameraPermission, useCodeScanner } from 'react-native-vision-camera';
-import { Camera } from 'react-native-vision-camera';
-import { useState } from 'react';
+import { SimpleCaroussel } from '@/components/ui/Carousel'
+import { StyleSheet, View } from 'react-native'
+import {
+  useCameraDevice,
+  useCameraPermission,
+  useCodeScanner,
+} from 'react-native-vision-camera'
+import { Camera } from 'react-native-vision-camera'
+import { useState } from 'react'
+import { AddOpinionModal } from '@/components/modals/AddOpinion'
 
 export default function HomeScreen() {
   const { hasPermission, requestPermission } = useCameraPermission()
   const [lastScan, setLastScan] = useState('')
-  const [consecutiveScans, setConsecutiveScans] = useState(0);
-  const [ scannedCodes, setScannedCodes ] = useState<string[]>([])
+  const [consecutiveScans, setConsecutiveScans] = useState(0)
+  const [scannedCodes, setScannedCodes] = useState<string[]>([])
+  const [modalVisible, setModalVisible] = useState(false)
 
   const device = useCameraDevice('back')
   const codeScanner = useCodeScanner({
     codeTypes: ['ean-13'],
     onCodeScanned: (codes) => {
-      const scannedCode = codes[0].value;
-      
-        if (!scannedCode) return
-      
-        if (scannedCode === lastScan) {
-            setConsecutiveScans(prev => prev + 1);
-            
-            if (consecutiveScans >= 2) {
-                setScannedCodes(prev => {
-                    if (prev[0] !== scannedCode) {
-                        return [scannedCode, ...prev];
-                    }
-                    return prev;
-                });
-                setConsecutiveScans(0);
-                setLastScan('');
+      const scannedCode = codes[0].value
+
+      if (!scannedCode) return
+
+      if (scannedCode === lastScan) {
+        setConsecutiveScans((prev) => prev + 1)
+
+        if (consecutiveScans >= 2) {
+          setScannedCodes((prev) => {
+            if (prev[0] !== scannedCode) {
+              return [scannedCode, ...prev]
             }
-        } else {
-            setLastScan(scannedCode);
-            setConsecutiveScans(0);
+            return prev
+          })
+          setConsecutiveScans(0)
+          setLastScan('')
         }
+      } else {
+        setLastScan(scannedCode)
+        setConsecutiveScans(0)
+      }
     },
   })
 
   if (!hasPermission) {
-    console.log("User dont give permissions")
+    console.log('User dont give permissions')
     return null
   }
   if (!device) {
@@ -48,7 +54,11 @@ export default function HomeScreen() {
   }
 
   return (
-    <View style={{flex: 1}}>
+    <View style={{ flex: 1 }}>
+      <AddOpinionModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+      ></AddOpinionModal>
       <Camera
         style={StyleSheet.absoluteFill}
         device={device}
@@ -56,14 +66,17 @@ export default function HomeScreen() {
         codeScanner={codeScanner}
       />
       <View style={styles.carousselContainer}>
-        <SimpleCaroussel data={scannedCodes}></SimpleCaroussel>
+        <SimpleCaroussel
+          onAddOpinion={() => setModalVisible(true)}
+          data={scannedCodes}
+        ></SimpleCaroussel>
       </View>
     </View>
-  );
+  )
 }
 const styles = StyleSheet.create({
   carousselContainer: {
     position: 'absolute',
-    bottom: 0
-  }
+    bottom: 0,
+  },
 })

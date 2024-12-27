@@ -10,7 +10,7 @@ import {
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
-export const CarouselCard = ({ info }: any) => {
+export const CarouselCard = ({ onAddOpinion, info }: any) => {
   const [productOpinion, setProductOpinion] = useState<string>('')
   const [isLoading, setIsLoading] = useState<boolean>(false)
   const [opinions, setOpinions] = useState<any>([])
@@ -92,7 +92,7 @@ export const CarouselCard = ({ info }: any) => {
         value={productOpinion}
         onChangeText={setProductOpinion}
       ></TextInput>
-
+      <Button title="Add" onPress={onAddOpinion}></Button>
       <Button
         title={isLoading ? 'Saving...' : 'Save'}
         onPress={submitProductOpinion}
