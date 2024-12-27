@@ -56,6 +56,8 @@ export default function HomeScreen() {
   return (
     <View style={{ flex: 1 }}>
       <AddOpinionModal
+        style={styles.modal}
+        barcode={'com ho faig'}
         visible={modalVisible}
         onClose={() => setModalVisible(false)}
       ></AddOpinionModal>
@@ -75,6 +77,11 @@ export default function HomeScreen() {
   )
 }
 const styles = StyleSheet.create({
+  modal: {
+    position: 'absolute',
+    top: 0,
+    backgroundColor: 'red',
+  },
   carousselContainer: {
     position: 'absolute',
     bottom: 0,

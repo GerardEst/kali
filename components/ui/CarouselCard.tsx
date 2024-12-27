@@ -11,8 +11,6 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
 export const CarouselCard = ({ onAddOpinion, info }: any) => {
-  const [productOpinion, setProductOpinion] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(false)
   const [opinions, setOpinions] = useState<any>([])
 
   useEffect(() => {
@@ -39,65 +37,12 @@ export const CarouselCard = ({ onAddOpinion, info }: any) => {
     fetchData()
   }, [info.barcode])
 
-  const postNewProduct = async () => {
-    try {
-      const { data, error } = await supabase
-        .from('products')
-        .upsert([{ barcode: info.barcode }])
-        .select()
-
-      if (error) {
-        throw error
-      }
-    } catch (error: any) {
-      Alert.alert('Error', error.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const submitProductOpinion = async () => {
-    if (!productOpinion.trim()) {
-      Alert.alert('Error', 'Please enter an opinion')
-      return
-    }
-    setIsLoading(true)
-
-    postNewProduct()
-
-    try {
-      const { data, error } = await supabase
-        .from('opinions')
-        .insert([
-          { product: info.barcode, opinion: productOpinion, user_id: 1 },
-        ])
-        .select()
-
-      if (error) {
-        throw error
-      }
-
-      setOpinions([...opinions, ...data])
-    } catch (error: any) {
-      Alert.alert('Error', error.message)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
   return (
     <View style={styles.slideContent}>
       <Text>{info.barcode}</Text>
-      <TextInput
-        value={productOpinion}
-        onChangeText={setProductOpinion}
-      ></TextInput>
+
       <Button title="Add" onPress={onAddOpinion}></Button>
-      <Button
-        title={isLoading ? 'Saving...' : 'Save'}
-        onPress={submitProductOpinion}
-        disabled={isLoading}
-      ></Button>
+
       <FlatList
         data={opinions}
         keyExtractor={(item) => item.id.toString()}
