@@ -5,6 +5,7 @@ import {
 } from '@react-native-google-signin/google-signin'
 import { supabase } from '@/lib/supabase'
 import { useAuthState } from '@/hooks/authState'
+import { Alert } from 'react-native'
 
 export default function GoogleSign() {
     const { user, setUser } = useAuthState()
@@ -36,6 +37,7 @@ export default function GoogleSign() {
                         throw new Error('no ID token present!')
                     }
                 } catch (error: any) {
+                    Alert.alert(error)
                     console.log(error)
                     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                         // user cancelled the login flow
