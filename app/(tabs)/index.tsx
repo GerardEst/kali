@@ -46,7 +46,7 @@ export default function HomeScreen() {
     })
 
     if (!hasPermission) {
-        console.log('User dont give permissions')
+        requestPermission()
         return null
     }
     if (!device) {
