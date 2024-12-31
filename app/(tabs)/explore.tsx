@@ -1,11 +1,15 @@
 import { StyleSheet, Text, Image, Platform, View } from 'react-native'
-import GoogleSign from '@/components/auth.native'
+import GoogleSign from '@/components/auth/auth.native'
+import LogoutButton from '@/components/auth/logoutButton'
+import { useAuthState } from '@/hooks/authState'
 
 export default function TabTwoScreen() {
+    const { user, isAuthenticated } = useAuthState()
+    console.log(user)
     return (
         <View>
             <Text>Holaaa</Text>
-            <GoogleSign></GoogleSign>
+            {user ? <LogoutButton></LogoutButton> : <GoogleSign></GoogleSign>}
         </View>
     )
 }

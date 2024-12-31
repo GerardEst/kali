@@ -4,11 +4,14 @@ import {
     statusCodes,
 } from '@react-native-google-signin/google-signin'
 import { supabase } from '@/lib/supabase'
+import { useAuthState } from '@/hooks/authState'
 
 export default function GoogleSign() {
+    const { user, setUser } = useAuthState()
+
     GoogleSignin.configure({
         webClientId:
-            '134329457349-u50d4ecn40mnu8qu179b33vvd6v9r4kh.apps.googleusercontent.com',
+            '134329457349-952c6sm81q8dvc6jbcl3rjmv2c3gbgsi.apps.googleusercontent.com',
     })
 
     return (
@@ -26,11 +29,13 @@ export default function GoogleSign() {
                                 provider: 'google',
                                 token: userInfo.data.idToken,
                             })
+                        setUser(data)
                         console.log(error, data)
                     } else {
                         throw new Error('no ID token present!')
                     }
                 } catch (error: any) {
+                    console.log(error)
                     if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                         // user cancelled the login flow
                     } else if (error.code === statusCodes.IN_PROGRESS) {
