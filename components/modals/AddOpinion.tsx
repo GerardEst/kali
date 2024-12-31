@@ -1,14 +1,15 @@
 import React from 'react'
 import {
     StyleSheet,
-    Modal,
     View,
     Text,
     Pressable,
     TextInput,
     Button,
     Alert,
+    TouchableOpacity,
 } from 'react-native'
+import Modal from 'react-native-modal'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
@@ -66,60 +67,43 @@ export function AddOpinionModal({ barcode, visible, onClose }: any) {
 
     return (
         <Modal
-            animationType="fade"
-            transparent={true}
-            visible={visible}
-            onRequestClose={onClose}
+            isVisible={visible}
+            onBackdropPress={onClose}
+            onBackButtonPress={onClose}
             statusBarTranslucent={true}
+            style={styles.centeredView}
         >
-            <Pressable style={styles.centeredView} onPress={onClose}>
-                <Pressable
-                    style={styles.modalContainer}
-                    onPress={(e) => e.stopPropagation()}
-                >
-                    {user ? (
-                        <>
-                            <View style={styles.modalHeader}>
-                                <Text>{barcode}</Text>
-                                <Pressable
-                                    style={styles.button}
-                                    onPress={onClose}
-                                >
-                                    <EvilIcons
-                                        name="close"
-                                        size={24}
-                                        color="black"
-                                    />
-                                </Pressable>
-                            </View>
-                            <View style={styles.modalContent}>
-                                <TextInput
-                                    editable
-                                    multiline
-                                    numberOfLines={4}
-                                    maxLength={150}
-                                    onChangeText={(text) =>
-                                        setProductOpinion(text)
-                                    }
-                                    style={styles.opinion}
-                                />
-                                <Button
-                                    title={isLoading ? 'Saving...' : 'Save'}
-                                    onPress={submitProductOpinion}
-                                    disabled={isLoading}
-                                ></Button>
-                            </View>
-                        </>
-                    ) : (
-                        <View>
-                            <Text>
-                                Registrate para poder añadir valoraciones
-                            </Text>
-                            <GoogleSign></GoogleSign>
-                        </View>
-                    )}
-                </Pressable>
-            </Pressable>
+            {user ? (
+                <View style={styles.modalContainer}>
+                    <View style={styles.modalHeader}>
+                        <Text>{barcode}</Text>
+                        <Pressable style={styles.button} onPress={onClose}>
+                            <EvilIcons name="close" size={24} color="black" />
+                        </Pressable>
+                    </View>
+                    <View style={styles.modalContent}>
+                        <TextInput
+                            editable
+                            multiline
+                            numberOfLines={4}
+                            maxLength={150}
+                            onChangeText={(text) => setProductOpinion(text)}
+                            style={styles.opinion}
+                        />
+                        <Button
+                            title={isLoading ? 'Saving...' : 'Save'}
+                            onPress={submitProductOpinion}
+                            disabled={isLoading}
+                        ></Button>
+                    </View>
+                </View>
+            ) : (
+                <View style={styles.modalContainer}>
+                    <Text>Registrate para poder añadir valoraciones</Text>
+
+                    <GoogleSign></GoogleSign>
+                </View>
+            )}
         </Modal>
     )
 }

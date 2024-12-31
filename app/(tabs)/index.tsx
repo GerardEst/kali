@@ -14,7 +14,7 @@ export default function HomeScreen() {
     const [lastScan, setLastScan] = useState('')
     const [consecutiveScans, setConsecutiveScans] = useState(0)
     const [scannedCodes, setScannedCodes] = useState<string[]>([])
-    const [modalVisible, setModalVisible] = useState(true)
+    const [modalVisible, setModalVisible] = useState(false)
     const [activeBarcode, setActiveBarcode] = useState('')
 
     const device = useCameraDevice('back')
