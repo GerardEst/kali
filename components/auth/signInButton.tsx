@@ -29,8 +29,9 @@ export default function GoogleSign() {
                                 provider: 'google',
                                 token: userInfo.data.idToken,
                             })
-                        setUser(data)
-                        console.log(error, data)
+
+                        setUser(data.user)
+                        console.log(error, data.user)
                     } else {
                         throw new Error('no ID token present!')
                     }

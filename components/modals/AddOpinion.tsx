@@ -7,7 +7,6 @@ import {
     TextInput,
     Button,
     Alert,
-    TouchableOpacity,
 } from 'react-native'
 import Modal from 'react-native-modal'
 import { useState } from 'react'
@@ -51,7 +50,11 @@ export function AddOpinionModal({ barcode, visible, onClose }: any) {
             const { data, error } = await supabase
                 .from('opinions')
                 .insert([
-                    { product: barcode, opinion: productOpinion, user_id: 1 },
+                    {
+                        product: barcode,
+                        opinion: productOpinion,
+                        profile: user?.id,
+                    },
                 ])
                 .select()
 
@@ -62,6 +65,7 @@ export function AddOpinionModal({ barcode, visible, onClose }: any) {
             Alert.alert('Error', error.message)
         } finally {
             setIsLoading(false)
+            onClose()
         }
     }
 
