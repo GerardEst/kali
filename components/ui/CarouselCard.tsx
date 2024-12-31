@@ -12,39 +12,42 @@ import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
 
-export const CarouselCard = ({ onAddOpinion, info }: any) => {
+export const CarouselCard = ({ onAddOpinion, barcode }: any) => {
     const [opinions, setOpinions] = useState<any>([])
+    const [productInfo, setProductInfo] = useState<any>({})
 
     useEffect(() => {
         const fetchData = async () => {
             let { data: products, error } = await supabase
                 .from('products')
                 .select('*')
-                .eq('barcode', info.barcode)
+                .eq('barcode', barcode)
 
             console.log({ products })
 
             let { data: opinions, error: opinionsError } = await supabase
                 .from('opinions')
                 .select('*')
-                .eq('product', info.barcode)
+                .eq('product', barcode)
 
             if (opinionsError) {
                 Alert.alert('Error', opinionsError.message)
             } else {
                 setOpinions(opinions)
+                setProductInfo(products?.[0])
             }
         }
+        console.log(productInfo)
 
         fetchData()
-    }, [info.barcode])
+    }, [barcode])
 
     return (
         <View style={styles.slideContent}>
             <View style={styles.cardHeader}>
-                <Text>{info.barcode}</Text>
+                <Text>{productInfo?.name || barcode}</Text>
 
-                <Pressable onPress={() => onAddOpinion(info.barcode)}>
+                <Pressable onPress={() => onAddOpinion(barcode)}>
                     <EvilIcons name="plus" size={40} color="black" />
                 </Pressable>
             </View>
@@ -56,6 +59,12 @@ export const CarouselCard = ({ onAddOpinion, info }: any) => {
                         <Text>{item.opinion}</Text>
                     </View>
                 )}
+                ListEmptyComponent={
+                    <Text>
+                        Aún no hay ninguna valoración para este producto. Sé el
+                        primero!
+                    </Text>
+                }
             />
         </View>
     )

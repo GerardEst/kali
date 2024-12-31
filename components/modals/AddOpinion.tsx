@@ -15,7 +15,7 @@ import EvilIcons from '@expo/vector-icons/EvilIcons'
 import { useAuthState } from '@/hooks/authState'
 import GoogleSign from '@/components/auth/signInButton'
 
-export function AddOpinionModal({ barcode, visible, onClose }: any) {
+export function AddOpinionModal({ productInfo, visible, onClose }: any) {
     const [productOpinion, setProductOpinion] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { user } = useAuthState()
@@ -24,7 +24,7 @@ export function AddOpinionModal({ barcode, visible, onClose }: any) {
         try {
             const { data, error } = await supabase
                 .from('products')
-                .upsert([{ barcode: barcode }])
+                .upsert([{ barcode: productInfo.barcode }])
                 .select()
 
             if (error) {
@@ -51,7 +51,7 @@ export function AddOpinionModal({ barcode, visible, onClose }: any) {
                 .from('opinions')
                 .insert([
                     {
-                        product: barcode,
+                        product: productInfo.barcode,
                         opinion: productOpinion,
                         profile: user?.id,
                     },
@@ -80,7 +80,7 @@ export function AddOpinionModal({ barcode, visible, onClose }: any) {
             {user ? (
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text>{barcode}</Text>
+                        <Text>{productInfo.name || productInfo.barcode}</Text>
                         <Pressable style={styles.button} onPress={onClose}>
                             <EvilIcons name="close" size={24} color="black" />
                         </Pressable>

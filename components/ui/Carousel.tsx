@@ -45,7 +45,7 @@ export const SimpleCaroussel = ({ onAddOpinion, data }: any) => {
                     >
                         <CarouselCard
                             onAddOpinion={onAddOpinion}
-                            info={{ barcode: item }}
+                            barcode={item}
                         ></CarouselCard>
                     </Animated.View>
                 ))}

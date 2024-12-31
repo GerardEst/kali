@@ -15,7 +15,7 @@ export default function HomeScreen() {
     const [consecutiveScans, setConsecutiveScans] = useState(0)
     const [scannedCodes, setScannedCodes] = useState<string[]>([])
     const [modalVisible, setModalVisible] = useState(false)
-    const [activeBarcode, setActiveBarcode] = useState('')
+    const [activeProduct, setActiveProduct] = useState(null)
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
@@ -58,7 +58,7 @@ export default function HomeScreen() {
         <View style={{ flex: 1 }}>
             <AddOpinionModal
                 style={styles.modal}
-                barcode={activeBarcode}
+                productInfo={activeProduct}
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
             ></AddOpinionModal>
@@ -70,9 +70,9 @@ export default function HomeScreen() {
             />
             <View style={styles.carousselContainer}>
                 <SimpleCaroussel
-                    onAddOpinion={(barcode: string) => {
+                    onAddOpinion={(info: any) => {
                         setModalVisible(true)
-                        setActiveBarcode(barcode)
+                        setActiveProduct(info)
                     }}
                     data={scannedCodes}
                 ></SimpleCaroussel>
