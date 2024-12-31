@@ -1,3 +1,4 @@
+import React from 'react'
 import {
     StyleSheet,
     Modal,
@@ -11,10 +12,13 @@ import {
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
+import { useAuthState } from '@/hooks/authState'
+import GoogleSign from '@/components/auth/signInButton'
 
 export function AddOpinionModal({ barcode, visible, onClose }: any) {
     const [productOpinion, setProductOpinion] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { user } = useAuthState()
 
     const postNewProduct = async () => {
         try {
@@ -73,27 +77,47 @@ export function AddOpinionModal({ barcode, visible, onClose }: any) {
                     style={styles.modalContainer}
                     onPress={(e) => e.stopPropagation()}
                 >
-                    <View style={styles.modalHeader}>
-                        <Text>{barcode}</Text>
-                        <Pressable style={styles.button} onPress={onClose}>
-                            <EvilIcons name="close" size={24} color="black" />
-                        </Pressable>
-                    </View>
-                    <View style={styles.modalContent}>
-                        <TextInput
-                            editable
-                            multiline
-                            numberOfLines={4}
-                            maxLength={150}
-                            onChangeText={(text) => setProductOpinion(text)}
-                            style={styles.opinion}
-                        />
-                        <Button
-                            title={isLoading ? 'Saving...' : 'Save'}
-                            onPress={submitProductOpinion}
-                            disabled={isLoading}
-                        ></Button>
-                    </View>
+                    {user ? (
+                        <>
+                            <View style={styles.modalHeader}>
+                                <Text>{barcode}</Text>
+                                <Pressable
+                                    style={styles.button}
+                                    onPress={onClose}
+                                >
+                                    <EvilIcons
+                                        name="close"
+                                        size={24}
+                                        color="black"
+                                    />
+                                </Pressable>
+                            </View>
+                            <View style={styles.modalContent}>
+                                <TextInput
+                                    editable
+                                    multiline
+                                    numberOfLines={4}
+                                    maxLength={150}
+                                    onChangeText={(text) =>
+                                        setProductOpinion(text)
+                                    }
+                                    style={styles.opinion}
+                                />
+                                <Button
+                                    title={isLoading ? 'Saving...' : 'Save'}
+                                    onPress={submitProductOpinion}
+                                    disabled={isLoading}
+                                ></Button>
+                            </View>
+                        </>
+                    ) : (
+                        <View>
+                            <Text>
+                                Registrate para poder añadir valoraciones
+                            </Text>
+                            <GoogleSign></GoogleSign>
+                        </View>
+                    )}
                 </Pressable>
             </Pressable>
         </Modal>

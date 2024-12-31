@@ -1,20 +1,18 @@
 import { create } from 'zustand'
 
 type User = {
-    id: string;
-    email: string;
+    user: any;
+    session: any;
 } | null;
 
 interface AuthState {
-    user: any;
+    user: User;
     setUser: (user: User) => void;
-    cleanUser: () => void;
-    //isAuthenticated: () => boolean;
+    cleanUser: () => void
 }
 
-export const useAuthState = create<any>((set,get) => ({
+export const useAuthState = create<AuthState>((set,get) => ({
     user: null,
     setUser: (user: User) => set({ user }),
-    cleanUser: () => set({ user: null }),
-    //isAuthenticated: () => !!get().user
+    cleanUser: () => set({ user: null })
 }))
