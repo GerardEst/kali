@@ -40,7 +40,6 @@ export default function TabLayout() {
                     ),
                 }}
             />
-            <Text>1.0.1</Text>
         </Tabs>
     )
 }
