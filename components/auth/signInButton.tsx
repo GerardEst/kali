@@ -7,6 +7,7 @@ import { supabase } from '@/lib/supabase'
 import { useAuthState } from '@/hooks/authState'
 import { Alert } from 'react-native'
 import { useEffect } from 'react'
+import { logger } from '@/lib/logger'
 
 type GoogleSignProps = {
     onError?: (error: Error) => void
@@ -52,8 +53,22 @@ export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
 
             setUser(authData.user)
             onSuccess?.(authData.user)
+
+            // Log the success
+            logger({
+                type: 'success',
+                title: 'Auth Success',
+                message: authData.user,
+            })
         } catch (error: any) {
             onError?.(error)
+
+            // Log the error to Supabase
+            logger({
+                type: 'error',
+                title: 'Auth Error',
+                message: error,
+            })
 
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
                 Alert.alert(

@@ -15,24 +15,10 @@ export default function TabTwoScreen() {
 
     const onError = async (error: any) => {
         setAuthStatus('error')
-
-        // Log the error to Supabase
-        logger({
-            type: 'error',
-            title: 'Auth Error',
-            message: JSON.stringify(error),
-        })
     }
 
     const onSuccess = async (message: any) => {
         setAuthStatus('success')
-
-        // Log the success
-        logger({
-            type: 'success',
-            title: 'Auth Success',
-            message: JSON.stringify(message),
-        })
     }
 
     return (

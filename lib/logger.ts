@@ -3,7 +3,7 @@ import { supabase } from './supabase'
 interface log {
     type: 'error' | 'success' | 'info'
     title?: string
-    message: string
+    message: any
 }
 export const logger = async ({ type, title, message }: log) => {
     try {
