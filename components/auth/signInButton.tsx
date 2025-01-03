@@ -58,7 +58,7 @@ export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
             logger({
                 type: 'success',
                 title: 'Auth Success',
-                message: authData.user,
+                message: authData.user.email,
             })
         } catch (error: any) {
             onError?.(error)
@@ -67,7 +67,7 @@ export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
             logger({
                 type: 'error',
                 title: 'Auth Error',
-                message: error,
+                message: JSON.stringify(error),
             })
 
             if (error.code === statusCodes.SIGN_IN_CANCELLED) {
