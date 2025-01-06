@@ -1,4 +1,4 @@
-import { SimpleCaroussel } from '@/components/ui/Carousel'
+import { ProductsCaroussel } from '@/components/ProductsCaroussel'
 import { StyleSheet, View } from 'react-native'
 import {
     useCameraDevice,
@@ -15,7 +15,8 @@ export default function HomeScreen() {
     const [consecutiveScans, setConsecutiveScans] = useState(0)
     const [scannedCodes, setScannedCodes] = useState<string[]>([])
     const [modalVisible, setModalVisible] = useState(false)
-    const [activeProduct, setActiveProduct] = useState(null)
+    const [activeBarcode, setActiveBarcode] = useState(null)
+    const [productOpinion, setProductOpinion] = useState(null)
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
@@ -58,9 +59,10 @@ export default function HomeScreen() {
         <View style={{ flex: 1 }}>
             <AddOpinionModal
                 style={styles.modal}
-                productInfo={activeProduct}
+                productBarcode={activeBarcode}
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
+                opinion={productOpinion}
             ></AddOpinionModal>
             <Camera
                 style={StyleSheet.absoluteFill}
@@ -69,13 +71,18 @@ export default function HomeScreen() {
                 codeScanner={codeScanner}
             />
             <View style={styles.carousselContainer}>
-                <SimpleCaroussel
-                    onAddOpinion={(info: any) => {
+                <ProductsCaroussel
+                    onAddOpinion={(barcode: any) => {
                         setModalVisible(true)
-                        setActiveProduct(info)
+                        setActiveBarcode(barcode)
+                    }}
+                    onUpdateOpinion={(barcode: any, opinion: any) => {
+                        setProductOpinion(opinion)
+                        setModalVisible(true)
+                        setActiveBarcode(barcode)
                     }}
                     data={scannedCodes}
-                ></SimpleCaroussel>
+                ></ProductsCaroussel>
             </View>
         </View>
     )

@@ -97,8 +97,8 @@ export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
 
     return (
         <GoogleSigninButton
-            size={GoogleSigninButton.Size.Wide}
-            color={GoogleSigninButton.Color.Dark}
+            size={GoogleSigninButton.Size.Standard}
+            color={GoogleSigninButton.Color.Light}
             onPress={handleSignin}
         />
     )

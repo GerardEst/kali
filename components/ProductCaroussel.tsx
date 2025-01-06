@@ -2,8 +2,6 @@ import {
     View,
     Text,
     StyleSheet,
-    TextInput,
-    Button,
     Alert,
     FlatList,
     Pressable,
@@ -11,19 +9,25 @@ import {
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
 import EvilIcons from '@expo/vector-icons/EvilIcons'
+import { useAuthState } from '@/hooks/authState'
 
-export const CarouselCard = ({ onAddOpinion, barcode }: any) => {
+export const ProductCaroussel = ({
+    onAddOpinion,
+    onUpdateOpinion,
+    barcode,
+}: any) => {
+    const { user } = useAuthState()
     const [opinions, setOpinions] = useState<any>([])
+    const [userOpinion, setUserOpinion] = useState<any>(null)
     const [productInfo, setProductInfo] = useState<any>({})
 
     useEffect(() => {
+        fetchExistingOpinionFromUser()
         const fetchData = async () => {
             let { data: products, error } = await supabase
                 .from('products')
                 .select('*')
                 .eq('barcode', barcode)
-
-            console.log({ products })
 
             let { data: opinions, error: opinionsError } = await supabase
                 .from('opinions')
@@ -31,26 +35,60 @@ export const CarouselCard = ({ onAddOpinion, barcode }: any) => {
                 .eq('product', barcode)
 
             if (opinionsError) {
-                Alert.alert('Error', opinionsError.message)
+                Alert.alert('Error getting opinions', opinionsError.message)
             } else {
                 setOpinions(opinions)
-                setProductInfo(products?.[0])
+
+                // Product info pilla lo que vingui de db, però si no hi ha res
+                // hi posa el barcode
+                setProductInfo(products?.[0] || { barcode: barcode })
             }
         }
-        console.log(productInfo)
 
         fetchData()
     }, [barcode])
 
+    const fetchExistingOpinionFromUser = async () => {
+        try {
+            const { data, error } = await supabase
+                .from('opinions')
+                .select('created_at, opinion, sentiment')
+                .eq('product', barcode)
+                .eq('profile', user?.id)
+
+            if (data) {
+                setUserOpinion(data?.[0])
+            }
+        } catch (error: any) {
+            Alert.alert('Error getting user opinion', error.message)
+        }
+    }
+
     return (
         <View style={styles.slideContent}>
             <View style={styles.cardHeader}>
-                <Text>{productInfo?.name || barcode}</Text>
-
-                <Pressable onPress={() => onAddOpinion(barcode)}>
-                    <EvilIcons name="plus" size={40} color="black" />
-                </Pressable>
+                <Text>{productInfo.name || productInfo.barcode}</Text>
+                {userOpinion ? (
+                    <Pressable
+                        onPress={() =>
+                            onUpdateOpinion(productInfo.barcode, userOpinion)
+                        }
+                    >
+                        <EvilIcons name="pencil" size={40} color="black" />
+                    </Pressable>
+                ) : (
+                    <Pressable
+                        onPress={() => onAddOpinion(productInfo.barcode)}
+                    >
+                        <EvilIcons name="plus" size={40} color="black" />
+                    </Pressable>
+                )}
             </View>
+            {userOpinion && (
+                <View>
+                    <Text>{userOpinion.opinion}</Text>
+                </View>
+            )}
             <FlatList
                 data={opinions}
                 keyExtractor={(item) => item.id.toString()}

@@ -1,9 +1,13 @@
 import { useEffect, useRef } from 'react'
 import { Dimensions, View, Text, StyleSheet, Animated } from 'react-native'
 import { ScrollView } from 'react-native'
-import { CarouselCard } from './CarouselCard'
+import { ProductCaroussel } from './ProductCaroussel'
 
-export const SimpleCaroussel = ({ onAddOpinion, data }: any) => {
+export const ProductsCaroussel = ({
+    onAddOpinion,
+    onUpdateOpinion,
+    data,
+}: any) => {
     const scrollViewRef = useRef<ScrollView>(null)
     const { width } = Dimensions.get('window')
 
@@ -43,10 +47,11 @@ export const SimpleCaroussel = ({ onAddOpinion, data }: any) => {
                             { opacity: index === 0 ? fadeAnim : 1 },
                         ]}
                     >
-                        <CarouselCard
+                        <ProductCaroussel
                             onAddOpinion={onAddOpinion}
+                            onUpdateOpinion={onUpdateOpinion}
                             barcode={item}
-                        ></CarouselCard>
+                        ></ProductCaroussel>
                     </Animated.View>
                 ))}
             </ScrollView>
