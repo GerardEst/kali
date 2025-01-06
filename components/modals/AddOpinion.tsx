@@ -11,7 +11,7 @@ import {
 import Modal from 'react-native-modal'
 import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import EvilIcons from '@expo/vector-icons/EvilIcons'
+import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/hooks/authState'
 import GoogleSign from '@/components/auth/signInButton'
 
@@ -115,7 +115,7 @@ export function AddOpinionModal({
                     <View style={styles.modalHeader}>
                         <Text>{productBarcode}</Text>
                         <Pressable style={styles.button} onPress={onClose}>
-                            <EvilIcons name="close" size={24} color="black" />
+                            <AntDesign name="close" size={24} color="black" />
                         </Pressable>
                     </View>
                     <View style={styles.modalContent}>

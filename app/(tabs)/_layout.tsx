@@ -1,8 +1,7 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { Platform, Text } from 'react-native'
-
-import { IconSymbol } from '@/components/ui/IconSymbol'
+import { Platform } from 'react-native'
+import AntDesign from '@expo/vector-icons/AntDesign'
 
 export default function TabLayout() {
     return (
@@ -23,20 +22,16 @@ export default function TabLayout() {
                 options={{
                     title: 'Home',
                     tabBarIcon: ({ color }) => (
-                        <IconSymbol size={28} name="house.fill" color={color} />
+                        <AntDesign name="home" size={24} color="black" />
                     ),
                 }}
             />
             <Tabs.Screen
-                name="explore"
+                name="profile"
                 options={{
-                    title: 'Explore',
+                    title: 'Profile',
                     tabBarIcon: ({ color }) => (
-                        <IconSymbol
-                            size={28}
-                            name="paperplane.fill"
-                            color={color}
-                        />
+                        <AntDesign size={24} name="user" color={color} />
                     ),
                 }}
             />

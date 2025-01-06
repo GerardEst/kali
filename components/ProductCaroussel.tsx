@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useEffect, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import EvilIcons from '@expo/vector-icons/EvilIcons'
+import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/hooks/authState'
 
 export const ProductCaroussel = ({
@@ -74,13 +74,13 @@ export const ProductCaroussel = ({
                             onUpdateOpinion(productInfo.barcode, userOpinion)
                         }
                     >
-                        <EvilIcons name="pencil" size={40} color="black" />
+                        <AntDesign name="edit" size={24} color="black" />
                     </Pressable>
                 ) : (
                     <Pressable
                         onPress={() => onAddOpinion(productInfo.barcode)}
                     >
-                        <EvilIcons name="plus" size={40} color="black" />
+                        <AntDesign name="plus" size={24} color="black" />
                     </Pressable>
                 )}
             </View>
