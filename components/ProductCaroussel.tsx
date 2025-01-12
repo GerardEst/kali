@@ -2,95 +2,43 @@ import {
     View,
     Text,
     StyleSheet,
-    Alert,
     FlatList,
     Pressable,
 } from 'react-native'
-import { useEffect, useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import AntDesign from '@expo/vector-icons/AntDesign'
-import { useAuthState } from '@/hooks/authState'
 
 export const ProductCaroussel = ({
     onAddOpinion,
     onUpdateOpinion,
-    barcode,
+    product,
 }: any) => {
-    const { user } = useAuthState()
-    const [opinions, setOpinions] = useState<any>([])
-    const [userOpinion, setUserOpinion] = useState<any>(null)
-    const [productInfo, setProductInfo] = useState<any>({})
-
-    useEffect(() => {
-        fetchExistingOpinionFromUser()
-        const fetchData = async () => {
-            let { data: products, error } = await supabase
-                .from('products')
-                .select('*')
-                .eq('barcode', barcode)
-
-            let { data: opinions, error: opinionsError } = await supabase
-                .from('opinions')
-                .select('*')
-                .eq('product', barcode)
-
-            if (opinionsError) {
-                Alert.alert('Error getting opinions', opinionsError.message)
-            } else {
-                setOpinions(opinions)
-
-                // Product info pilla lo que vingui de db, però si no hi ha res
-                // hi posa el barcode
-                setProductInfo(products?.[0] || { barcode: barcode })
-            }
-        }
-
-        fetchData()
-    }, [barcode])
-
-    const fetchExistingOpinionFromUser = async () => {
-        try {
-            const { data, error } = await supabase
-                .from('opinions')
-                .select('created_at, opinion, sentiment')
-                .eq('product', barcode)
-                .eq('profile', user?.id)
-
-            if (data) {
-                setUserOpinion(data?.[0])
-            }
-        } catch (error: any) {
-            Alert.alert('Error getting user opinion', error.message)
-        }
-    }
-
     return (
         <View style={styles.slideContent}>
             <View style={styles.cardHeader}>
-                <Text>{productInfo.name || productInfo.barcode}</Text>
-                {userOpinion ? (
+                <Text>{product.name || product.barcode}</Text>
+                {product.userOpinion ? (
                     <Pressable
                         onPress={() =>
-                            onUpdateOpinion(productInfo.barcode, userOpinion)
+                            onUpdateOpinion(product.barcode, product.userOpinion)
                         }
                     >
                         <AntDesign name="edit" size={24} color="black" />
                     </Pressable>
                 ) : (
                     <Pressable
-                        onPress={() => onAddOpinion(productInfo.barcode)}
+                        onPress={() => onAddOpinion(product.barcode)}
                     >
                         <AntDesign name="plus" size={24} color="black" />
                     </Pressable>
                 )}
             </View>
-            {userOpinion && (
+            {product.userOpinion && (
                 <View>
-                    <Text>{userOpinion.opinion}</Text>
+                    <Text>{product.userOpinion.text}</Text>
                 </View>
             )}
             <FlatList
-                data={opinions}
+                data={product.opinions}
                 keyExtractor={(item) => item.id.toString()}
                 renderItem={({ item }) => (
                     <View style={styles.opinionItem}>

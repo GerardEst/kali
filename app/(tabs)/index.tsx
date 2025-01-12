@@ -1,5 +1,5 @@
 import { ProductsCaroussel } from '@/components/ProductsCaroussel'
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import {
     useCameraDevice,
     useCameraPermission,
@@ -8,12 +8,13 @@ import {
 import { Camera } from 'react-native-vision-camera'
 import { useState } from 'react'
 import { AddOpinionModal } from '@/components/modals/AddOpinion'
+import { useScannedProductsState } from '@/hooks/scannedProductsState'
+import { getProductByBarcode, getProductOpinionByUser } from '@/api/products'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
     const [lastScan, setLastScan] = useState('')
-    const [consecutiveScans, setConsecutiveScans] = useState(0)
-    const [scannedCodes, setScannedCodes] = useState<string[]>([])
+    const {products, upsertProduct} = useScannedProductsState()
     const [modalVisible, setModalVisible] = useState(false)
     const [activeBarcode, setActiveBarcode] = useState(null)
     const [productOpinion, setProductOpinion] = useState(null)
@@ -21,28 +22,22 @@ export default function HomeScreen() {
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
         codeTypes: ['ean-13'],
-        onCodeScanned: (codes) => {
+        onCodeScanned: async (codes) => {
+
             const scannedCode = codes[0].value
 
-            if (!scannedCode) return
+            if (!scannedCode || scannedCode === lastScan) return
 
-            if (scannedCode === lastScan) {
-                setConsecutiveScans((prev) => prev + 1)
+            // TODO - Per culpa de l'async està fent la call unes quantes vegades
+            setLastScan(scannedCode)
 
-                if (consecutiveScans >= 2) {
-                    setScannedCodes((prev) => {
-                        if (prev[0] !== scannedCode) {
-                            return [scannedCode, ...prev]
-                        }
-                        return prev
-                    })
-                    setConsecutiveScans(0)
-                    setLastScan('')
-                }
-            } else {
-                setLastScan(scannedCode)
-                setConsecutiveScans(0)
-            }
+            const scannedProductInfo = await getProductByBarcode(scannedCode)
+            // Faltaria passarli el user i afegir la opinio de l'usuari al producte
+            //const scannedProductUserOpinion = await getProductOpinionByUser(scannedCode, )
+
+            upsertProduct(scannedProductInfo)
+            console.log({products})
+
         },
     })
 
@@ -70,7 +65,7 @@ export default function HomeScreen() {
                 isActive={true}
                 codeScanner={codeScanner}
             />
-            <View style={styles.carousselContainer}>
+            {products[0] ? (<View style={styles.carousselContainer}>
                 <ProductsCaroussel
                     onAddOpinion={(barcode: any) => {
                         setModalVisible(true)
@@ -81,9 +76,10 @@ export default function HomeScreen() {
                         setModalVisible(true)
                         setActiveBarcode(barcode)
                     }}
-                    data={scannedCodes}
+                    data={products}
                 ></ProductsCaroussel>
-            </View>
+            </View>):(<Text>Start scanning</Text>)}
+            
         </View>
     )
 }

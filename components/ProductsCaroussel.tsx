@@ -15,6 +15,9 @@ export const ProductsCaroussel = ({
     const fadeAnim = fadeAnimRef.current
 
     useEffect(() => {
+
+        console.log(data)
+        console.log('hola')
         // Quan tenim un nou escaner, ens posicionem al segon immediatament
         scrollViewRef.current?.scrollTo({ x: width, animated: false })
         // Just després, ens desplaçem al principi per veure l'animació
@@ -38,7 +41,7 @@ export const ProductsCaroussel = ({
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
             >
-                {data.map((item: any, index: number) => (
+                {Object.keys(data).map((barcode: string, index: number) => (
                     <Animated.View
                         key={index}
                         style={[
@@ -50,7 +53,7 @@ export const ProductsCaroussel = ({
                         <ProductCaroussel
                             onAddOpinion={onAddOpinion}
                             onUpdateOpinion={onUpdateOpinion}
-                            barcode={item}
+                            product={data[barcode]}
                         ></ProductCaroussel>
                     </Animated.View>
                 ))}

@@ -27,7 +27,6 @@ export function AddOpinionModal({
     const { user } = useAuthState()
 
     useEffect(() => {
-        console.log(opinion)
         if (opinion) {
             setProductOpinion(opinion.opinion)
             setSelectedSentiment(opinion.sentiment)
@@ -77,7 +76,7 @@ export function AddOpinionModal({
                     .eq('product', productBarcode)
                     .eq('profile', user.id)
                     .select()
-
+                    
                 if (error) {
                     throw error
                 }
