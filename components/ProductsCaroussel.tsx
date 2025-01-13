@@ -15,9 +15,8 @@ export const ProductsCaroussel = ({
     const fadeAnim = fadeAnimRef.current
 
     useEffect(() => {
+        console.log('add product to caroussel: ', data)
 
-        console.log(data)
-        console.log('hola')
         // Quan tenim un nou escaner, ens posicionem al segon immediatament
         scrollViewRef.current?.scrollTo({ x: width, animated: false })
         // Just després, ens desplaçem al principi per veure l'animació

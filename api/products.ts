@@ -12,7 +12,13 @@ export const getProductByBarcode = async (barcode:string) => {
         // TODO - Limitar la quantitat d'opinions, o deixar definir a les propietats
         const productOpinions = await getProductOpinionsByBarcode(barcode)
 
+        console.log('database product', product)
+        if (product && product.length === 0) {
+            throw new Error('Cant find the barcode')
+        }
         // TODO - Si no hi ha producte, crearlo
+
+        
         return {
             ...product?.[0],
             opinions: productOpinions

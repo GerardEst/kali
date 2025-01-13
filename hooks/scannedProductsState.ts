@@ -18,8 +18,8 @@ export const useScannedProductsState = create<ScannedProductState>((set)=>({
 
     upsertProduct: (product:Product) => set((state) => ({
         products: {
-        ...state.products,
-        [product.barcode]: product
+            [product.barcode]: product,
+            ...state.products,
         }
     })),
 
