@@ -1,10 +1,4 @@
-import {
-    View,
-    Text,
-    StyleSheet,
-    FlatList,
-    Pressable,
-} from 'react-native'
+import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native'
 import AntDesign from '@expo/vector-icons/AntDesign'
 
 export const ProductCaroussel = ({
@@ -19,22 +13,23 @@ export const ProductCaroussel = ({
                 {product.userOpinion ? (
                     <Pressable
                         onPress={() =>
-                            onUpdateOpinion(product.barcode, product.userOpinion)
+                            onUpdateOpinion(
+                                product.barcode,
+                                product.userOpinion
+                            )
                         }
                     >
                         <AntDesign name="edit" size={24} color="black" />
                     </Pressable>
                 ) : (
-                    <Pressable
-                        onPress={() => onAddOpinion(product.barcode)}
-                    >
+                    <Pressable onPress={() => onAddOpinion(product.barcode)}>
                         <AntDesign name="plus" size={24} color="black" />
                     </Pressable>
                 )}
             </View>
             {product.userOpinion && (
                 <View>
-                    <Text>{product.userOpinion.text}</Text>
+                    <Text>{product.userOpinion.opinion}</Text>
                 </View>
             )}
             <FlatList

@@ -10,9 +10,12 @@ interface ScannedProductState {
         };
     };
     upsertProduct: (product: Product) => void;
-    upsertOpinion: (barcode: string, opinionId: string, updates: any) => void;
+    upsertUserOpinion: (product: Product, userOpinion: any) => void;
+    //upsertOpinion: (barcode: string, opinionId: string, updates: any) => void;
 }
 
+// TODO - Empescarme algo per l'ordre. Es per culpa d'aquestes coses que fa una pampalluga rara quan
+// afegeix algo
 export const useScannedProductsState = create<ScannedProductState>((set)=>({
     products: {},
 
@@ -23,9 +26,18 @@ export const useScannedProductsState = create<ScannedProductState>((set)=>({
         }
     })),
 
-    upsertOpinion: (barcode:string, opinionId:string, updates:any) => set((state) => ({
+    upsertUserOpinion: (product:Product, userOpinion:any) => set((state) => ({
         products: {
-          ...state.products,
+            ...state.products,
+            [product.barcode]: {
+                ...state.products[product.barcode],
+                userOpinion: userOpinion
+            },
+        }
+    }))
+
+    /* upsertOpinion: (barcode:string, opinionId:string, updates:any) => set((state) => ({
+        products: {
           [barcode]: {
             ...state.products[barcode],
             opinions: state.products[barcode].opinions.map((opinion:Opinion) =>
@@ -33,7 +45,9 @@ export const useScannedProductsState = create<ScannedProductState>((set)=>({
                 ? { ...opinion, ...updates }
                 : opinion
             )
-          }
+            },
+            
+          ...state.products,
         }
-    }))
+    })) */
 }))

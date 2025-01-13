@@ -14,24 +14,24 @@ import { supabase } from '@/lib/supabase'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/hooks/authState'
 import GoogleSign from '@/components/auth/signInButton'
+import { useScannedProductsState } from '@/hooks/scannedProductsState'
 
-export function AddOpinionModal({
-    productBarcode,
-    visible,
-    onClose,
-    opinion,
-}: any) {
+export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const [productOpinion, setProductOpinion] = useState<string>('')
     const [selectedSentiment, setSelectedSentiment] = useState<number>(2)
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { products, upsertUserOpinion } = useScannedProductsState()
     const { user } = useAuthState()
 
+    // TODO - Tot aixo necessita un repas amb lo de la nova store
+
     useEffect(() => {
-        if (opinion) {
-            setProductOpinion(opinion.opinion)
-            setSelectedSentiment(opinion.sentiment)
+        const userOpinion = products[productBarcode]?.userOpinion
+        if (userOpinion) {
+            setProductOpinion(userOpinion.opinion)
+            setSelectedSentiment(userOpinion.sentiment)
         }
-    }, [visible, opinion])
+    }, [visible, productBarcode])
 
     const postNewProduct = async () => {
         try {
@@ -56,13 +56,13 @@ export function AddOpinionModal({
         }
         setIsLoading(true)
 
-        if (!opinion) postNewProduct()
+        if (!products[productBarcode]?.userOpinion) postNewProduct()
 
         try {
             if (!user) {
                 throw new Error('User not found')
             }
-            if (opinion) {
+            if (products[productBarcode]?.userOpinion) {
                 const { data, error } = await supabase
                     .from('opinions')
                     .update([
@@ -76,7 +76,7 @@ export function AddOpinionModal({
                     .eq('product', productBarcode)
                     .eq('profile', user.id)
                     .select()
-                    
+
                 if (error) {
                     throw error
                 }
@@ -112,7 +112,7 @@ export function AddOpinionModal({
             {user ? (
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text>{productBarcode}</Text>
+                        <Text>{products[productBarcode]?.name}</Text>
                         <Pressable style={styles.button} onPress={onClose}>
                             <AntDesign name="close" size={24} color="black" />
                         </Pressable>

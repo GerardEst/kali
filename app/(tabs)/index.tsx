@@ -10,16 +10,17 @@ import { useState } from 'react'
 import { AddOpinionModal } from '@/components/modals/AddOpinion'
 import { useScannedProductsState } from '@/hooks/scannedProductsState'
 import { getProductByBarcode, getProductOpinionByUser } from '@/api/products'
-
+import { useAuthState } from '@/hooks/authState'
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
     const [lastScan, setLastScan] = useState('')
-    const { products, upsertProduct } = useScannedProductsState()
+    const { products, upsertProduct, upsertUserOpinion } =
+        useScannedProductsState()
     const [modalVisible, setModalVisible] = useState(false)
     const [activeBarcode, setActiveBarcode] = useState(null)
-    const [productOpinion, setProductOpinion] = useState(null)
     const [checkCode, setCheckCode] = useState<string>('')
     const [timesChecked, setTimesChecked] = useState<number>(0)
+    const { user } = useAuthState()
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
@@ -44,12 +45,23 @@ export default function HomeScreen() {
             setTimesChecked(0)
             setLastScan(scannedCode)
 
+            // TODO - S'estan fent en total 3 calls quan, potser, podria ser una que agafés
+            // el producte, les opinions i la opinió de l'usuari
             const scannedProductInfo = await getProductByBarcode(scannedCode)
 
-            // Faltaria passarli el user i afegir la opinio de l'usuari al producte
-            //const scannedProductUserOpinion = await getProductOpinionByUser(scannedCode, )
-
             upsertProduct(scannedProductInfo)
+            if (user) {
+                const scannedProductUserOpinion = await getProductOpinionByUser(
+                    scannedCode,
+                    user.id
+                )
+                if (scannedProductUserOpinion) {
+                    upsertUserOpinion(
+                        scannedProductInfo,
+                        scannedProductUserOpinion
+                    )
+                }
+            }
         },
     })
 
@@ -62,6 +74,13 @@ export default function HomeScreen() {
         return null
     }
 
+    /** Per editar o afegir una opinio,
+     * ara ho podem fer mes facil pude
+     * des del productCaroussel passem el barcode que volem editar com abans, perquè
+     * d'alguna manera ho hem de saber. Potser també rebem la opinió com ja fem? Naah ja tenim la
+     * store per aixo
+     */
+
     return (
         <View style={{ flex: 1 }}>
             <AddOpinionModal
@@ -69,7 +88,6 @@ export default function HomeScreen() {
                 productBarcode={activeBarcode}
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
-                opinion={productOpinion}
             ></AddOpinionModal>
             <Camera
                 style={StyleSheet.absoluteFill}
@@ -84,8 +102,7 @@ export default function HomeScreen() {
                             setModalVisible(true)
                             setActiveBarcode(barcode)
                         }}
-                        onUpdateOpinion={(barcode: any, opinion: any) => {
-                            setProductOpinion(opinion)
+                        onUpdateOpinion={(barcode: any) => {
                             setModalVisible(true)
                             setActiveBarcode(barcode)
                         }}

@@ -4,5 +4,5 @@ export interface Product {
     barcode: number,
     name: string,
     opinions?: Opinion[],
-    userOpinion?: Opinion
+    userOpinion?: Opinion,
 }

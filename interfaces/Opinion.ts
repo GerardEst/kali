@@ -1,6 +1,6 @@
 export interface Opinion{
     id: string,
-    text: string,
+    opinion: string,
     sentiment: number,
     product: string,
     profile: string
