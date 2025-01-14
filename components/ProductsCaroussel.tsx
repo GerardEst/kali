@@ -2,11 +2,12 @@ import { useEffect, useRef } from 'react'
 import { Dimensions, View, Text, StyleSheet, Animated } from 'react-native'
 import { ScrollView } from 'react-native'
 import { ProductCaroussel } from './ProductCaroussel'
+import { Product } from '@/interfaces/Product'
 
 export const ProductsCaroussel = ({
     onAddOpinion,
     onUpdateUserOpinion,
-    data,
+    products,
 }: any) => {
     const scrollViewRef = useRef<ScrollView>(null)
     const { width } = Dimensions.get('window')
@@ -15,6 +16,11 @@ export const ProductsCaroussel = ({
     const fadeAnim = fadeAnimRef.current
 
     useEffect(() => {
+        console.log({ products })
+        // TODO - A vegades fa l'animació i altres no
+        // Sembla que quan passa de 2 i escaneja una cosa nova, va
+        // pero quan son pocs o escaneja algo que ja hi havia, no
+
         // Quan tenim un nou escaner, ens posicionem al segon immediatament
         scrollViewRef.current?.scrollTo({ x: width, animated: false })
         // Just després, ens desplaçem al principi per veure l'animació
@@ -26,7 +32,7 @@ export const ProductsCaroussel = ({
             duration: 700,
             useNativeDriver: true,
         }).start()
-    }, [data])
+    }, [products.length]) // L'effect només corre quan afegim o treiem algo de products
 
     return (
         <View style={styles.container}>
@@ -36,7 +42,7 @@ export const ProductsCaroussel = ({
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
             >
-                {Object.keys(data).map((barcode: string, index: number) => (
+                {products.map((product: Product, index: number) => (
                     <Animated.View
                         key={index}
                         style={[
@@ -48,7 +54,7 @@ export const ProductsCaroussel = ({
                         <ProductCaroussel
                             onAddOpinion={onAddOpinion}
                             onUpdateUserOpinion={onUpdateUserOpinion}
-                            product={data[barcode]}
+                            product={product}
                         ></ProductCaroussel>
                     </Animated.View>
                 ))}

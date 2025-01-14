@@ -1,37 +1,35 @@
-/** Per tant faig un hook nou, amb el zustand aquell */
 import { create } from 'zustand'
 import { Product } from '@/interfaces/Product'
 import { Opinion } from '@/interfaces/Opinion';
 
 interface ScannedProductState {
-    products: {
-        [barcode: string]: Product & {
-            opinions: Opinion[];
-        };
-    };
+    products: (Product & {
+        opinions: Opinion[];
+    })[];
     upsertProduct: (product: Product) => void;
-    upsertUserOpinion: (barcode: string, userOpinion: Opinion) => void;
+    upsertUserOpinion: (barcode: number, userOpinion: Opinion) => void;
 }
 
-// TODO - Empescarme algo per l'ordre. Es per culpa d'aquestes coses que fa una pampalluga rara quan
-// afegeix algo
 export const useScannedProductsState = create<ScannedProductState>((set)=>({
-    products: {},
+    products: [],
 
-    upsertProduct: (product:Product) => set((state) => ({
-        products: {
-            [product.barcode]: product,
-            ...state.products,
-        }
-    })),
+    //@ts-ignore
+    upsertProduct: (product: Product) => set((state) => {
+        const filteredProducts = state.products.filter((p:Product) => p.barcode !== product.barcode)
 
-    upsertUserOpinion: (barcode:string, userOpinion:Opinion) => set((state) => ({
-        products: {
-            ...state.products,
-            [barcode]: {
-                ...state.products[barcode],
-                userOpinion: userOpinion
-            },
+        return {
+            products: [product, ...filteredProducts]
         }
-    }))
+    }),
+
+    //@ts-ignore
+    upsertUserOpinion: (barcode: number, userOpinion: Opinion) => set((state) => {
+       return {
+            products: state.products.map((product:Product) => 
+                product.barcode === barcode 
+                    ? { ...product, userOpinion }
+                    : product
+            )
+        }
+    })
 }))

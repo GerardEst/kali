@@ -52,13 +52,17 @@ export default function HomeScreen() {
             const scannedProductInfo = await getProductByBarcode(scannedCode)
 
             upsertProduct(scannedProductInfo)
+
             if (user) {
                 const scannedProductUserOpinion = await getProductOpinionByUser(
                     scannedCode,
                     user.id
                 )
                 if (scannedProductUserOpinion) {
-                    upsertUserOpinion(scannedCode, scannedProductUserOpinion)
+                    upsertUserOpinion(
+                        parseInt(scannedCode),
+                        scannedProductUserOpinion
+                    )
                 }
             }
         },
@@ -87,7 +91,7 @@ export default function HomeScreen() {
                 isActive={true}
                 codeScanner={codeScanner}
             />
-            {Object.keys(products).length > 0 ? (
+            {products && products.length > 0 ? (
                 <View style={styles.carousselContainer}>
                     <ProductsCaroussel
                         onAddOpinion={(barcode: any) => {
@@ -98,7 +102,7 @@ export default function HomeScreen() {
                             setModalVisible(true)
                             setActiveBarcode(barcode)
                         }}
-                        data={products}
+                        products={products}
                     ></ProductsCaroussel>
                 </View>
             ) : (
