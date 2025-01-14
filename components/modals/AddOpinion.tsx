@@ -10,11 +10,14 @@ import {
 } from 'react-native'
 import Modal from 'react-native-modal'
 import { useState } from 'react'
-import { supabase } from '@/lib/supabase'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/hooks/authState'
 import GoogleSign from '@/components/auth/signInButton'
 import { useScannedProductsState } from '@/hooks/scannedProductsState'
+import {
+    createNewOpinionForProduct,
+    updateOpinionForProduct,
+} from '@/api/products'
 
 export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const [productOpinion, setProductOpinion] = useState<string>('')
@@ -23,31 +26,16 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const { products, upsertUserOpinion } = useScannedProductsState()
     const { user } = useAuthState()
 
-    // TODO - Tot aixo necessita un repas amb lo de la nova store
-
     useEffect(() => {
         const userOpinion = products[productBarcode]?.userOpinion
         if (userOpinion) {
             setProductOpinion(userOpinion.opinion)
             setSelectedSentiment(userOpinion.sentiment)
+        } else {
+            setProductOpinion('')
+            setSelectedSentiment(2)
         }
     }, [visible, productBarcode])
-
-    const postNewProduct = async () => {
-        try {
-            const { data, error } = await supabase
-                .from('products')
-                .upsert([{ barcode: productBarcode }])
-                .select()
-            if (error) {
-                throw error
-            }
-        } catch (error: any) {
-            Alert.alert('Error posting a new product', error.message)
-        } finally {
-            setIsLoading(false)
-        }
-    }
 
     const submitProductOpinion = async () => {
         if (!productOpinion.trim()) {
@@ -56,43 +44,27 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
         }
         setIsLoading(true)
 
-        if (!products[productBarcode]?.userOpinion) postNewProduct()
-
         try {
-            if (!user) {
-                throw new Error('User not found')
-            }
-            if (products[productBarcode]?.userOpinion) {
-                const { data, error } = await supabase
-                    .from('opinions')
-                    .update([
-                        {
-                            product: productBarcode,
-                            profile: user?.id,
-                            opinion: productOpinion,
-                            sentiment: selectedSentiment,
-                        },
-                    ])
-                    .eq('product', productBarcode)
-                    .eq('profile', user.id)
-                    .select()
+            if (!user) throw new Error('User not found')
 
-                if (error) {
-                    throw error
-                }
+            let opinion
+            if (products[productBarcode].userOpinion) {
+                opinion = await updateOpinionForProduct(
+                    productBarcode,
+                    productOpinion,
+                    selectedSentiment,
+                    user.id
+                )
             } else {
-                const { data, error } = await supabase
-                    .from('opinions')
-                    .insert([
-                        {
-                            product: productBarcode,
-                            profile: user.id,
-                            opinion: productOpinion,
-                            sentiment: selectedSentiment,
-                        },
-                    ])
-                    .select()
+                opinion = await createNewOpinionForProduct(
+                    productBarcode,
+                    productOpinion,
+                    selectedSentiment,
+                    user.id
+                )
             }
+
+            upsertUserOpinion(productBarcode, opinion)
         } catch (error: any) {
             Alert.alert('Error adding a new opinion', error.message)
         } finally {
@@ -112,7 +84,9 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
             {user ? (
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text>{products[productBarcode]?.name}</Text>
+                        <Text>
+                            {products[productBarcode]?.name || productBarcode}
+                        </Text>
                         <Pressable style={styles.button} onPress={onClose}>
                             <AntDesign name="close" size={24} color="black" />
                         </Pressable>

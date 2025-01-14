@@ -9,16 +9,18 @@ export const getProductByBarcode = async (barcode:string) => {
             .select('*')
             .eq('barcode', barcode)
 
+        
+        if (product && product.length === 0) {
+            // Si no hi ha producte, el creem i ens estalviem de pillar les opinions
+            const createdProduct = await createNewProduct(barcode)
+
+            return createdProduct as Product
+        }
+
         // TODO - Limitar la quantitat d'opinions, o deixar definir a les propietats
         const productOpinions = await getProductOpinionsByBarcode(barcode)
 
-        if (product && product.length === 0) {
-            throw new Error('Cant find the barcode')
-        }
-        
-        // TODO - Si no hi ha producte, crearlo
-
-
+        if(error) throw error
         return {
             ...product?.[0],
             opinions: productOpinions
@@ -32,11 +34,12 @@ export const getProductByBarcode = async (barcode:string) => {
 
 export const getProductOpinionsByBarcode = async (barcode:string) => {
     try{
-        let { data: opinions, error: opinionsError } = await supabase
+        let { data: opinions, error } = await supabase
         .from('opinions')
         .select('*')
         .eq('product', barcode)
     
+        if(error) throw error
         return opinions as Opinion[]
 
     }catch(error){
@@ -53,11 +56,76 @@ export const getProductOpinionByUser = async (productBarcode:string, userId:stri
             .eq('product', productBarcode)
             .eq('profile', userId)
 
-        if (data) {
-            return data[0] as Opinion
-        }
+        if(error) throw error
+        return data[0] as Opinion
+        
     } catch (error: any) {
         console.error(error)
         throw new Error('Error getting user opinion')
     }
+}
+
+export const createNewProduct = async (barcode: string) => {
+    try {
+        const { data:product, error } = await supabase
+            .from('products')
+            .insert([
+                { barcode: barcode },
+            ])
+            .select()
+        
+        if(error) throw error
+        return product[0] as Product
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error creating a new product')
+    }
+}
+
+export const updateOpinionForProduct = async (barcode: string, opinion: string, sentiment: number, userId: string) => { 
+    try {
+        const { data, error } = await supabase
+            .from('opinions')
+            .update([
+                {
+                    product: barcode,
+                    profile: userId,
+                    opinion: opinion,
+                    sentiment: sentiment,
+                },
+            ])
+            .eq('product', barcode)
+            .eq('profile', userId)
+            .select()
+    
+        if (error) throw error
+
+        return data[0] as Opinion
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error posting new opinion')
+    }
+}
+
+export const createNewOpinionForProduct = async (barcode: string, opinion: string, sentiment:number, userId: string) => {
+    try {
+        const { data, error } = await supabase
+            .from('opinions')
+            .insert([
+                {
+                    product: barcode,
+                    profile: userId,
+                    opinion: opinion,
+                    sentiment: sentiment,
+                },
+            ])
+        .select()
+        
+        if (error) throw error
+        return data[0] as Opinion
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error posting new opinion')
+    }
+    
 }

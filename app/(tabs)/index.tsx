@@ -11,6 +11,7 @@ import { AddOpinionModal } from '@/components/modals/AddOpinion'
 import { useScannedProductsState } from '@/hooks/scannedProductsState'
 import { getProductByBarcode, getProductOpinionByUser } from '@/api/products'
 import { useAuthState } from '@/hooks/authState'
+
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
     const [lastScan, setLastScan] = useState('')
@@ -24,9 +25,10 @@ export default function HomeScreen() {
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
-        codeTypes: ['ean-13'],
+        codeTypes: ['ean-13', 'ean-8'],
         onCodeScanned: async (codes) => {
             const scannedCode = codes[0].value
+
             if (!scannedCode) return
 
             // Check to prevent repeated codes
@@ -56,10 +58,7 @@ export default function HomeScreen() {
                     user.id
                 )
                 if (scannedProductUserOpinion) {
-                    upsertUserOpinion(
-                        scannedProductInfo,
-                        scannedProductUserOpinion
-                    )
+                    upsertUserOpinion(scannedCode, scannedProductUserOpinion)
                 }
             }
         },
@@ -73,13 +72,6 @@ export default function HomeScreen() {
         console.error('User dont have a camera')
         return null
     }
-
-    /** Per editar o afegir una opinio,
-     * ara ho podem fer mes facil pude
-     * des del productCaroussel passem el barcode que volem editar com abans, perquè
-     * d'alguna manera ho hem de saber. Potser també rebem la opinió com ja fem? Naah ja tenim la
-     * store per aixo
-     */
 
     return (
         <View style={{ flex: 1 }}>
@@ -102,7 +94,7 @@ export default function HomeScreen() {
                             setModalVisible(true)
                             setActiveBarcode(barcode)
                         }}
-                        onUpdateOpinion={(barcode: any) => {
+                        onUpdateUserOpinion={(barcode: any) => {
                             setModalVisible(true)
                             setActiveBarcode(barcode)
                         }}

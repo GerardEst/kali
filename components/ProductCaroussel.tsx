@@ -3,7 +3,7 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 
 export const ProductCaroussel = ({
     onAddOpinion,
-    onUpdateOpinion,
+    onUpdateUserOpinion,
     product,
 }: any) => {
     return (
@@ -12,12 +12,7 @@ export const ProductCaroussel = ({
                 <Text>{product.name || product.barcode}</Text>
                 {product.userOpinion ? (
                     <Pressable
-                        onPress={() =>
-                            onUpdateOpinion(
-                                product.barcode,
-                                product.userOpinion
-                            )
-                        }
+                        onPress={() => onUpdateUserOpinion(product.barcode)}
                     >
                         <AntDesign name="edit" size={24} color="black" />
                     </Pressable>

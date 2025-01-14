@@ -5,7 +5,7 @@ import { ProductCaroussel } from './ProductCaroussel'
 
 export const ProductsCaroussel = ({
     onAddOpinion,
-    onUpdateOpinion,
+    onUpdateUserOpinion,
     data,
 }: any) => {
     const scrollViewRef = useRef<ScrollView>(null)
@@ -15,14 +15,10 @@ export const ProductsCaroussel = ({
     const fadeAnim = fadeAnimRef.current
 
     useEffect(() => {
-        console.log('add product to caroussel: ', data)
-
         // Quan tenim un nou escaner, ens posicionem al segon immediatament
         scrollViewRef.current?.scrollTo({ x: width, animated: false })
         // Just després, ens desplaçem al principi per veure l'animació
         scrollViewRef.current?.scrollTo({ x: 0, animated: true })
-
-        // El problema és que tots es posen a opacity 0, i només vui el primer
 
         fadeAnim.setValue(0)
         Animated.timing(fadeAnim, {
@@ -51,7 +47,7 @@ export const ProductsCaroussel = ({
                     >
                         <ProductCaroussel
                             onAddOpinion={onAddOpinion}
-                            onUpdateOpinion={onUpdateOpinion}
+                            onUpdateUserOpinion={onUpdateUserOpinion}
                             product={data[barcode]}
                         ></ProductCaroussel>
                     </Animated.View>
