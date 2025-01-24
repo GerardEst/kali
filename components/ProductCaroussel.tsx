@@ -10,7 +10,7 @@ export const ProductCaroussel = ({
         <View style={styles.slideContent}>
             <View style={styles.cardHeader}>
                 <Text>{product.name || product.barcode}</Text>
-                {product.userOpinion ? (
+                {product?.userOpinion ? (
                     <Pressable
                         onPress={() => onUpdateUserOpinion(product.barcode)}
                     >
@@ -22,7 +22,7 @@ export const ProductCaroussel = ({
                     </Pressable>
                 )}
             </View>
-            {product.userOpinion && (
+            {product?.userOpinion && (
                 <View>
                     <Text>{product.userOpinion.opinion}</Text>
                 </View>

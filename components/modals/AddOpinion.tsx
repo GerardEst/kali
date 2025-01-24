@@ -48,7 +48,7 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
             if (!user) throw new Error('User not found')
 
             let opinion
-            if (products[productBarcode].userOpinion) {
+            if (products[productBarcode]?.userOpinion) {
                 opinion = await updateOpinionForProduct(
                     productBarcode,
                     productOpinion,
