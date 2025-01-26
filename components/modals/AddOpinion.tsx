@@ -27,7 +27,13 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const { user } = useAuthState()
 
     useEffect(() => {
-        const userOpinion = products[productBarcode]?.userOpinion
+        const product = products.find(
+            (product) => product.barcode == productBarcode
+        )
+
+        const userOpinion = product?.userOpinion
+        console.log(userOpinion)
+
         if (userOpinion) {
             setProductOpinion(userOpinion.opinion)
             setSelectedSentiment(userOpinion.sentiment)
@@ -47,8 +53,13 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
         try {
             if (!user) throw new Error('User not found')
 
+            // TODO -> Bueno aixo es un desproposit que per fi funciona
+            const product = products.find(
+                (product) => product.barcode == productBarcode
+            )
+
             let opinion
-            if (products[productBarcode]?.userOpinion) {
+            if (product?.userOpinion) {
                 opinion = await updateOpinionForProduct(
                     productBarcode,
                     productOpinion,
