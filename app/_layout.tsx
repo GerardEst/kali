@@ -11,34 +11,27 @@ import { supabase } from '@/lib/supabase'
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
-  })
-  const [session, setSession] = useState(null)
-
-  /*useEffect(()=>{
-    supabase.auth.getSession().then((data)=>{
-      setSession(data)
+    const [loaded] = useFonts({
+        SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     })
-  }, [])*/
 
-  useEffect(() => {
-    if (loaded) {
-      SplashScreen.hideAsync()
+    useEffect(() => {
+        if (loaded) {
+            SplashScreen.hideAsync()
+        }
+    }, [loaded])
+
+    if (!loaded) {
+        return null
     }
-  }, [loaded])
 
-  if (!loaded) {
-    return null
-  }
-
-  return (
-    <ThemeProvider value={DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
-  )
+    return (
+        <ThemeProvider value={DefaultTheme}>
+            <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+        </ThemeProvider>
+    )
 }

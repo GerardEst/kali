@@ -15,7 +15,7 @@ type GoogleSignProps = {
 }
 
 export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
-    const { user, setUser } = useAuthState()
+    const { user, setUser, checkExistingSession } = useAuthState()
 
     useEffect(() => {
         GoogleSignin.configure({
@@ -24,39 +24,6 @@ export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
         })
         checkExistingSession()
     }, [])
-
-    // TODO -> Posar aixo a una altra banda perquè fins que no activem el signin button
-    // anant a alguna pantalla que el tingui pos no fa el check i no es logueja l'usuari
-    // sol
-    const checkExistingSession = async () => {
-        try {
-            const currentUser = await GoogleSignin.getCurrentUser()
-            if (currentUser?.idToken) {
-                const { data: authData, error: authError } =
-                    await supabase.auth.signInWithIdToken({
-                        provider: 'google',
-                        token: currentUser.idToken,
-                    })
-
-                if (authError) throw authError
-
-                setUser(authData.user)
-                onSuccess?.(authData.user)
-
-                logger({
-                    type: 'success',
-                    title: 'Auto Auth Success',
-                    message: authData.user.email,
-                })
-            }
-        } catch (error: any) {
-            logger({
-                type: 'error',
-                title: 'Auto Auth Error',
-                message: JSON.stringify(error),
-            })
-        }
-    }
 
     const handleSignin = async () => {
         try {

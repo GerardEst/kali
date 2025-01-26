@@ -106,7 +106,7 @@ export default function HomeScreen() {
                     ></ProductsCaroussel>
                 </View>
             ) : (
-                <Text>Start scanning</Text>
+                <Text>Start scanninggg</Text>
             )}
         </View>
     )
