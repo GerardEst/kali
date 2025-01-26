@@ -1,7 +1,7 @@
 import { Opinion } from "./Opinion"
 
 export interface Product {
-    barcode: number,
+    barcode: string,
     name?: string,
     opinions?: Opinion[],
     userOpinion?: Opinion,

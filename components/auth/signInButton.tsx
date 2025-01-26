@@ -25,6 +25,9 @@ export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
         checkExistingSession()
     }, [])
 
+    // TODO -> Posar aixo a una altra banda perquè fins que no activem el signin button
+    // anant a alguna pantalla que el tingui pos no fa el check i no es logueja l'usuari
+    // sol
     const checkExistingSession = async () => {
         try {
             const currentUser = await GoogleSignin.getCurrentUser()

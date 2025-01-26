@@ -24,7 +24,7 @@ export const ProductCaroussel = ({
             </View>
             {product?.userOpinion && (
                 <View>
-                    <Text>{product.userOpinion.opinion}</Text>
+                    <Text>User opinion: {product.userOpinion.opinion}</Text>
                 </View>
             )}
             <FlatList

@@ -5,6 +5,7 @@ import { Opinion } from '@/interfaces/Opinion';
 interface ScannedProductState {
     products: (Product & {
         opinions: Opinion[];
+        userOpinion: Opinion[]
     })[];
     upsertProduct: (product: Product) => void;
     upsertUserOpinion: (barcode: number, userOpinion: Opinion) => void;
@@ -23,13 +24,14 @@ export const useScannedProductsState = create<ScannedProductState>((set)=>({
     }),
 
     //@ts-ignore
-    upsertUserOpinion: (barcode: number, userOpinion: Opinion) => set((state) => {
+    upsertUserOpinion: (barcode: string, userOpinion: Opinion) => set((state) => {
        return {
-            products: state.products.map((product:Product) => 
-                product.barcode === barcode 
-                    ? { ...product, userOpinion }
-                    : product
-            )
+           products: state.products.map((product: Product) => 
+                // TODO -> Cuidado que aqui necessitem == perquè tenim number i string, sembla
+                product.barcode == barcode 
+                    ? { ...product, userOpinion: userOpinion }
+                : product)
+            
         }
     })
 }))
