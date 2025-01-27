@@ -10,7 +10,8 @@
         "test": "jest --watchAll",
         "lint": "expo lint",
         "build-app": "eas build --platform android",
-        "upload-app": "eas submit -p android"
+        "upload-app": "eas submit -p android",
+        "check-sha1": "cd android && ./gradlew signingReport"
     },
     "jest": {
         "preset": "jest-expo"

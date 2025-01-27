@@ -1,6 +1,5 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { Platform } from 'react-native'
 import AntDesign from '@expo/vector-icons/AntDesign'
 
 export default function TabLayout() {
@@ -8,31 +7,49 @@ export default function TabLayout() {
         <Tabs
             screenOptions={{
                 headerShown: false,
-                tabBarStyle: Platform.select({
-                    ios: {
-                        // Use a transparent background on iOS to show the blur effect
-                        position: 'absolute',
-                    },
-                    default: {},
-                }),
+                tabBarStyle: {
+                    position: 'absolute',
+                    bottom: 15,
+                    height: 60,
+                    width: '94%',
+                    marginLeft: '3%',
+                    borderRadius: 10,
+                    paddingVertical: 20,
+                },
+                tabBarItemStyle: {
+                    paddingVertical: 5,
+                    borderRadius: 20,
+                },
             }}
         >
             <Tabs.Screen
-                name="index"
+                name="favs"
                 options={{
-                    title: 'Home',
+                    title: 'Tus productos',
                     tabBarIcon: ({ color }) => (
-                        <AntDesign name="home" size={24} color="black" />
+                        <AntDesign name="heart" size={24} color={color} />
                     ),
+                    tabBarActiveTintColor: '#E74C3C',
                 }}
             />
             <Tabs.Screen
-                name="profile"
+                name="index"
                 options={{
-                    title: 'Profile',
+                    title: 'Buscador',
                     tabBarIcon: ({ color }) => (
-                        <AntDesign size={24} name="user" color={color} />
+                        <AntDesign name="search1" size={24} color={color} />
                     ),
+                    tabBarActiveTintColor: '#F39C12',
+                }}
+            />
+            <Tabs.Screen
+                name="settings"
+                options={{
+                    title: 'Opciones',
+                    tabBarIcon: ({ color }) => (
+                        <AntDesign size={24} name="setting" color={color} />
+                    ),
+                    tabBarActiveTintColor: '#F39C12',
                 }}
             />
         </Tabs>

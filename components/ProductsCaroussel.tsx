@@ -16,7 +16,6 @@ export const ProductsCaroussel = ({
     const fadeAnim = fadeAnimRef.current
 
     useEffect(() => {
-        console.log({ products })
         // TODO - A vegades fa l'animació i altres no
         // Sembla que quan passa de 2 i escaneja una cosa nova, va
         // pero quan son pocs o escaneja algo que ja hi havia, no

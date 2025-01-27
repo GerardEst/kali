@@ -32,7 +32,6 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
         )
 
         const userOpinion = product?.userOpinion
-        console.log(userOpinion)
 
         if (userOpinion) {
             setProductOpinion(userOpinion.opinion)

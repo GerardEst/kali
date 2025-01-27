@@ -28,7 +28,8 @@ export const useAuthState = create<AuthState>((set) => ({
     cleanUser: () => set({ user: null }),
     checkExistingSession: async () => {
         try {
-            console.log('check')
+            console.log('Check existing user session')
+
             const currentUser = GoogleSignin.getCurrentUser()
             if (currentUser?.idToken) {
                 const { data: authData, error: authError } =
@@ -40,8 +41,6 @@ export const useAuthState = create<AuthState>((set) => ({
                 if (authError) throw authError
 
                 set({ user: authData.user })
-
-                //onSuccess?.(authData.user)
 
                 logger({
                     type: 'success',
