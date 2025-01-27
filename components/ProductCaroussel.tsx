@@ -49,8 +49,8 @@ export const ProductCaroussel = ({
 const styles = StyleSheet.create({
     slideContent: {
         height: '100%',
-        width: '100%',
-        borderRadius: 15,
+        width: '95%',
+        borderRadius: 10,
         paddingHorizontal: 10,
         backgroundColor: 'white',
     },

@@ -78,7 +78,7 @@ export default function HomeScreen() {
     }
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={styles.scanner}>
             <AddOpinionModal
                 style={styles.modal}
                 productBarcode={activeBarcode}
@@ -91,34 +91,45 @@ export default function HomeScreen() {
                 isActive={true}
                 codeScanner={codeScanner}
             />
-            {products && products.length > 0 ? (
-                <View style={styles.carousselContainer}>
-                    <ProductsCaroussel
-                        onAddOpinion={(barcode: any) => {
-                            setModalVisible(true)
-                            setActiveBarcode(barcode)
-                        }}
-                        onUpdateUserOpinion={(barcode: any) => {
-                            setModalVisible(true)
-                            setActiveBarcode(barcode)
-                        }}
-                        products={products}
-                    ></ProductsCaroussel>
-                </View>
-            ) : (
-                <Text>Start scanninggg</Text>
-            )}
+            <View style={styles.scannerContent}>
+                {products && products.length > 0 ? (
+                    <View>
+                        <ProductsCaroussel
+                            onAddOpinion={(barcode: any) => {
+                                setModalVisible(true)
+                                setActiveBarcode(barcode)
+                            }}
+                            onUpdateUserOpinion={(barcode: any) => {
+                                setModalVisible(true)
+                                setActiveBarcode(barcode)
+                            }}
+                            products={products}
+                        ></ProductsCaroussel>
+                    </View>
+                ) : (
+                    <View style={styles.message}>
+                        <Text>Apunta la cámara a un código de barras para</Text>
+                    </View>
+                )}
+            </View>
         </View>
     )
 }
 const styles = StyleSheet.create({
+    scanner: {
+        flex: 1,
+    },
+    scannerContent: {
+        position: 'absolute',
+        bottom: 85,
+    },
+    message: {
+        width: '95%',
+        left: '2.5%',
+    },
     modal: {
         position: 'absolute',
         top: 0,
         backgroundColor: 'red',
-    },
-    carousselContainer: {
-        position: 'absolute',
-        bottom: 0,
     },
 })
