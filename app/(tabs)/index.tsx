@@ -108,7 +108,21 @@ export default function HomeScreen() {
                     </View>
                 ) : (
                     <View style={styles.message}>
-                        <Text>Apunta la cámara a un código de barras para</Text>
+                        <Text>
+                            Apunta con la cámara a un código de barras para:
+                        </Text>
+                        <Text>
+                            🤝 Conocer opiniones de otros usuarios sobre el
+                            producto
+                        </Text>
+                        <Text>
+                            🏷️ Añadir una nota o un recordatorio al producto
+                        </Text>
+                        <Text>💡 Encontrar información sobre el producto</Text>
+                        <Text>
+                            🌟 Comparar distintos productos y escoger el mejor,
+                            siempre
+                        </Text>
                     </View>
                 )}
             </View>
@@ -125,7 +139,11 @@ const styles = StyleSheet.create({
     },
     message: {
         width: '95%',
-        left: '2.5%',
+        marginHorizontal: '2.5%',
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
     },
     modal: {
         position: 'absolute',
