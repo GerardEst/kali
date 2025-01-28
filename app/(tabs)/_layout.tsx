@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import { Colors } from '@/constants/colors'
 
 export default function TabLayout() {
     return (
@@ -29,7 +30,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => (
                         <AntDesign name="heart" size={24} color={color} />
                     ),
-                    tabBarActiveTintColor: '#E74C3C',
+                    tabBarActiveTintColor: Colors.love,
                 }}
             />
             <Tabs.Screen
@@ -39,7 +40,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => (
                         <AntDesign name="search1" size={24} color={color} />
                     ),
-                    tabBarActiveTintColor: '#F39C12',
+                    tabBarActiveTintColor: Colors.primary,
                 }}
             />
             <Tabs.Screen
@@ -49,7 +50,7 @@ export default function TabLayout() {
                     tabBarIcon: ({ color }) => (
                         <AntDesign size={24} name="setting" color={color} />
                     ),
-                    tabBarActiveTintColor: '#F39C12',
+                    tabBarActiveTintColor: Colors.primary,
                 }}
             />
         </Tabs>

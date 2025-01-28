@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native'
-import AntDesign from '@expo/vector-icons/AntDesign'
+import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { GenericButton } from './GenericButton'
+import { Colors } from '@/constants/colors'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -11,37 +12,43 @@ export const ProductCaroussel = ({
             <View style={styles.cardHeader}>
                 <Text>{product.name || product.barcode}</Text>
                 {product?.userOpinion ? (
-                    <Pressable
-                        onPress={() => onUpdateUserOpinion(product.barcode)}
-                    >
-                        <AntDesign name="edit" size={24} color="black" />
-                    </Pressable>
+                    <GenericButton
+                        text="Cambiar valoración"
+                        icon="pencil"
+                        action={() => onUpdateUserOpinion(product.barcode)}
+                    ></GenericButton>
                 ) : (
-                    <Pressable onPress={() => onAddOpinion(product.barcode)}>
-                        <AntDesign name="plus" size={24} color="black" />
-                    </Pressable>
+                    <GenericButton
+                        text="Valorar"
+                        icon="plus"
+                        action={() => onAddOpinion(product.barcode)}
+                    ></GenericButton>
                 )}
             </View>
-            {product?.userOpinion && (
-                <View>
-                    <Text>User opinion: {product.userOpinion.opinion}</Text>
-                </View>
-            )}
-            <FlatList
-                data={product.opinions}
-                keyExtractor={(item) => item.id.toString()}
-                renderItem={({ item }) => (
-                    <View style={styles.opinionItem}>
-                        <Text>{item.opinion}</Text>
+            <View>
+                {product?.userOpinion && (
+                    <View style={styles.userOpinion}>
+                        <Text>Tu opinión</Text>
+                        <Text>{product.userOpinion.opinion}</Text>
                     </View>
                 )}
-                ListEmptyComponent={
-                    <Text>
-                        Aún no hay ninguna valoración para este producto. Sé el
-                        primero!
-                    </Text>
-                }
-            />
+                <Text>Otras opiniones</Text>
+                <FlatList
+                    data={product.opinions}
+                    keyExtractor={(item) => item.id.toString()}
+                    renderItem={({ item }) => (
+                        <View style={styles.opinionItem}>
+                            <Text>{item.opinion}</Text>
+                        </View>
+                    )}
+                    ListEmptyComponent={
+                        <Text>
+                            Aún no hay ninguna valoración para este producto. Sé
+                            el primero!
+                        </Text>
+                    }
+                />
+            </View>
         </View>
     )
 }
@@ -51,20 +58,21 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '95%',
         borderRadius: 10,
-        paddingHorizontal: 10,
+        padding: 10,
         backgroundColor: 'white',
+        gap: 10,
     },
     cardHeader: {
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#eee',
     },
     opinionItem: {
         padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+    },
+    userOpinion: {
+        padding: 15,
+        borderRadius: 10,
+        backgroundColor: Colors.background,
     },
 })
