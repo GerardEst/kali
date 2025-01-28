@@ -1,12 +1,47 @@
-import { Pressable, StyleSheet, View, Text } from 'react-native'
+import {
+    Pressable,
+    StyleSheet,
+    View,
+    Text,
+    ActivityIndicator,
+} from 'react-native'
 import Octicons from '@expo/vector-icons/Octicons'
-import { Colors } from '@/constants/colors'
+import { Colors, ButtonColors } from '@/constants/colors'
+import React from 'react'
 
-export const GenericButton = ({ action, icon, text }: any) => {
+interface genericButton {
+    type?: 'normal' | 'danger' | 'success'
+    action?: any
+    icon?: any
+    text?: string
+    disabled?: boolean
+}
+
+export const GenericButton = ({
+    type,
+    action,
+    icon,
+    text,
+    disabled,
+}: genericButton) => {
     return (
-        <Pressable onPress={action} style={styles.button}>
-            <Octicons name={icon} size={18} color="white" />
-            <Text style={styles.text}>{text}</Text>
+        <Pressable
+            disabled={disabled}
+            onPress={action}
+            style={[
+                styles.button,
+                disabled && styles.buttonDisabled,
+                { backgroundColor: ButtonColors[type || 'normal'] },
+            ]}
+        >
+            {disabled ? (
+                <ActivityIndicator color="white" size="small" />
+            ) : (
+                <>
+                    {icon && <Octicons name={icon} size={18} color="white" />}
+                    <Text style={styles.text}>{text}</Text>
+                </>
+            )}
         </Pressable>
     )
 }
@@ -19,6 +54,9 @@ const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 15,
         borderRadius: 10,
+    },
+    buttonDisabled: {
+        backgroundColor: Colors.gray,
     },
     text: { color: 'white' },
 })

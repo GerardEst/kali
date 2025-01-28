@@ -4,3 +4,9 @@ export const Colors = {
     background: '#ECF0F1',
     love: '#E74C3C',
 }
+
+export const ButtonColors = {
+    normal: Colors.primary,
+    success: '#2ECC71',
+    danger: Colors.love,
+}

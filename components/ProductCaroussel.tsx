@@ -2,6 +2,7 @@ import { View, Text, StyleSheet, FlatList } from 'react-native'
 import { GenericButton } from './GenericButton'
 import { Colors } from '@/constants/colors'
 import { Texts } from '@/constants/texts'
+import { Sentiments } from '@/constants/reactions'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -22,6 +23,9 @@ export const ProductCaroussel = ({
                             <View style={styles.opinion}>
                                 <Text style={Texts.smallTitle}>Tu opinión</Text>
                                 <Text>{product.userOpinion.opinion}</Text>
+                                <Text>
+                                    {Sentiments[product.userOpinion.sentiment]}
+                                </Text>
                             </View>
                             <GenericButton
                                 text="Modificar"
@@ -48,6 +52,7 @@ export const ProductCaroussel = ({
                         renderItem={({ item }) => (
                             <View style={styles.opinionItem}>
                                 <Text>{item.opinion}</Text>
+                                <Text>{Sentiments[item.sentiment]}</Text>
                             </View>
                         )}
                         ListEmptyComponent={

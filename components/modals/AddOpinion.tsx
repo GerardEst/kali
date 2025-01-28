@@ -18,6 +18,9 @@ import {
     createNewOpinionForProduct,
     updateOpinionForProduct,
 } from '@/api/products'
+import { Sentiments } from '@/constants/reactions'
+import { GenericButton } from '../GenericButton'
+import { Texts } from '@/constants/texts'
 
 export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const [productOpinion, setProductOpinion] = useState<string>('')
@@ -94,10 +97,10 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
             {user ? (
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
-                        <Text>
+                        <Text style={[Texts.smallTitle, styles.modalTitle]}>
                             {products[productBarcode]?.name || productBarcode}
                         </Text>
-                        <Pressable style={styles.button} onPress={onClose}>
+                        <Pressable style={styles.closeButton} onPress={onClose}>
                             <AntDesign name="close" size={24} color="black" />
                         </Pressable>
                     </View>
@@ -111,7 +114,21 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                                 ]}
                                 onPress={() => setSelectedSentiment(0)}
                             >
-                                <Text style={styles.faceEmoji}>😠</Text>
+                                <Text style={styles.faceEmoji}>
+                                    {Sentiments[0]}
+                                </Text>
+                            </Pressable>
+                            <Pressable
+                                style={[
+                                    styles.faceButton,
+                                    selectedSentiment === 1 &&
+                                        styles.selectedSentiment,
+                                ]}
+                                onPress={() => setSelectedSentiment(1)}
+                            >
+                                <Text style={styles.faceEmoji}>
+                                    {Sentiments[1]}
+                                </Text>
                             </Pressable>
                             <Pressable
                                 style={[
@@ -121,7 +138,21 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                                 ]}
                                 onPress={() => setSelectedSentiment(2)}
                             >
-                                <Text style={styles.faceEmoji}>😐</Text>
+                                <Text style={styles.faceEmoji}>
+                                    {Sentiments[2]}
+                                </Text>
+                            </Pressable>
+                            <Pressable
+                                style={[
+                                    styles.faceButton,
+                                    selectedSentiment === 3 &&
+                                        styles.selectedSentiment,
+                                ]}
+                                onPress={() => setSelectedSentiment(3)}
+                            >
+                                <Text style={styles.faceEmoji}>
+                                    {Sentiments[3]}
+                                </Text>
                             </Pressable>
                             <Pressable
                                 style={[
@@ -131,7 +162,9 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                                 ]}
                                 onPress={() => setSelectedSentiment(4)}
                             >
-                                <Text style={styles.faceEmoji}>😊</Text>
+                                <Text style={styles.faceEmoji}>
+                                    {Sentiments[4]}
+                                </Text>
                             </Pressable>
                         </View>
                         <TextInput
@@ -143,11 +176,20 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                             onChangeText={(text) => setProductOpinion(text)}
                             style={styles.opinion}
                         />
-                        <Button
-                            title={isLoading ? 'Saving...' : 'Save'}
-                            onPress={submitProductOpinion}
-                            disabled={isLoading}
-                        ></Button>
+                        <View style={styles.modalFooter}>
+                            <GenericButton
+                                text="Borrar"
+                                icon="circle-slash"
+                                type="danger"
+                            ></GenericButton>
+                            <GenericButton
+                                text="Publicar"
+                                icon="check"
+                                type="success"
+                                action={submitProductOpinion}
+                                disabled={isLoading}
+                            ></GenericButton>
+                        </View>
                     </View>
                 </View>
             ) : (
@@ -179,8 +221,6 @@ const styles = StyleSheet.create({
         shadowRadius: 4,
         elevation: 5,
         gap: 10,
-        paddingHorizontal: 10,
-        paddingVertical: 10,
     },
     modalHeader: {
         display: 'flex',
@@ -189,20 +229,27 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'space-between',
     },
+    modalTitle: {
+        paddingLeft: 15,
+    },
     modalContent: {
         gap: 10,
-        paddingVertical: 20,
+        padding: 15,
         width: '100%',
         alignItems: 'center',
     },
-    button: {
-        padding: 10,
+    modalFooter: {
+        flexDirection: 'row',
+        gap: 10,
     },
     opinion: {
         borderWidth: 1,
         borderColor: 'gray',
         padding: 10,
         width: '100%',
+    },
+    closeButton: {
+        padding: 15,
     },
     faceContainer: {
         flexDirection: 'row',
