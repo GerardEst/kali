@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, FlatList } from 'react-native'
 import { GenericButton } from './GenericButton'
 import { Colors } from '@/constants/colors'
+import { Texts } from '@/constants/texts'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -10,44 +11,53 @@ export const ProductCaroussel = ({
     return (
         <View style={styles.slideContent}>
             <View style={styles.cardHeader}>
-                <Text>{product.name || product.barcode}</Text>
-                {product?.userOpinion ? (
-                    <GenericButton
-                        text="Cambiar valoración"
-                        icon="pencil"
-                        action={() => onUpdateUserOpinion(product.barcode)}
-                    ></GenericButton>
-                ) : (
-                    <GenericButton
-                        text="Valorar"
-                        icon="plus"
-                        action={() => onAddOpinion(product.barcode)}
-                    ></GenericButton>
-                )}
+                <Text style={Texts.title}>
+                    {product.name || product.barcode}
+                </Text>
             </View>
-            <View>
-                {product?.userOpinion && (
-                    <View style={styles.userOpinion}>
-                        <Text>Tu opinión</Text>
-                        <Text>{product.userOpinion.opinion}</Text>
-                    </View>
-                )}
-                <Text>Otras opiniones</Text>
-                <FlatList
-                    data={product.opinions}
-                    keyExtractor={(item) => item.id.toString()}
-                    renderItem={({ item }) => (
-                        <View style={styles.opinionItem}>
-                            <Text>{item.opinion}</Text>
+            <View style={styles.cardContent}>
+                <View>
+                    {product?.userOpinion ? (
+                        <View style={styles.userOpinion}>
+                            <View style={styles.opinion}>
+                                <Text style={Texts.smallTitle}>Tu opinión</Text>
+                                <Text>{product.userOpinion.opinion}</Text>
+                            </View>
+                            <GenericButton
+                                text="Modificar"
+                                icon="pencil"
+                                action={() =>
+                                    onUpdateUserOpinion(product.barcode)
+                                }
+                            ></GenericButton>
                         </View>
+                    ) : (
+                        <GenericButton
+                            text="Valorar"
+                            icon="plus"
+                            action={() => onAddOpinion(product.barcode)}
+                        ></GenericButton>
                     )}
-                    ListEmptyComponent={
-                        <Text>
-                            Aún no hay ninguna valoración para este producto. Sé
-                            el primero!
-                        </Text>
-                    }
-                />
+                </View>
+                <View>
+                    <Text style={Texts.title}>Valoraciones</Text>
+                    <FlatList
+                        data={product.opinions}
+                        style={styles.otherOpinionsList}
+                        keyExtractor={(item) => item.id.toString()}
+                        renderItem={({ item }) => (
+                            <View style={styles.opinionItem}>
+                                <Text>{item.opinion}</Text>
+                            </View>
+                        )}
+                        ListEmptyComponent={
+                            <Text>
+                                Aún no hay ninguna valoración para este
+                                producto. Sé el primero!
+                            </Text>
+                        }
+                    />
+                </View>
             </View>
         </View>
     )
@@ -67,12 +77,25 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
     },
+    cardContent: {
+        flexDirection: 'column',
+        gap: 15,
+    },
+    otherOpinionsList: {
+        marginTop: 5,
+    },
     opinionItem: {
         padding: 10,
+        borderLeftWidth: 2,
+        borderLeftColor: Colors.gray,
     },
     userOpinion: {
+        flexDirection: 'row',
         padding: 15,
         borderRadius: 10,
         backgroundColor: Colors.background,
+    },
+    opinion: {
+        flex: 1,
     },
 })
