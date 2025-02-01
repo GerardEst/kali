@@ -3,6 +3,7 @@ import { GenericButton } from './GenericButton'
 import { Colors } from '@/constants/colors'
 import { Texts } from '@/constants/texts'
 import { Sentiments } from '@/constants/reactions'
+import { UserOpinion } from './opinion'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -19,22 +20,11 @@ export const ProductCaroussel = ({
             <View style={styles.cardContent}>
                 <View>
                     {product?.userOpinion ? (
-                        <View style={styles.userOpinion}>
-                            <View style={styles.opinion}>
-                                <Text style={Texts.smallTitle}>Tu opinión</Text>
-                                <Text>{product.userOpinion.opinion}</Text>
-                                <Text>
-                                    {Sentiments[product.userOpinion.sentiment]}
-                                </Text>
-                            </View>
-                            <GenericButton
-                                text="Modificar"
-                                icon="pencil"
-                                action={() =>
-                                    onUpdateUserOpinion(product.barcode)
-                                }
-                            ></GenericButton>
-                        </View>
+                        <UserOpinion
+                            productBarcode={product.barcode}
+                            opinion={product.userOpinion}
+                            onUpdateUserOpinion={onUpdateUserOpinion}
+                        ></UserOpinion>
                     ) : (
                         <GenericButton
                             text="Valorar"
@@ -93,14 +83,5 @@ const styles = StyleSheet.create({
         padding: 10,
         borderLeftWidth: 2,
         borderLeftColor: Colors.gray,
-    },
-    userOpinion: {
-        flexDirection: 'row',
-        padding: 15,
-        borderRadius: 10,
-        backgroundColor: Colors.background,
-    },
-    opinion: {
-        flex: 1,
     },
 })
