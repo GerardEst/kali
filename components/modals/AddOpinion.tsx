@@ -18,7 +18,7 @@ import {
     createNewOpinionForProduct,
     updateOpinionForProduct,
 } from '@/api/products'
-import { Sentiments } from '@/constants/reactions'
+import { Sentiments } from '@/constants/sentiments'
 import { GenericButton } from '../GenericButton'
 import { Texts } from '@/constants/texts'
 

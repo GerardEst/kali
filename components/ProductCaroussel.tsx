@@ -2,8 +2,8 @@ import { View, Text, StyleSheet, FlatList } from 'react-native'
 import { GenericButton } from './GenericButton'
 import { Colors } from '@/constants/colors'
 import { Texts } from '@/constants/texts'
-import { Sentiments } from '@/constants/reactions'
-import { UserOpinion } from './opinion'
+import { Sentiments } from '@/constants/sentiments'
+import { UserOpinion } from './UserOpinion'
 
 export const ProductCaroussel = ({
     onAddOpinion,

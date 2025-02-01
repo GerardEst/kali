@@ -10,6 +10,7 @@ import { Colors, ButtonColors } from '@/constants/colors'
 import React from 'react'
 
 interface genericButton {
+    style?: any
     type?: 'normal' | 'danger' | 'success'
     action?: any
     icon?: any
@@ -18,6 +19,7 @@ interface genericButton {
 }
 
 export const GenericButton = ({
+    style,
     type,
     action,
     icon,
@@ -32,6 +34,7 @@ export const GenericButton = ({
                 styles.button,
                 disabled && styles.buttonDisabled,
                 { backgroundColor: ButtonColors[type || 'normal'] },
+                style,
             ]}
         >
             {disabled ? (
