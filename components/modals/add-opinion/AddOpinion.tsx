@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import {
     StyleSheet,
     View,
@@ -28,6 +28,7 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const { products, upsertUserOpinion } = useScannedProductsState()
     const { user } = useAuthState()
     const [product, setProduct] = useState<any>({})
+    const InputRef = useRef<any>(null)
 
     useEffect(() => {
         const product = products.find(
@@ -47,6 +48,10 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
             setProductOpinion('')
             setSelectedSentiment(2)
         }
+
+        setTimeout(() => {
+            if (InputRef.current) InputRef.current.focus()
+        }, 100)
     }, [visible, productBarcode])
 
     const submitProductOpinion = async () => {
@@ -116,6 +121,7 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                             }
                         ></SentimentSelector>
                         <TextInput
+                            ref={InputRef}
                             value={productOpinion}
                             editable
                             multiline
@@ -151,7 +157,7 @@ const styles = StyleSheet.create({
     },
     modalContainer: {
         backgroundColor: 'white',
-        width: '80%',
+        width: '90%',
         minWidth: 200,
         borderRadius: 10,
         alignItems: 'center',
@@ -191,6 +197,7 @@ const styles = StyleSheet.create({
         borderColor: 'gray',
         padding: 10,
         width: '100%',
+        borderRadius: 10,
     },
     closeButton: {
         padding: 15,

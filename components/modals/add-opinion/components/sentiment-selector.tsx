@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { Sentiments } from '@/constants/sentiments'
+import { Colors } from '@/constants/colors'
 
 export function SentimentSelector({ sentiment, onSelectedSentiment }: any) {
     return (
@@ -59,17 +60,24 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         width: '100%',
         marginBottom: 10,
+        //borderWidth: 1,
+        backgroundColor: Colors.background,
+        borderColor: Colors.gray,
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     faceButton: {
-        padding: 10,
-        borderRadius: 25,
-        borderWidth: 2,
-        borderColor: 'transparent',
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        height: '100%',
     },
     selectedSentiment: {
-        borderColor: '#007AFF',
+        backgroundColor: Colors.gray,
     },
     faceEmoji: {
         fontSize: 24,
+        textAlign: 'center',
     },
 })
