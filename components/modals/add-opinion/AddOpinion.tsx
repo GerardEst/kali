@@ -5,7 +5,6 @@ import {
     Text,
     Pressable,
     TextInput,
-    Button,
     Alert,
 } from 'react-native'
 import Modal from 'react-native-modal'
@@ -18,9 +17,9 @@ import {
     createNewOpinionForProduct,
     updateOpinionForProduct,
 } from '@/api/products'
-import { Sentiments } from '@/constants/sentiments'
-import { GenericButton } from '../GenericButton'
+import { GenericButton } from '../../GenericButton'
 import { Texts } from '@/constants/texts'
+import { SentimentSelector } from './components/sentiment-selector'
 
 export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const [productOpinion, setProductOpinion] = useState<string>('')
@@ -110,68 +109,12 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                         </Pressable>
                     </View>
                     <View style={styles.modalContent}>
-                        <View style={styles.faceContainer}>
-                            <Pressable
-                                style={[
-                                    styles.faceButton,
-                                    selectedSentiment === 0 &&
-                                        styles.selectedSentiment,
-                                ]}
-                                onPress={() => setSelectedSentiment(0)}
-                            >
-                                <Text style={styles.faceEmoji}>
-                                    {Sentiments[0]}
-                                </Text>
-                            </Pressable>
-                            <Pressable
-                                style={[
-                                    styles.faceButton,
-                                    selectedSentiment === 1 &&
-                                        styles.selectedSentiment,
-                                ]}
-                                onPress={() => setSelectedSentiment(1)}
-                            >
-                                <Text style={styles.faceEmoji}>
-                                    {Sentiments[1]}
-                                </Text>
-                            </Pressable>
-                            <Pressable
-                                style={[
-                                    styles.faceButton,
-                                    selectedSentiment === 2 &&
-                                        styles.selectedSentiment,
-                                ]}
-                                onPress={() => setSelectedSentiment(2)}
-                            >
-                                <Text style={styles.faceEmoji}>
-                                    {Sentiments[2]}
-                                </Text>
-                            </Pressable>
-                            <Pressable
-                                style={[
-                                    styles.faceButton,
-                                    selectedSentiment === 3 &&
-                                        styles.selectedSentiment,
-                                ]}
-                                onPress={() => setSelectedSentiment(3)}
-                            >
-                                <Text style={styles.faceEmoji}>
-                                    {Sentiments[3]}
-                                </Text>
-                            </Pressable>
-                            <Pressable
-                                style={[
-                                    styles.faceButton,
-                                    selectedSentiment === 4 &&
-                                        styles.selectedSentiment,
-                                ]}
-                                onPress={() => setSelectedSentiment(4)}
-                            >
-                                <Text style={styles.faceEmoji}>
-                                    {Sentiments[4]}
-                                </Text>
-                            </Pressable>
-                        </View>
+                        <SentimentSelector
+                            sentiment={selectedSentiment}
+                            onSelectedSentiment={(sentiment: number) =>
+                                setSelectedSentiment(sentiment)
+                            }
+                        ></SentimentSelector>
                         <TextInput
                             value={productOpinion}
                             editable
@@ -182,11 +125,6 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                             style={styles.opinion}
                         />
                         <View style={styles.modalFooter}>
-                            <GenericButton
-                                text="Borrar"
-                                icon="circle-slash"
-                                type="danger"
-                            ></GenericButton>
                             <GenericButton
                                 text="Publicar"
                                 icon="check"
@@ -245,7 +183,8 @@ const styles = StyleSheet.create({
     },
     modalFooter: {
         flexDirection: 'row',
-        gap: 10,
+        width: '100%',
+        justifyContent: 'flex-end',
     },
     opinion: {
         borderWidth: 1,
@@ -255,23 +194,5 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         padding: 15,
-    },
-    faceContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-        marginBottom: 10,
-    },
-    faceButton: {
-        padding: 10,
-        borderRadius: 25,
-        borderWidth: 2,
-        borderColor: 'transparent',
-    },
-    selectedSentiment: {
-        borderColor: '#007AFF',
-    },
-    faceEmoji: {
-        fontSize: 24,
     },
 })

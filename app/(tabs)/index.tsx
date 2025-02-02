@@ -7,7 +7,7 @@ import {
 } from 'react-native-vision-camera'
 import { Camera } from 'react-native-vision-camera'
 import { useState } from 'react'
-import { AddOpinionModal } from '@/components/modals/AddOpinion'
+import { AddOpinionModal } from '@/components/modals/add-opinion/AddOpinion'
 import { useScannedProductsState } from '@/hooks/scannedProductsState'
 import { getProductByBarcode, getProductOpinionByUser } from '@/api/products'
 import { useAuthState } from '@/hooks/authState'
