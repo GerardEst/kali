@@ -7,6 +7,7 @@ import { Product } from '@/interfaces/Product'
 export const ProductsCaroussel = ({
     onAddOpinion,
     onUpdateUserOpinion,
+    onUpdateProductInfo,
     products,
 }: any) => {
     const scrollViewRef = useRef<ScrollView>(null)
@@ -53,6 +54,7 @@ export const ProductsCaroussel = ({
                         <ProductCaroussel
                             onAddOpinion={onAddOpinion}
                             onUpdateUserOpinion={onUpdateUserOpinion}
+                            onUpdateProductInfo={onUpdateProductInfo}
                             product={product}
                         ></ProductCaroussel>
                     </Animated.View>

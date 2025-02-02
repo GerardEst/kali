@@ -51,7 +51,9 @@ export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
                 )
             }
 
-            setUser(authData.user)
+            const isAdmin = authData.user.email === 'gesteve.12@gmail.com'
+
+            setUser({ ...authData.user, isAdmin })
             onSuccess?.(authData.user)
 
             // Log the success

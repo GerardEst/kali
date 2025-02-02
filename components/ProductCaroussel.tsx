@@ -1,21 +1,31 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, Text, StyleSheet, FlatList, Button } from 'react-native'
 import { GenericButton } from './GenericButton'
 import { Colors } from '@/constants/colors'
 import { Texts } from '@/constants/texts'
 import { Sentiments } from '@/constants/sentiments'
 import { UserOpinion } from './UserOpinion'
+import { useAuthState } from '@/hooks/authState'
 
 export const ProductCaroussel = ({
     onAddOpinion,
     onUpdateUserOpinion,
+    onUpdateProductInfo,
     product,
 }: any) => {
+    const { user } = useAuthState()
+
     return (
         <View style={styles.slideContent}>
             <View style={styles.cardHeader}>
                 <Text style={Texts.title}>
                     {product.name || product.barcode}
                 </Text>
+                {user?.isAdmin && (
+                    <Button
+                        onPress={() => onUpdateProductInfo(product.barcode)}
+                        title="Update"
+                    ></Button>
+                )}
             </View>
             <View style={styles.cardContent}>
                 <View>
@@ -69,7 +79,7 @@ const styles = StyleSheet.create({
     },
     cardHeader: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        gap: 15,
         alignItems: 'center',
     },
     cardContent: {

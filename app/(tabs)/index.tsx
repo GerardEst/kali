@@ -11,6 +11,7 @@ import { AddOpinionModal } from '@/components/modals/AddOpinion'
 import { useScannedProductsState } from '@/hooks/scannedProductsState'
 import { getProductByBarcode, getProductOpinionByUser } from '@/api/products'
 import { useAuthState } from '@/hooks/authState'
+import { UpdateProductInfoModal } from '@/components/modals/UpdateProductInfo'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
@@ -18,7 +19,8 @@ export default function HomeScreen() {
     const { products, upsertProduct, upsertUserOpinion } =
         useScannedProductsState()
     const [modalVisible, setModalVisible] = useState(false)
-    const [activeBarcode, setActiveBarcode] = useState(null)
+    const [infoModalVisible, setInfoModalVisible] = useState(false)
+    const [activeBarcode, setActiveBarcode] = useState<string | null>(null)
     const [checkCode, setCheckCode] = useState<string>('')
     const [timesChecked, setTimesChecked] = useState<number>(0)
     const { user } = useAuthState()
@@ -85,6 +87,12 @@ export default function HomeScreen() {
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
             ></AddOpinionModal>
+            <UpdateProductInfoModal
+                style={styles.modal}
+                productBarcode={activeBarcode}
+                visible={infoModalVisible}
+                onClose={() => setInfoModalVisible(false)}
+            ></UpdateProductInfoModal>
             <Camera
                 style={StyleSheet.absoluteFill}
                 device={device}
@@ -95,12 +103,16 @@ export default function HomeScreen() {
                 {products && products.length > 0 ? (
                     <View>
                         <ProductsCaroussel
-                            onAddOpinion={(barcode: any) => {
+                            onAddOpinion={(barcode: string) => {
                                 setModalVisible(true)
                                 setActiveBarcode(barcode)
                             }}
-                            onUpdateUserOpinion={(barcode: any) => {
+                            onUpdateUserOpinion={(barcode: string) => {
                                 setModalVisible(true)
+                                setActiveBarcode(barcode)
+                            }}
+                            onUpdateProductInfo={(barcode: string) => {
+                                setInfoModalVisible(true)
                                 setActiveBarcode(barcode)
                             }}
                             products={products}

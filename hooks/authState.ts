@@ -13,6 +13,7 @@ type User = {
     id: string
     user_metadata: any
     identities?: any
+    isAdmin?: boolean
 } | null
 
 interface AuthState {
@@ -40,7 +41,10 @@ export const useAuthState = create<AuthState>((set) => ({
 
                 if (authError) throw authError
 
-                set({ user: authData.user })
+                // TODO - Fer millor
+                const isAdmin = authData.user.email === 'gesteve.12@gmail.com'
+
+                set({ user: { ...authData.user, isAdmin } })
 
                 logger({
                     type: 'success',

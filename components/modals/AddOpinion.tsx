@@ -28,11 +28,16 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const { products, upsertUserOpinion } = useScannedProductsState()
     const { user } = useAuthState()
+    const [product, setProduct] = useState<any>({})
 
     useEffect(() => {
         const product = products.find(
             (product) => product.barcode == productBarcode
         )
+
+        if (product) {
+            setProduct(product)
+        }
 
         const userOpinion = product?.userOpinion
 
@@ -98,7 +103,7 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
                         <Text style={[Texts.smallTitle, styles.modalTitle]}>
-                            {products[productBarcode]?.name || productBarcode}
+                            {product.name || productBarcode}
                         </Text>
                         <Pressable style={styles.closeButton} onPress={onClose}>
                             <AntDesign name="close" size={24} color="black" />
