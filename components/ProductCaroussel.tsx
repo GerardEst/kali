@@ -31,6 +31,7 @@ export const ProductCaroussel = ({
                 <View>
                     {product?.userOpinion ? (
                         <UserOpinion
+                            title="Tu opinión"
                             productBarcode={product.barcode}
                             opinion={product.userOpinion}
                             onUpdateUserOpinion={onUpdateUserOpinion}

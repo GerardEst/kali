@@ -6,12 +6,14 @@ import { Colors, SentimentColors } from '@/constants/colors'
 import { Opinion } from '@/interfaces/Opinion'
 
 interface UserOpinionComponent {
+    title?: string
     productBarcode: string
     opinion: Opinion
-    onUpdateUserOpinion: (barcode: string) => void
+    onUpdateUserOpinion?: (barcode: string) => void
 }
 
 export const UserOpinion = ({
+    title,
     productBarcode,
     opinion,
     onUpdateUserOpinion,
@@ -20,7 +22,7 @@ export const UserOpinion = ({
         <View style={styles.userOpinion}>
             <View>
                 <View>
-                    <Text style={Texts.smallTitle}>Tu opinión</Text>
+                    {title && <Text style={Texts.smallTitle}>{title}</Text>}
                     <Text>{opinion.opinion}</Text>
                 </View>
                 <View
@@ -41,7 +43,7 @@ export const UserOpinion = ({
                 style={styles.modifyButton}
                 text="Modificar"
                 icon="pencil"
-                action={() => onUpdateUserOpinion(productBarcode)}
+                action={() => onUpdateUserOpinion?.(productBarcode)}
             ></GenericButton>
         </View>
     )

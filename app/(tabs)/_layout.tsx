@@ -26,7 +26,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="favs"
                 options={{
-                    title: 'Tus productos',
+                    title: 'Tus opiniones',
                     tabBarIcon: ({ color }) => (
                         <AntDesign name="heart" size={24} color={color} />
                     ),

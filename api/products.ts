@@ -64,6 +64,22 @@ export const getProductOpinionByUser = async (
     }
 }
 
+export const getAllOpinionsByUser = async (userId: string) => {
+    try {
+        const { data, error } = await supabase
+            .from('opinions')
+            .select('*')
+            .eq('profile', userId)
+
+        if (error) throw error
+
+        return data as Opinion[]
+    } catch (error: any) {
+        console.error(error)
+        throw new Error('Error getting user opinion')
+    }
+}
+
 export const createNewProduct = async (barcode: string) => {
     try {
         const { data: product, error } = await supabase
