@@ -9,7 +9,7 @@ const VersionDisplay = () => {
     return (
         <View className="p-4 rounded-lg bg-gray-100">
             <Text className="text-gray-700 font-medium">
-                Version: {version} ({buildNumber})
+                Versió: {version} ({buildNumber})
             </Text>
         </View>
     )

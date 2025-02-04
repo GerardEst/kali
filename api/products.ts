@@ -1,4 +1,4 @@
-import { Opinion } from '@/interfaces/Opinion'
+import { Opinion, UserOpinionWithProductName } from '@/interfaces/Opinion'
 import { Product } from '@/interfaces/Product'
 import { supabase } from '@/lib/supabase'
 
@@ -68,12 +68,12 @@ export const getAllOpinionsByUser = async (userId: string) => {
     try {
         const { data, error } = await supabase
             .from('opinions')
-            .select('*')
+            .select('id, opinion, sentiment, products (name)')
             .eq('profile', userId)
 
         if (error) throw error
 
-        return data as Opinion[]
+        return data as UserOpinionWithProductName[]
     } catch (error: any) {
         console.error(error)
         throw new Error('Error getting user opinion')

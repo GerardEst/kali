@@ -39,12 +39,14 @@ export const UserOpinion = ({
                     </Text>
                 </View>
             </View>
-            <GenericButton
-                style={styles.modifyButton}
-                text="Modificar"
-                icon="pencil"
-                action={() => onUpdateUserOpinion?.(productBarcode)}
-            ></GenericButton>
+            {onUpdateUserOpinion && (
+                <GenericButton
+                    style={styles.modifyButton}
+                    text="Modificar"
+                    icon="pencil"
+                    action={() => onUpdateUserOpinion?.(productBarcode)}
+                ></GenericButton>
+            )}
         </View>
     )
 }

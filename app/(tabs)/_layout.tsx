@@ -24,9 +24,9 @@ export default function TabLayout() {
             }}
         >
             <Tabs.Screen
-                name="favs"
+                name="opinions"
                 options={{
-                    title: 'Tus opiniones',
+                    title: 'Opinions',
                     tabBarIcon: ({ color }) => (
                         <AntDesign name="heart" size={24} color={color} />
                     ),
@@ -46,7 +46,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="settings"
                 options={{
-                    title: 'Opciones',
+                    title: 'Opcions',
                     tabBarIcon: ({ color }) => (
                         <AntDesign size={24} name="setting" color={color} />
                     ),

@@ -10,7 +10,7 @@ import { useUserOpinionsState } from '@/hooks/userOpinionsState'
 import { Opinion } from '@/interfaces/Opinion'
 import { UserOpinion } from '@/components/UserOpinion'
 
-export default function Favs() {
+export default function Opinions() {
     const { user } = useAuthState()
     const { opinions, setUserOpinions } = useUserOpinionsState()
 
@@ -26,7 +26,7 @@ export default function Favs() {
 
     return (
         <SafeAreaView style={Pages}>
-            <Text style={Texts.title}>Tus opiniones</Text>
+            <Text style={Texts.title}>Les teves opinions</Text>
 
             {user ? (
                 <View style={styles.opinionsList}>
@@ -36,6 +36,7 @@ export default function Favs() {
                         renderItem={({ item }) => (
                             <View style={styles.userOpinion}>
                                 <UserOpinion
+                                    title={item.products.name}
                                     productBarcode="null"
                                     opinion={item}
                                 ></UserOpinion>
@@ -51,7 +52,6 @@ export default function Favs() {
                 </View>
             ) : (
                 <View>
-                    <Text>Registrate</Text>
                     <GoogleSign></GoogleSign>
                 </View>
             )}

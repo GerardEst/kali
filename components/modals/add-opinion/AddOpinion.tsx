@@ -143,7 +143,7 @@ export function AddOpinionModal({ productBarcode, visible, onClose }: any) {
                 </View>
             ) : (
                 <View style={styles.modalContainer}>
-                    <Text>Registrate para poder añadir valoraciones</Text>
+                    <Text>Registra't per poder afegir opinions</Text>
                     <GoogleSign></GoogleSign>
                 </View>
             )}

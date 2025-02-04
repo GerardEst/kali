@@ -31,7 +31,7 @@ export const ProductCaroussel = ({
                 <View>
                     {product?.userOpinion ? (
                         <UserOpinion
-                            title="Tu opinión"
+                            title="La teva opinió"
                             productBarcode={product.barcode}
                             opinion={product.userOpinion}
                             onUpdateUserOpinion={onUpdateUserOpinion}
@@ -45,7 +45,7 @@ export const ProductCaroussel = ({
                     )}
                 </View>
                 <View>
-                    <Text style={Texts.title}>Valoraciones</Text>
+                    <Text style={Texts.title}>Altres opinions</Text>
                     <FlatList
                         data={product.opinions}
                         style={styles.otherOpinionsList}
@@ -58,8 +58,8 @@ export const ProductCaroussel = ({
                         )}
                         ListEmptyComponent={
                             <Text>
-                                Aún no hay ninguna valoración para este
-                                producto. Sé el primero!
+                                Encara no s'ha valorat aquet producte. Sigues el
+                                primer!
                             </Text>
                         }
                     />
