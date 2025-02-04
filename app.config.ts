@@ -1,5 +1,7 @@
 import { ConfigContext, ExpoConfig } from 'expo/config'
 
+const APP_VERSION = '0.3.0'
+
 const IS_DEV = process.env.APP_VARIANT === 'development'
 const IS_PREVIEW = process.env.APP_VARIANT === 'preview'
 
@@ -31,7 +33,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     ...config,
     name: getAppName(),
     slug: 'kali',
-    version: '0.2.1',
+    version: APP_VERSION,
     orientation: 'portrait',
     icon: './assets/images/icon.png',
     scheme: 'myapp',
