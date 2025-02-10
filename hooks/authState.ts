@@ -42,7 +42,10 @@ export const useAuthState = create<AuthState>((set) => ({
                 if (authError) throw authError
 
                 // TODO - Fer millor
-                const isAdmin = authData.user.email === 'gesteve.12@gmail.com'
+                const isAdmin =
+                    authData.user.email === 'gesteve.12@gmail.com' ||
+                    authData.user.email === 'davidestevebusquets@gmail.com' ||
+                    authData.user.email === 'rosamariabn@hotmail.com'
 
                 set({ user: { ...authData.user, isAdmin } })
 
