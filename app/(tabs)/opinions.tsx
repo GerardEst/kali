@@ -3,11 +3,10 @@ import { useAuthState } from '@/hooks/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Texts } from '@/constants/texts'
 import { Pages } from '@/styles/common'
-import { useEffect, useState } from 'react'
-import { getAllOpinionsByUser } from '@/api/products'
+import { useEffect } from 'react'
+import { getAllOpinionsByUser } from '@/apis/products-api'
 import GoogleSign from '@/components/auth/signInButton'
 import { useUserOpinionsState } from '@/hooks/userOpinionsState'
-import { Opinion } from '@/interfaces/Opinion'
 import { UserOpinion } from '@/components/UserOpinion'
 
 export default function Opinions() {

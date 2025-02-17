@@ -16,7 +16,7 @@ import { useScannedProductsState } from '@/hooks/scannedProductsState'
 import {
     createNewOpinionForProduct,
     updateOpinionForProduct,
-} from '@/api/products'
+} from '@/apis/products-api'
 import { GenericButton } from '../../GenericButton'
 import { Texts } from '@/constants/texts'
 import { SentimentSelector } from './components/sentiment-selector'

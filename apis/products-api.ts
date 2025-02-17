@@ -1,6 +1,7 @@
 import { Opinion, UserOpinionWithProductName } from '@/interfaces/Opinion'
 import { Product } from '@/interfaces/Product'
 import { supabase } from '@/lib/supabase'
+import { getProductName } from './openFood-api'
 
 export const getProductByBarcode = async (
     barcode: string,
@@ -13,8 +14,14 @@ export const getProductByBarcode = async (
             .eq('barcode', barcode)
 
         if (product && product.length === 0) {
+            const name = await getProductName(barcode)
+
             // Si no hi ha producte, el creem i ens estalviem de pillar les opinions
-            const createdProduct = await createNewProduct(barcode, barcodeType)
+            const createdProduct = await createNewProduct(
+                barcode,
+                barcodeType,
+                name || barcode
+            )
 
             return createdProduct as Product
         }
@@ -85,12 +92,19 @@ export const getAllOpinionsByUser = async (userId: string) => {
 
 export const createNewProduct = async (
     barcode: string,
-    barcodeType: string
+    barcodeType: string,
+    productName: string
 ) => {
     try {
         const { data: product, error } = await supabase
             .from('products')
-            .insert([{ barcode: barcode, barcode_type: barcodeType }])
+            .insert([
+                {
+                    barcode: barcode,
+                    name: productName,
+                    barcode_type: barcodeType,
+                },
+            ])
             .select()
 
         if (error) throw error
