@@ -129,19 +129,18 @@ export default function HomeScreen() {
                 ) : (
                     <View style={styles.message}>
                         <Text>
-                            Apunta con la cámara a un código de barras para:
+                            Apunta amb la cámara a un códi de barres per:
                         </Text>
                         <Text>
-                            🤝 Conocer opiniones de otros usuarios sobre el
-                            producto
+                            🤝 Veure opinions d'altres usuaris sobre el producte
                         </Text>
                         <Text>
-                            🏷️ Añadir una nota o un recordatorio al producto
+                            🏷️ Afegir una nota o un recordatori al producte
                         </Text>
-                        <Text>💡 Encontrar información sobre el producto</Text>
+                        <Text>💡 Trobar informació sobre el producte</Text>
                         <Text>
-                            🌟 Comparar distintos productos y escoger el mejor,
-                            siempre
+                            🌟 Comparar diferents productes i triar el millor,
+                            sempre
                         </Text>
                     </View>
                 )}

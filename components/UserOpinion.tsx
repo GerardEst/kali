@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList } from 'react-native'
+import { View, Text, StyleSheet } from 'react-native'
 import { Texts } from '@/constants/texts'
 import { Sentiments } from '@/constants/sentiments'
 import { GenericButton } from './GenericButton'

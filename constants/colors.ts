@@ -14,9 +14,9 @@ export const ButtonColors = {
 }
 
 export const SentimentColors = [
-    Colors.gray,
-    Colors.gray,
-    Colors.gray,
-    Colors.gray,
-    Colors.gray,
+    '#e12729',
+    '#f37324',
+    '#f8cc1b',
+    '#72b043',
+    '#007f4e',
 ]

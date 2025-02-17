@@ -1,8 +1,10 @@
-import { Opinion } from "./Opinion"
+import { Opinion } from './Opinion'
 
 export interface Product {
-    barcode: string,
-    name?: string,
-    opinions?: Opinion[],
-    userOpinion?: Opinion,
+    barcode: string
+    name?: string
+    barcode_type?: string
+    image_url?: string
+    opinions?: Opinion[]
+    userOpinion?: Opinion
 }

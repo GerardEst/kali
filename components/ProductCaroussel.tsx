@@ -5,6 +5,7 @@ import { Texts } from '@/constants/texts'
 import { Sentiments } from '@/constants/sentiments'
 import { UserOpinion } from './UserOpinion'
 import { useAuthState } from '@/hooks/authState'
+import { Image } from 'react-native'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -27,6 +28,12 @@ export const ProductCaroussel = ({
                     ></Button>
                 )}
             </View>
+            {product.image_url && (
+                <Image
+                    source={{ uri: product.image_url }}
+                    style={styles.productImage}
+                ></Image>
+            )}
             <View style={styles.cardContent}>
                 <View>
                     {product?.userOpinion ? (
@@ -77,6 +84,10 @@ const styles = StyleSheet.create({
         padding: 10,
         backgroundColor: 'white',
         gap: 10,
+    },
+    productImage: {
+        width: 50,
+        height: 50,
     },
     cardHeader: {
         flexDirection: 'row',
