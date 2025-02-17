@@ -1,5 +1,8 @@
 import { CodeType } from 'react-native-vision-camera'
 
+// Increasing it ads checks to the barcode to prevent bad lectures
+export const checkTimes = 10
+
 export const supportedBarcodeTypes: CodeType[] = [
     'ean-13',
     'ean-8',

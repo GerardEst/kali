@@ -15,7 +15,7 @@ import {
 } from '@/apis/products-api'
 import { useAuthState } from '@/hooks/authState'
 import { UpdateProductInfoModal } from '@/components/modals/UpdateProductInfo'
-import { supportedBarcodeTypes } from '@/constants/supportedBarcodeTypes'
+import { supportedBarcodeTypes, checkTimes } from '@/constants/scanParameters'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
@@ -48,7 +48,7 @@ export default function HomeScreen() {
                 setCheckCode(scannedCode)
                 setTimesChecked(0)
             }
-            if (timesChecked <= 2) return
+            if (timesChecked <= checkTimes) return
 
             // Finally accept the scanned code
             setTimesChecked(0)
