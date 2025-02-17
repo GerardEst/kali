@@ -12,6 +12,7 @@ import { useScannedProductsState } from '@/hooks/scannedProductsState'
 import { getProductByBarcode, getProductOpinionByUser } from '@/api/products'
 import { useAuthState } from '@/hooks/authState'
 import { UpdateProductInfoModal } from '@/components/modals/UpdateProductInfo'
+import { supportedBarcodeTypes } from '@/constants/supportedBarcodeTypes'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
@@ -27,9 +28,10 @@ export default function HomeScreen() {
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
-        codeTypes: ['ean-13', 'ean-8'],
+        codeTypes: supportedBarcodeTypes,
         onCodeScanned: async (codes) => {
             const scannedCode = codes[0].value
+            const barcodeType = codes[0].type
 
             if (!scannedCode) return
 
@@ -51,7 +53,10 @@ export default function HomeScreen() {
 
             // TODO - S'estan fent en total 3 calls quan, potser, podria ser una que agafés
             // el producte, les opinions i la opinió de l'usuari
-            const scannedProductInfo = await getProductByBarcode(scannedCode)
+            const scannedProductInfo = await getProductByBarcode(
+                scannedCode,
+                barcodeType
+            )
 
             upsertProduct(scannedProductInfo)
 
