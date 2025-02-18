@@ -17,13 +17,6 @@ type GoogleSignProps = {
 export default function GoogleSign({ onError, onSuccess }: GoogleSignProps) {
     const { user, setUser } = useAuthState()
 
-    useEffect(() => {
-        GoogleSignin.configure({
-            webClientId:
-                '134329457349-952c6sm81q8dvc6jbcl3rjmv2c3gbgsi.apps.googleusercontent.com',
-        })
-    }, [])
-
     const handleSignin = async () => {
         try {
             await GoogleSignin.hasPlayServices({

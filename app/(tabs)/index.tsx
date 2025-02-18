@@ -108,7 +108,7 @@ export default function HomeScreen() {
                 isActive={true}
                 codeScanner={codeScanner}
             />
-            $
+
             {!hasPermission && (
                 <Text>
                     Has de donar permis a la càmara des de les opcions d'android
