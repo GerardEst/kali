@@ -4,8 +4,8 @@ import {
     useCameraDevice,
     useCameraPermission,
     useCodeScanner,
+    Camera,
 } from 'react-native-vision-camera'
-import { Camera } from 'react-native-vision-camera'
 import { useState } from 'react'
 import { AddOpinionModal } from '@/components/modals/add-opinion/AddOpinion'
 import { useScannedProductsState } from '@/hooks/scannedProductsState'
@@ -79,6 +79,7 @@ export default function HomeScreen() {
     })
 
     if (!hasPermission) {
+        console.log("User didn't allow camera")
         requestPermission()
         return null
     }
@@ -107,6 +108,12 @@ export default function HomeScreen() {
                 isActive={true}
                 codeScanner={codeScanner}
             />
+            $
+            {!hasPermission && (
+                <Text>
+                    Has de donar permis a la càmara des de les opcions d'android
+                </Text>
+            )}
             <View style={styles.scannerContent}>
                 {products && products.length > 0 ? (
                     <View>
