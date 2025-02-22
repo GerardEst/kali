@@ -5,11 +5,19 @@ export async function getProductInfo(barcode: string) {
         const name = await fetch(FOOD_PRODUCT_API_URL + barcode + '.json')
         const response = await name.json()
 
+        if (response.status === 'failure') {
+            console.log({ code: 'openFood_not_found' })
+            return false
+        }
+
         return {
-            productName: response.product.generic_name_es,
-            imageUrl: response.product.image_front_small_url,
+            productName: response?.product.generic_name_es,
+            imageUrl: response?.product.image_front_small_url,
         } as any
     } catch (error) {
-        console.error(error)
+        console.error({
+            code: 'openFood_error',
+            message: 'Error getting info from openfoodapi',
+        })
     }
 }

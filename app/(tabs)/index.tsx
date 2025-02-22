@@ -26,6 +26,7 @@ export default function HomeScreen() {
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [activeBarcode, setActiveBarcode] = useState<string | null>(null)
     const [checkCode, setCheckCode] = useState<string>('')
+    const [scannedCode, setScannedCode] = useState<string>('')
     const [timesChecked, setTimesChecked] = useState<number>(0)
     const { user } = useAuthState()
 
@@ -33,7 +34,9 @@ export default function HomeScreen() {
     const codeScanner = useCodeScanner({
         codeTypes: supportedBarcodeTypes,
         onCodeScanned: async (codes) => {
-            const scannedCode = codes[0].value
+            if (!codes[0]?.value) return
+
+            setScannedCode(codes[0].value)
             const barcodeType = codes[0].type
 
             if (!scannedCode) return
@@ -108,7 +111,7 @@ export default function HomeScreen() {
                 isActive={true}
                 codeScanner={codeScanner}
             />
-
+            <Text>{scannedCode}</Text>
             {!hasPermission && (
                 <Text>
                     Has de donar permis a la càmara des de les opcions d'android

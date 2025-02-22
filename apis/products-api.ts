@@ -14,14 +14,14 @@ export const getProductByBarcode = async (
             .eq('barcode', barcode)
 
         if (product && product.length === 0) {
-            const { productName, imageUrl } = await getProductInfo(barcode)
+            const product = await getProductInfo(barcode)
 
             // Si no hi ha producte, el creem i ens estalviem de pillar les opinions
             const createdProduct = await createNewProduct(
                 barcode,
                 barcodeType,
-                productName,
-                imageUrl
+                product?.productName,
+                product?.imageUrl
             )
 
             return createdProduct as Product
