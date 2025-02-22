@@ -3,7 +3,6 @@ import {
     GoogleSignin,
     isSuccessResponse,
     isNoSavedCredentialFoundResponse,
-    SignInSilentlyResponse,
 } from '@react-native-google-signin/google-signin'
 import { supabase } from '@/lib/supabase'
 import { logger } from '@/lib/logger'
@@ -39,24 +38,17 @@ export const useAuthState = create<AuthState>((set) => ({
                     '134329457349-952c6sm81q8dvc6jbcl3rjmv2c3gbgsi.apps.googleusercontent.com',
             })
 
-            console.log('Check existing user session')
-
             try {
                 const response: any = await GoogleSignin.signInSilently()
-                if (isSuccessResponse(response)) {
-                    logger({
-                        type: 'success',
-                        title: 'Auto Auth signin',
-                        message: 'successfully signInSilently',
-                    })
 
-                    // Auth in supabase with the correct token (autorefreshed)
-                    // TODO - Sembla que el signInSilently refresca el token bé, però després supabase peta
+                if (isSuccessResponse(response)) {
+                    // Signin user to supabase
                     const { data: authData, error: authError } =
                         await supabase.auth.signInWithIdToken({
                             provider: 'google',
                             token: response.data.idToken as any,
                         })
+
                     if (authError) throw authError
 
                     // xapusa jeje
@@ -71,33 +63,25 @@ export const useAuthState = create<AuthState>((set) => ({
 
                     logger({
                         type: 'success',
-                        title: 'Auto Auth Success',
-                        message: authData.user.email,
+                        title: 'Auto startup signin',
+                        message:
+                            response.data.user.email +
+                            ' successfully signed in',
                     })
                 } else if (isNoSavedCredentialFoundResponse(response)) {
-                    logger({
-                        type: 'error',
-                        title: 'Auto Auth signin',
-                        message: 'signInSilently failed',
-                    })
+                    throw new Error('No saved credentials found response')
                 }
-            } catch (error) {
-                logger({
-                    type: 'error',
-                    title: 'signInSilently failed 2',
-                    message: error,
-                })
+            } catch (error: any) {
+                throw new Error(
+                    'Failed to login on supabase with given token with message: ' +
+                        error.message
+                )
             }
-        } catch (error) {
-            console.log({ error })
-
+        } catch (error: any) {
             logger({
                 type: 'error',
-                title: 'Auto Auth Error 2',
-                message:
-                    error instanceof Error
-                        ? error.message
-                        : JSON.stringify(error),
+                title: 'Auto startup signin failed',
+                message: error.message,
             })
 
             // Clean up on error
