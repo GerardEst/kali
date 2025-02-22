@@ -4,47 +4,43 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Texts } from '@/constants/texts'
 import { Pages } from '@/styles/common'
 import { useEffect } from 'react'
-import { getAllOpinionsByUser } from '@/apis/products-api'
+import { getSavedProductsForUser } from '@/apis/products-api'
 import GoogleSign from '@/components/auth/signInButton'
-import { useUserOpinionsState } from '@/hooks/userOpinionsState'
-import { UserOpinion } from '@/components/UserOpinion'
+import { useListsState } from '@/hooks/listsState'
 
-export default function Opinions() {
+export default function Saved() {
     const { user } = useAuthState()
-    const { opinions, setUserOpinions } = useUserOpinionsState()
+    const { favs, setUserFavs } = useListsState()
 
     useEffect(() => {
         const userId = user?.id
         if (!userId) return
 
-        getAllOpinionsByUser(userId).then((data) => {
-            console.log(data)
-            setUserOpinions(data)
+        getSavedProductsForUser(userId).then((data) => {
+            setUserFavs(data)
+
+            console.log(favs)
         })
     }, [user])
 
     return (
         <SafeAreaView style={Pages}>
-            <Text style={Texts.title}>Les teves opinions</Text>
+            <Text style={Texts.title}>Productes guardats</Text>
 
             {user ? (
-                <View style={styles.opinionsList}>
+                <View style={styles.savedList}>
                     <FlatList
-                        data={opinions}
-                        keyExtractor={(opinion) => opinion.id.toString()}
+                        data={favs}
+                        keyExtractor={(product) => product.barcode.toString()}
                         renderItem={({ item }) => (
-                            <View style={styles.userOpinion}>
-                                <UserOpinion
-                                    title={item.products.name}
-                                    productBarcode="null"
-                                    opinion={item}
-                                ></UserOpinion>
+                            <View style={styles.userProduct}>
+                                <Text>{item.product_name}</Text>
                             </View>
                         )}
                         ListEmptyComponent={
                             <Text>
-                                Encara no has valorat cap producte. A què
-                                esperes?
+                                Pots guardar-te productes i t'apareixeran aquí
+                                perquè els trobis ràpidament
                             </Text>
                         }
                     />
@@ -59,11 +55,11 @@ export default function Opinions() {
 }
 
 const styles = StyleSheet.create({
-    opinionsList: {
+    savedList: {
         marginTop: 20,
         paddingBottom: 85,
     },
-    userOpinion: {
+    userProduct: {
         marginTop: 15,
     },
 })

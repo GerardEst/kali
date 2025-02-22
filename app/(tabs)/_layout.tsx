@@ -24,13 +24,23 @@ export default function TabLayout() {
             }}
         >
             <Tabs.Screen
-                name="opinions"
+                name="saved"
                 options={{
-                    title: 'Opinions',
+                    title: 'Guardats',
                     tabBarIcon: ({ color }) => (
                         <AntDesign name="heart" size={24} color={color} />
                     ),
                     tabBarActiveTintColor: Colors.love,
+                }}
+            />
+            <Tabs.Screen
+                name="opinions"
+                options={{
+                    title: 'Opinions',
+                    tabBarIcon: ({ color }) => (
+                        <AntDesign name="like1" size={24} color={color} />
+                    ),
+                    tabBarActiveTintColor: Colors.primary,
                 }}
             />
             <Tabs.Screen

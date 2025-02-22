@@ -175,10 +175,18 @@ export const createNewOpinionForProduct = async (
     }
 }
 
-export const setProductName = async () => {
+export const getSavedProductsForUser = async (userId: string) => {
     try {
+        const { data, error } = await supabase
+            .from('user_listed_products')
+            .select('barcode, list_name, product_name, image_url')
+            .eq('profile_id', userId)
+            .eq('list_name', 'favs')
+
+        if (error) throw error
+        return data
     } catch (error) {
         console.error(error)
-        throw new Error('Error updating product name')
+        throw new Error('Error geting saved products')
     }
 }
