@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, FlatList } from 'react-native'
+import { StyleSheet, View, Text, FlatList, Image } from 'react-native'
 import { useAuthState } from '@/hooks/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Texts } from '@/constants/texts'
@@ -18,8 +18,6 @@ export default function Saved() {
 
         getSavedProductsForUser(userId).then((data) => {
             setUserFavs(data)
-
-            console.log(favs)
         })
     }, [user])
 
@@ -34,6 +32,10 @@ export default function Saved() {
                         keyExtractor={(product) => product.barcode.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.userProduct}>
+                                <Image
+                                    source={{ uri: item.image_url }}
+                                    style={styles.productImage}
+                                ></Image>
                                 <Text>{item.product_name}</Text>
                             </View>
                         )}
@@ -61,5 +63,9 @@ const styles = StyleSheet.create({
     },
     userProduct: {
         marginTop: 15,
+    },
+    productImage: {
+        width: 50,
+        height: 50,
     },
 })
