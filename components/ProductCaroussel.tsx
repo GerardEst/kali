@@ -6,6 +6,7 @@ import { Sentiments } from '@/constants/sentiments'
 import { UserOpinion } from './UserOpinion'
 import { useAuthState } from '@/hooks/authState'
 import { Image } from 'react-native'
+import { saveProductForUser } from '@/apis/products-api'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -26,6 +27,15 @@ export const ProductCaroussel = ({
                         onPress={() => onUpdateProductInfo(product.barcode)}
                         title="Update"
                     ></Button>
+                )}
+                {user && (
+                    <GenericButton
+                        text="Fav"
+                        icon="heart"
+                        action={() =>
+                            saveProductForUser(user.id, product.barcode)
+                        }
+                    ></GenericButton>
                 )}
             </View>
             {product.image_url && (

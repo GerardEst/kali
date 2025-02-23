@@ -179,14 +179,65 @@ export const getSavedProductsForUser = async (userId: string) => {
     try {
         const { data, error } = await supabase
             .from('user_listed_products')
-            .select('barcode, list_name, product_name, image_url')
+            .select('list_id, barcode, list_name, product_name, image_url')
             .eq('profile_id', userId)
             .eq('list_name', 'favs')
 
         if (error) throw error
+
         return data
     } catch (error) {
         console.error(error)
-        throw new Error('Error geting saved products')
+        throw new Error('Error geting favorite products')
+    }
+}
+
+export const saveProductForUser = async (
+    userId: string,
+    productBarcode: string
+) => {
+    try {
+        // Buscar l'id de la llista de favs de l'usuari
+        // TODO - No té sentit estar fent aixo cada vegada home, hi ha un punt que ja sé de sobres l'id de la llista de favs de l'usuari
+        const { data: userFavList, error: userFavListError } = await supabase
+            .from('lists')
+            .select('id')
+            .eq('profile_id', userId)
+            .eq('name', 'favs')
+
+        if (userFavListError) throw userFavListError
+
+        let listId = userFavList[0]?.id
+
+        // Si l'usuari encara no té llista per favs, li creem
+        if (!listId) {
+            const { data: createdFavList, error: createdFavListError } =
+                await supabase
+                    .from('lists')
+                    .insert([{ name: 'favs', profile_id: userId }])
+                    .select()
+
+            if (createdFavListError) throw createdFavListError
+
+            listId = createdFavList[0]?.id
+        }
+
+        // Afegir producte a la llista de favs
+        const { data: savedProduct, error: savedProductError } = await supabase
+            .from('lists_products')
+            .insert([
+                {
+                    product_id: productBarcode,
+                    list_id: listId,
+                },
+            ])
+            .select()
+
+        if (savedProductError) throw savedProductError
+
+        console.log({ savedProduct })
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error saving product to favorites')
     }
 }
