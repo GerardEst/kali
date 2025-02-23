@@ -7,4 +7,5 @@ export interface Product {
     image_url?: string
     opinions?: Opinion[]
     userOpinion?: Opinion
+    isFav?: Boolean
 }

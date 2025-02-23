@@ -6,7 +6,9 @@ import { Sentiments } from '@/constants/sentiments'
 import { UserOpinion } from './UserOpinion'
 import { useAuthState } from '@/hooks/authState'
 import { Image } from 'react-native'
-import { saveProductForUser } from '@/apis/products-api'
+import { saveProductForUser, unsaveProductForUser } from '@/apis/products-api'
+import { useListsState } from '@/hooks/listsState'
+import { useScannedProductsState } from '@/hooks/scannedProductsState'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -15,6 +17,34 @@ export const ProductCaroussel = ({
     product,
 }: any) => {
     const { user } = useAuthState()
+    const { upsertProduct } = useScannedProductsState()
+    const { removeUserFav, addUserFav } = useListsState()
+
+    const removeFav = async () => {
+        if (!user) return
+
+        const unsavedProduct = await unsaveProductForUser(
+            user.id,
+            product.barcode
+        )
+        if (unsavedProduct) {
+            // Remove product from fav list
+            removeUserFav(product)
+
+            // Remove fav state from scanned products
+            upsertProduct({ ...product, isFav: false })
+        }
+    }
+
+    const addFav = async () => {
+        if (!user) return
+
+        const savedProduct = await saveProductForUser(user.id, product.barcode)
+        if (savedProduct) {
+            addUserFav(product)
+            upsertProduct({ ...product, isFav: true })
+        }
+    }
 
     return (
         <View style={styles.slideContent}>
@@ -28,15 +58,20 @@ export const ProductCaroussel = ({
                         title="Update"
                     ></Button>
                 )}
-                {user && (
-                    <GenericButton
-                        text="Fav"
-                        icon="heart"
-                        action={() =>
-                            saveProductForUser(user.id, product.barcode)
-                        }
-                    ></GenericButton>
-                )}
+                {user &&
+                    (product.isFav ? (
+                        <GenericButton
+                            text="Guardat!"
+                            icon="heart-fill"
+                            action={() => removeFav()}
+                        ></GenericButton>
+                    ) : (
+                        <GenericButton
+                            text="Guardar"
+                            icon="heart"
+                            action={() => addFav()}
+                        ></GenericButton>
+                    ))}
             </View>
             {product.image_url && (
                 <Image

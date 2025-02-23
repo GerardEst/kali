@@ -7,6 +7,7 @@ export const getProductByBarcode = async (
     barcode: string,
     barcodeType: string
 ) => {
+    // TODO - Altre cop estic fent varies calls quan potser podria ser menys
     try {
         let { data: product, error } = await supabase
             .from('products')
@@ -38,6 +39,27 @@ export const getProductByBarcode = async (
     } catch (error) {
         console.error(error)
         throw new Error('Error getting product info')
+    }
+}
+
+export const getFavStateOfProductForUser = async (
+    userId: string,
+    barcode: string
+): Promise<boolean> => {
+    try {
+        let { data, error } = await supabase
+            .from('user_listed_products')
+            .select('*')
+            .eq('barcode', barcode)
+            .eq('profile_id', userId)
+            .eq('list_name', 'favs')
+
+        if (error) throw error
+
+        return !!data?.[0]
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting fav state of product')
     }
 }
 
@@ -179,7 +201,7 @@ export const getSavedProductsForUser = async (userId: string) => {
     try {
         const { data, error } = await supabase
             .from('user_listed_products')
-            .select('list_id, barcode, list_name, product_name, image_url')
+            .select('list_id, barcode, list_name, name, image_url')
             .eq('profile_id', userId)
             .eq('list_name', 'favs')
 
@@ -235,9 +257,38 @@ export const saveProductForUser = async (
 
         if (savedProductError) throw savedProductError
 
-        console.log({ savedProduct })
+        return savedProduct
     } catch (error) {
         console.error(error)
         throw new Error('Error saving product to favorites')
     }
+}
+
+export const unsaveProductForUser = async (
+    userId: string,
+    productBarcode: string
+) => {
+    console.log('remove from fav')
+    // Buscar l'id de la llista de favs de l'usuari
+    // TODO - No té sentit estar fent aixo cada vegada home, hi ha un punt que ja sé de sobres l'id de la llista de favs de l'usuari
+    const { data: userFavList, error: userFavListError } = await supabase
+        .from('lists')
+        .select('id')
+        .eq('profile_id', userId)
+        .eq('name', 'favs')
+
+    if (userFavListError) throw userFavListError
+
+    let listId = userFavList[0]?.id
+
+    // Afegir producte a la llista de favs
+    const { data: removedProduct, error: removedProductError } = await supabase
+        .from('lists_products')
+        .delete()
+        .eq('list_id', listId)
+        .eq('product_id', productBarcode)
+
+    if (removedProductError) throw removedProductError
+
+    return { unsavedProduct: productBarcode }
 }

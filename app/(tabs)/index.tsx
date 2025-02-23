@@ -12,6 +12,7 @@ import { useScannedProductsState } from '@/hooks/scannedProductsState'
 import {
     getProductByBarcode,
     getProductOpinionByUser,
+    getFavStateOfProductForUser,
 } from '@/apis/products-api'
 import { useAuthState } from '@/hooks/authState'
 import { UpdateProductInfoModal } from '@/components/modals/UpdateProductInfo'
@@ -64,7 +65,17 @@ export default function HomeScreen() {
                 barcodeType
             )
 
-            upsertProduct(scannedProductInfo)
+            // Busquem, si l'usuari està loguejat, si té el producte favejat
+            if (user) {
+                const productFavState = await getFavStateOfProductForUser(
+                    user.id,
+                    scannedCode
+                )
+
+                upsertProduct({ ...scannedProductInfo, isFav: productFavState })
+            } else {
+                upsertProduct(scannedProductInfo)
+            }
 
             if (user) {
                 const scannedProductUserOpinion = await getProductOpinionByUser(

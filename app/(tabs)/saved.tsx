@@ -36,7 +36,7 @@ export default function Saved() {
                                     source={{ uri: item.image_url }}
                                     style={styles.productImage}
                                 ></Image>
-                                <Text>{item.product_name}</Text>
+                                <Text>{item.name}</Text>
                             </View>
                         )}
                         ListEmptyComponent={
