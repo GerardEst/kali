@@ -207,7 +207,9 @@ export const getSavedProductsForUser = async (userId: string) => {
 
         if (error) throw error
 
-        return data
+        return data.map((savedProduct) => {
+            return { ...savedProduct, isFav: true }
+        })
     } catch (error) {
         console.error(error)
         throw new Error('Error geting favorite products')

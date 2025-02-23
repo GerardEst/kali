@@ -41,7 +41,7 @@ export const ProductCaroussel = ({
 
         const savedProduct = await saveProductForUser(user.id, product.barcode)
         if (savedProduct) {
-            addUserFav(product)
+            addUserFav({ ...product, isFav: true })
             upsertProduct({ ...product, isFav: true })
         }
     }

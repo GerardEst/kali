@@ -18,7 +18,6 @@ export default function Opinions() {
         if (!userId) return
 
         getAllOpinionsByUser(userId).then((data) => {
-            console.log(data)
             setUserOpinions(data)
         })
     }, [user])

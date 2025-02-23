@@ -7,6 +7,7 @@ import { useEffect } from 'react'
 import { getSavedProductsForUser } from '@/apis/products-api'
 import GoogleSign from '@/components/auth/signInButton'
 import { useListsState } from '@/hooks/listsState'
+import { ProductInList } from '@/components/ProductInList'
 
 export default function Saved() {
     const { user } = useAuthState()
@@ -32,11 +33,7 @@ export default function Saved() {
                         keyExtractor={(product) => product.barcode.toString()}
                         renderItem={({ item }) => (
                             <View style={styles.userProduct}>
-                                <Image
-                                    source={{ uri: item.image_url }}
-                                    style={styles.productImage}
-                                ></Image>
-                                <Text>{item.name}</Text>
+                                <ProductInList product={item}></ProductInList>
                             </View>
                         )}
                         ListEmptyComponent={
@@ -63,9 +60,5 @@ const styles = StyleSheet.create({
     },
     userProduct: {
         marginTop: 15,
-    },
-    productImage: {
-        width: 50,
-        height: 50,
     },
 })
