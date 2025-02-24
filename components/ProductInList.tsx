@@ -2,32 +2,13 @@ import { StyleSheet, View, Text, Image } from 'react-native'
 import React from 'react'
 import { Product } from '@/interfaces/Product'
 import { GenericButton } from './GenericButton'
-import { useAuthState } from '@/hooks/authState'
-import { unsaveProductForUser } from '@/apis/products-api'
-import { useListsState } from '@/hooks/listsState'
-import { useScannedProductsState } from '@/hooks/scannedProductsState'
+import { useFavoriteActions } from '@/useCases/useFavoritesActions'
 
 export const ProductInList = ({ product }: { product: Product }) => {
-    console.log(product)
+    const { removeFav } = useFavoriteActions()
 
-    const { user } = useAuthState()
-    const { upsertProduct } = useScannedProductsState()
-    const { removeUserFav } = useListsState()
-
-    const removeFav = async () => {
-        if (!user) return
-
-        const unsavedProduct = await unsaveProductForUser(
-            user.id,
-            product.barcode
-        )
-        if (unsavedProduct) {
-            // Remove product from fav list
-            removeUserFav(product)
-
-            // Remove fav state from scanned products
-            upsertProduct({ ...product, isFav: false })
-        }
+    const handleRemove = async (product: Product) => {
+        await removeFav(product)
     }
 
     return (
@@ -41,7 +22,7 @@ export const ProductInList = ({ product }: { product: Product }) => {
                 <GenericButton
                     text="Treure"
                     icon="bookmark-slash"
-                    action={() => removeFav()}
+                    action={() => handleRemove(product)}
                 ></GenericButton>
             )}
         </View>

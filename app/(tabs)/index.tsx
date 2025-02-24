@@ -13,7 +13,7 @@ import {
     getProductByBarcode,
     getProductOpinionByUser,
     getFavStateOfProductForUser,
-} from '@/apis/products-api'
+} from '@/apis/products/products-api'
 import { useAuthState } from '@/hooks/authState'
 import { UpdateProductInfoModal } from '@/components/modals/UpdateProductInfo'
 import { supportedBarcodeTypes, checkTimes } from '@/constants/scanParameters'
@@ -21,7 +21,7 @@ import { supportedBarcodeTypes, checkTimes } from '@/constants/scanParameters'
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
     const [lastScan, setLastScan] = useState('')
-    const { products, upsertProduct, upsertUserOpinion } =
+    const { products, upsertScannedProduct, upsertUserOpinion } =
         useScannedProductsState()
     const [modalVisible, setModalVisible] = useState(false)
     const [infoModalVisible, setInfoModalVisible] = useState(false)
@@ -72,9 +72,12 @@ export default function HomeScreen() {
                     scannedCode
                 )
 
-                upsertProduct({ ...scannedProductInfo, isFav: productFavState })
+                upsertScannedProduct({
+                    ...scannedProductInfo,
+                    isFav: productFavState,
+                })
             } else {
-                upsertProduct(scannedProductInfo)
+                upsertScannedProduct(scannedProductInfo)
             }
 
             if (user) {

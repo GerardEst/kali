@@ -6,9 +6,8 @@ import { Sentiments } from '@/constants/sentiments'
 import { UserOpinion } from './UserOpinion'
 import { useAuthState } from '@/hooks/authState'
 import { Image } from 'react-native'
-import { saveProductForUser, unsaveProductForUser } from '@/apis/products-api'
-import { useListsState } from '@/hooks/listsState'
-import { useScannedProductsState } from '@/hooks/scannedProductsState'
+import { useFavoriteActions } from '@/useCases/useFavoritesActions'
+import { Product } from '@/interfaces/Product'
 
 export const ProductCaroussel = ({
     onAddOpinion,
@@ -17,33 +16,14 @@ export const ProductCaroussel = ({
     product,
 }: any) => {
     const { user } = useAuthState()
-    const { upsertProduct } = useScannedProductsState()
-    const { removeUserFav, addUserFav } = useListsState()
+    const { removeFav, addFav } = useFavoriteActions()
 
-    const removeFav = async () => {
-        if (!user) return
-
-        const unsavedProduct = await unsaveProductForUser(
-            user.id,
-            product.barcode
-        )
-        if (unsavedProduct) {
-            // Remove product from fav list
-            removeUserFav(product)
-
-            // Remove fav state from scanned products
-            upsertProduct({ ...product, isFav: false })
-        }
+    const handleRemove = async (product: Product) => {
+        await removeFav(product)
     }
 
-    const addFav = async () => {
-        if (!user) return
-
-        const savedProduct = await saveProductForUser(user.id, product.barcode)
-        if (savedProduct) {
-            addUserFav({ ...product, isFav: true })
-            upsertProduct({ ...product, isFav: true })
-        }
+    const handleAdd = async (product: Product) => {
+        await addFav(product)
     }
 
     return (
@@ -63,13 +43,13 @@ export const ProductCaroussel = ({
                         <GenericButton
                             text="Guardat!"
                             icon="heart-fill"
-                            action={() => removeFav()}
+                            action={() => handleRemove(product)}
                         ></GenericButton>
                     ) : (
                         <GenericButton
                             text="Guardar"
                             icon="heart"
-                            action={() => addFav()}
+                            action={() => handleAdd(product)}
                         ></GenericButton>
                     ))}
             </View>

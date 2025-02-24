@@ -7,14 +7,14 @@ interface ScannedProductState {
         opinions: Opinion[]
         userOpinion: Opinion
     })[]
-    upsertProduct: (product: Product) => void
+    upsertScannedProduct: (product: Product) => void
     upsertUserOpinion: (barcode: number, userOpinion: Opinion) => void
 }
 
 export const useScannedProductsState = create<ScannedProductState>((set) => ({
     products: [],
 
-    upsertProduct: (product: Product) =>
+    upsertScannedProduct: (product: Product) =>
         //@ts-ignore
         set((state) => {
             const filteredProducts = state.products.filter(

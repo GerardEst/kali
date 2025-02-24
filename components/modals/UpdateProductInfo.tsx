@@ -17,7 +17,7 @@ export function UpdateProductInfoModal({
     onClose,
 }: any) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { products, upsertProduct } = useScannedProductsState()
+    const { products, upsertScannedProduct } = useScannedProductsState()
     const { user } = useAuthState()
     const [product, setProduct] = useState<any>({})
 
@@ -45,7 +45,7 @@ export function UpdateProductInfoModal({
             if (error) throw error
 
             // Actualitzem la store afegint el product + el cambi que acabem de fer
-            upsertProduct({ ...product, ...data[0] })
+            upsertScannedProduct({ ...product, ...data[0] })
 
             onClose()
 
