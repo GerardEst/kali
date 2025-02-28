@@ -8,6 +8,7 @@ export const Carousel = ({
     onAddOpinion,
     onUpdateUserOpinion,
     onUpdateProductInfo,
+    onAddNote,
     products,
 }: any) => {
     const scrollViewRef = useRef<ScrollView>(null)
@@ -55,6 +56,7 @@ export const Carousel = ({
                             onAddOpinion={onAddOpinion}
                             onUpdateUserOpinion={onUpdateUserOpinion}
                             onUpdateProductInfo={onUpdateProductInfo}
+                            onAddNote={onAddNote}
                             product={product}
                         ></CarouselProduct>
                     </Animated.View>

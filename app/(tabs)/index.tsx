@@ -12,12 +12,14 @@ import { AddOpinionModal } from '@/src/features/evaluateProduct/modals/AddOpinio
 import { supportedBarcodeTypes } from '@/src/features/scan/scanParameters'
 import { useScan } from '@/src/features/scan/hooks/useScan'
 import { Carousel } from '@/src/features/scan/components/Carousel'
+import { AddProductNoteModal } from '@/src/features/productNotes/modals/AddProductNote'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
     const { products } = useScannedProductsState()
     const [modalVisible, setModalVisible] = useState(false)
     const [infoModalVisible, setInfoModalVisible] = useState(false)
+    const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [activeBarcode, setActiveBarcode] = useState<string | null>(null)
     const [scan] = useScan()
 
@@ -45,6 +47,12 @@ export default function HomeScreen() {
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
             ></AddOpinionModal>
+            <AddProductNoteModal
+                style={styles.modal}
+                productBarcode={activeBarcode}
+                visible={noteModalVisible}
+                onClose={() => setNoteModalVisible(false)}
+            ></AddProductNoteModal>
             <UpdateProductInfoModal
                 style={styles.modal}
                 productBarcode={activeBarcode}
@@ -76,6 +84,10 @@ export default function HomeScreen() {
                             }}
                             onUpdateProductInfo={(barcode: string) => {
                                 setInfoModalVisible(true)
+                                setActiveBarcode(barcode)
+                            }}
+                            onAddNote={(barcode: string) => {
+                                setNoteModalVisible(true)
                                 setActiveBarcode(barcode)
                             }}
                             products={products}

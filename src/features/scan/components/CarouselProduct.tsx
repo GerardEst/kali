@@ -13,6 +13,7 @@ export const CarouselProduct = ({
     onAddOpinion,
     onUpdateUserOpinion,
     onUpdateProductInfo,
+    onAddNote,
     product,
 }: any) => {
     const { user } = useAuthState()
@@ -52,6 +53,13 @@ export const CarouselProduct = ({
                             action={() => handleAdd(product)}
                         ></GenericButton>
                     ))}
+                {user && (
+                    <GenericButton
+                        text="Nota"
+                        icon="heart"
+                        action={() => onAddNote(product)}
+                    ></GenericButton>
+                )}
             </View>
             {product.image_url && (
                 <Image
