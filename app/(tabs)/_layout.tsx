@@ -1,7 +1,7 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
-import { Colors } from '@/constants/colors'
+import { Colors } from '@/styles/colors'
 
 export default function TabLayout() {
     return (

@@ -1,4 +1,3 @@
-import { ProductsCaroussel } from '@/components/ProductsCaroussel'
 import { StyleSheet, View, Text } from 'react-native'
 import {
     useCameraDevice,
@@ -7,92 +6,25 @@ import {
     Camera,
 } from 'react-native-vision-camera'
 import { useState } from 'react'
-import { AddOpinionModal } from '@/components/modals/add-opinion/AddOpinion'
-import { useScannedProductsState } from '@/hooks/scannedProductsState'
-import {
-    getProductByBarcode,
-    getProductOpinionByUser,
-    getFavStateOfProductForUser,
-} from '@/apis/products/products-api'
-import { useAuthState } from '@/hooks/authState'
-import { UpdateProductInfoModal } from '@/components/modals/UpdateProductInfo'
-import { supportedBarcodeTypes, checkTimes } from '@/constants/scanParameters'
+import { useScannedProductsState } from '@/src/store/scannedProductsState'
+import { UpdateProductInfoModal } from '@/src/features/fillProduct/modals/UpdateProductInfo'
+import { AddOpinionModal } from '@/src/features/evaluateProduct/modals/AddOpinion'
+import { supportedBarcodeTypes } from '@/src/features/scan/scanParameters'
+import { useScan } from '@/src/features/scan/hooks/useScan'
+import { Carousel } from '@/src/features/scan/components/Carousel'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
-    const [lastScan, setLastScan] = useState('')
-    const { products, upsertScannedProduct, upsertUserOpinion } =
-        useScannedProductsState()
+    const { products } = useScannedProductsState()
     const [modalVisible, setModalVisible] = useState(false)
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [activeBarcode, setActiveBarcode] = useState<string | null>(null)
-    const [checkCode, setCheckCode] = useState<string>('')
-    const [scannedCode, setScannedCode] = useState<string>('')
-    const [timesChecked, setTimesChecked] = useState<number>(0)
-    const { user } = useAuthState()
+    const [scan] = useScan()
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
         codeTypes: supportedBarcodeTypes,
-        onCodeScanned: async (codes) => {
-            if (!codes[0]?.value) return
-
-            setScannedCode(codes[0].value)
-            const barcodeType = codes[0].type
-
-            if (!scannedCode) return
-
-            // Check to prevent repeated codes
-            if (scannedCode === lastScan) return
-
-            // Triple check to prevent bad codes
-            if (scannedCode === checkCode) {
-                setTimesChecked(timesChecked + 1)
-            } else {
-                setCheckCode(scannedCode)
-                setTimesChecked(0)
-            }
-            if (timesChecked <= checkTimes) return
-
-            // Finally accept the scanned code
-            setTimesChecked(0)
-            setLastScan(scannedCode)
-
-            // TODO - S'estan fent en total 3 calls quan, potser, podria ser una que agafés
-            // el producte, les opinions i la opinió de l'usuari
-            const scannedProductInfo = await getProductByBarcode(
-                scannedCode,
-                barcodeType
-            )
-
-            // Busquem, si l'usuari està loguejat, si té el producte favejat
-            if (user) {
-                const productFavState = await getFavStateOfProductForUser(
-                    user.id,
-                    scannedCode
-                )
-
-                upsertScannedProduct({
-                    ...scannedProductInfo,
-                    isFav: productFavState,
-                })
-            } else {
-                upsertScannedProduct(scannedProductInfo)
-            }
-
-            if (user) {
-                const scannedProductUserOpinion = await getProductOpinionByUser(
-                    scannedCode,
-                    user.id
-                )
-                if (scannedProductUserOpinion) {
-                    upsertUserOpinion(
-                        parseInt(scannedCode),
-                        scannedProductUserOpinion
-                    )
-                }
-            }
-        },
+        onCodeScanned: (codes) => scan(codes),
     })
 
     if (!hasPermission) {
@@ -125,7 +57,6 @@ export default function HomeScreen() {
                 isActive={true}
                 codeScanner={codeScanner}
             />
-            <Text>{scannedCode}</Text>
             {!hasPermission && (
                 <Text>
                     Has de donar permis a la càmara des de les opcions d'android
@@ -134,7 +65,7 @@ export default function HomeScreen() {
             <View style={styles.scannerContent}>
                 {products && products.length > 0 ? (
                     <View>
-                        <ProductsCaroussel
+                        <Carousel
                             onAddOpinion={(barcode: string) => {
                                 setModalVisible(true)
                                 setActiveBarcode(barcode)
@@ -148,7 +79,7 @@ export default function HomeScreen() {
                                 setActiveBarcode(barcode)
                             }}
                             products={products}
-                        ></ProductsCaroussel>
+                        ></Carousel>
                     </View>
                 ) : (
                     <View style={styles.message}>

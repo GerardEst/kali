@@ -1,13 +1,12 @@
 import { StyleSheet, View, Text, FlatList } from 'react-native'
-import { useAuthState } from '@/hooks/authState'
+import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Texts } from '@/constants/texts'
-import { Pages } from '@/styles/common'
+import { Pages, Texts } from '@/styles/common'
 import { useEffect } from 'react'
-import { getAllOpinionsByUser } from '@/apis/products/products-api'
-import GoogleSign from '@/components/auth/signInButton'
-import { useUserOpinionsState } from '@/hooks/userOpinionsState'
-import { UserOpinion } from '@/components/UserOpinion'
+import { getAllOpinionsByUser } from '@/src/core/api/products/products-api'
+import GoogleSign from '@/src/shared/components/signInButton'
+import { useUserOpinionsState } from '@/src/store/userOpinionsState'
+import { UserOpinion } from '@/src/shared/components/UserOpinion'
 
 export default function Opinions() {
     const { user } = useAuthState()

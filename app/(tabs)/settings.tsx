@@ -1,8 +1,8 @@
 import { StyleSheet, View } from 'react-native'
-import GoogleSign from '@/components/auth/signInButton'
-import LogoutButton from '@/components/auth/logoutButton'
-import { useAuthState } from '@/hooks/authState'
-import VersionDisplay from '@/components/snippets/app-version'
+import GoogleSign from '@/src/shared/components/signInButton'
+import LogoutButton from '@/src/shared/components/logoutButton'
+import { useAuthState } from '@/src/store/authState'
+import VersionDisplay from '@/src/shared/components/app-version'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 export default function TabTwoScreen() {

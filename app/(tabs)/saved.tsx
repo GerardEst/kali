@@ -1,13 +1,12 @@
 import { StyleSheet, View, Text, FlatList, Image } from 'react-native'
-import { useAuthState } from '@/hooks/authState'
+import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Texts } from '@/constants/texts'
-import { Pages } from '@/styles/common'
+import { Pages, Texts } from '@/styles/common'
 import { useEffect } from 'react'
-import { getSavedProductsForUser } from '@/apis/products/lists-api'
-import GoogleSign from '@/components/auth/signInButton'
-import { useListsState } from '@/hooks/listsState'
-import { ProductInList } from '@/components/ProductInList'
+import { getSavedProductsForUser } from '@/src/core/api/products/lists-api'
+import GoogleSign from '@/src/shared/components/signInButton'
+import { useListsState } from '@/src/store/listsState'
+import { ProductInList } from '@/src/features/savedList/components/ProductInList'
 
 export default function Saved() {
     const { user } = useAuthState()
