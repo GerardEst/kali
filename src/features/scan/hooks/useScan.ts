@@ -8,6 +8,7 @@ import {
 import { useAuthState } from '@/src/store/authState'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { Code } from 'react-native-vision-camera'
+import { getProductNotesForUser } from '@/src/core/api/products/notes-api'
 
 export const useScan = () => {
     const { user } = useAuthState()
@@ -15,7 +16,7 @@ export const useScan = () => {
     const [checkCode, setCheckCode] = useState<string>('')
     const [timesChecked, setTimesChecked] = useState<number>(0)
     const [scannedCode, setScannedCode] = useState<string>('')
-    const { upsertScannedProduct, upsertUserOpinion } =
+    const { upsertScannedProduct, upsertUserOpinion, setUserNotes } =
         useScannedProductsState()
 
     async function scan(codes: Code[]) {
@@ -74,6 +75,14 @@ export const useScan = () => {
                     parseInt(scannedCode),
                     scannedProductUserOpinion
                 )
+            }
+
+            const scannedProductUserNotes = await getProductNotesForUser(
+                scannedCode,
+                user.id
+            )
+            if (scannedProductUserNotes) {
+                setUserNotes(parseInt(scannedCode), scannedProductUserNotes)
             }
         }
     }

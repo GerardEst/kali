@@ -8,6 +8,7 @@ import { useAuthState } from '@/src/store/authState'
 import { Image } from 'react-native'
 import { useFavoriteActions } from '@/src/useCases/useFavoritesActions'
 import { Product } from '@/src/shared/interfaces/Product'
+import { Note } from '@/src/shared/interfaces/Note'
 
 export const CarouselProduct = ({
     onAddOpinion,
@@ -57,7 +58,7 @@ export const CarouselProduct = ({
                     <GenericButton
                         text="Nota"
                         icon="heart"
-                        action={() => onAddNote(product)}
+                        action={() => onAddNote(product.barcode)}
                     ></GenericButton>
                 )}
             </View>
@@ -83,6 +84,10 @@ export const CarouselProduct = ({
                             action={() => onAddOpinion(product.barcode)}
                         ></GenericButton>
                     )}
+                    {product?.userNotes &&
+                        product.userNotes.map((note: Note, index: number) => (
+                            <Text key={index}>{note.note}</Text>
+                        ))}
                 </View>
                 <View>
                     <Text style={Texts.title}>Altres opinions</Text>

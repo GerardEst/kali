@@ -1,3 +1,4 @@
+import { Note } from './Note'
 import { Opinion } from './Opinion'
 
 export interface Product {
@@ -7,5 +8,6 @@ export interface Product {
     image_url?: string
     opinions?: Opinion[]
     userOpinion?: Opinion
+    userNotes?: Note[]
     isFav?: Boolean
 }

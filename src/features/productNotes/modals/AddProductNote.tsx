@@ -13,7 +13,8 @@ import { saveNote } from '@/src/core/api/products/notes-api'
 
 export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { products, upsertScannedProduct } = useScannedProductsState()
+    const { products, upsertScannedProduct, addUserNote } =
+        useScannedProductsState()
     const { user } = useAuthState()
     const [product, setProduct] = useState<Product>()
     const [note, setNote] = useState<any>({})
@@ -30,6 +31,8 @@ export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
     const onSaveNote = (text: string) => {
         if (product && user) {
             saveNote(product.barcode, text, user.id)
+            // TODO - Nomes afegir a l'estat si el save ha anat bé
+            addUserNote(product.barcode, text)
         }
 
         // Tancar
