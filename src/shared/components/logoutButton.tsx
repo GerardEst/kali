@@ -1,22 +1,17 @@
 import { Button } from 'react-native'
-import { supabase } from '@/src/core/supabase'
-import { GoogleSignin } from '@react-native-google-signin/google-signin'
+import { logoutUser } from '@/src/core/auth/usecases/logout'
 import { useAuthState } from '@/src/store/authState'
 
 export default function LogoutButton() {
-    const { user, cleanUser } = useAuthState()
+    const { cleanUser } = useAuthState()
 
     const signOut = async () => {
-        try {
-            // Sign out from Google
-            await GoogleSignin.signOut()
+        const loggedOutUser = await logoutUser()
 
-            // Sign out from Supabase
-            await supabase.auth.signOut()
-
+        if (loggedOutUser.error) {
+            console.error('Error signing out:', loggedOutUser.error)
+        } else {
             cleanUser()
-        } catch (error) {
-            console.error('Error signing out:', error)
         }
     }
 
