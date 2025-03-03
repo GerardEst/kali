@@ -1,6 +1,7 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { Colors } from '@/styles/colors'
 
 export default function TabLayout() {
@@ -24,7 +25,7 @@ export default function TabLayout() {
             }}
         >
             <Tabs.Screen
-                name="saved"
+                name="saved-page"
                 options={{
                     title: 'Guardats',
                     tabBarIcon: ({ color }) => (
@@ -34,11 +35,15 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="opinions"
+                name="notes-page"
                 options={{
-                    title: 'Opinions',
+                    title: 'Notes',
                     tabBarIcon: ({ color }) => (
-                        <AntDesign name="like1" size={24} color={color} />
+                        <FontAwesome6
+                            name="sticky-note"
+                            size={24}
+                            color={color}
+                        />
                     ),
                     tabBarActiveTintColor: Colors.primary,
                 }}
@@ -54,7 +59,7 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="settings"
+                name="settings-page"
                 options={{
                     title: 'Opcions',
                     tabBarIcon: ({ color }) => (

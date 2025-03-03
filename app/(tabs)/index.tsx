@@ -15,7 +15,6 @@ import {
 import { useState } from 'react'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { UpdateProductInfoModal } from '@/src/features/fillProduct/modals/UpdateProductInfo'
-import { AddOpinionModal } from '@/src/features/evaluateProduct/modals/AddOpinion'
 import { ReviewFormModal } from '@/src/features/evaluateProduct/modals/ReviewFormModal'
 import { supportedBarcodeTypes } from '@/src/features/scan/scanParameters'
 import { useScan } from '@/src/features/scan/hooks/useScan'
@@ -23,11 +22,11 @@ import { Carousel } from '@/src/features/scan/components/Carousel'
 import { AddProductNoteModal } from '@/src/features/productNotes/modals/AddProductNote'
 import Reviews from '@/src/features/scan/components/Reviews'
 import React from 'react'
+import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
     const { products } = useScannedProductsState()
-    const [modalVisible, setModalVisible] = useState(false)
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
@@ -52,12 +51,6 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.scanner}>
-            <AddOpinionModal
-                style={styles.modal}
-                productBarcode={activeBarcode}
-                visible={modalVisible}
-                onClose={() => setModalVisible(false)}
-            ></AddOpinionModal>
             <AddProductNoteModal
                 style={styles.modal}
                 productBarcode={activeBarcode}
@@ -89,31 +82,21 @@ export default function HomeScreen() {
             )}
             {products && products.length > 0 ? (
                 <>
-                    <View style={styles.reviews}>
+                    <View style={styles.reviewSection}>
                         <Reviews
                             productScore={products[0].product_score_avg}
                             packagingScore={products[0].packaging_score_avg}
                             ecoScore={products[0].eco_score_avg}
                         ></Reviews>
-                        <TouchableOpacity
+                        <GenericButton
                             style={styles.reviewButton}
-                            onPress={() => setReviewFormVisible(true)}
-                        >
-                            <Text style={styles.reviewButtonText}>
-                                Add Review
-                            </Text>
-                        </TouchableOpacity>
+                            text="Deixa una valoració"
+                            icon="plus"
+                            action={() => setReviewFormVisible(true)}
+                        ></GenericButton>
                     </View>
                     <View style={styles.scannerContent}>
                         <Carousel
-                            onAddOpinion={(barcode: string) => {
-                                setModalVisible(true)
-                                setActiveBarcode(barcode)
-                            }}
-                            onUpdateUserOpinion={(barcode: string) => {
-                                setModalVisible(true)
-                                setActiveBarcode(barcode)
-                            }}
                             onUpdateProductInfo={(barcode: string) => {
                                 setInfoModalVisible(true)
                                 setActiveBarcode(barcode)
@@ -165,7 +148,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         top: 0,
     },
-    reviews: {
+    reviewSection: {
         position: 'absolute',
         alignSelf: 'center',
         alignItems: 'center',
@@ -174,10 +157,6 @@ const styles = StyleSheet.create({
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
     },
     reviewButton: {
-        backgroundColor: '#2196F3',
-        paddingHorizontal: 20,
-        paddingVertical: 10,
-        borderRadius: 20,
         marginTop: 10,
     },
     reviewButtonText: {

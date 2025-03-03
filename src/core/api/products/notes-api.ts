@@ -21,6 +21,35 @@ export const getProductNotesForUser = async (
     }
 }
 
+export const getNotesByUser = async (profileId: string) => {
+    try {
+        const { data, error } = await supabase
+            .from('notes')
+            .select(
+                `
+                id,
+                profile,
+                product,
+                created_at,
+                note,
+                productData:products(barcode, name, image_url)
+            `
+            )
+            .eq('profile', profileId)
+
+        if (error) throw error
+
+        console.log('notesWithSingleProduct', data)
+
+        // Necessari perquè es pensa que productData és un array, però de la db arriba sense array
+        // @ts-ignore
+        return data as Note[]
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting notes of user')
+    }
+}
+
 export const saveNote = async (
     productBarcode: string,
     note: string,

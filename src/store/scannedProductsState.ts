@@ -1,19 +1,7 @@
 import { create } from 'zustand'
 import { Product } from '@/src/shared/interfaces/Product'
-// import { Opinion } from '@/src/shared/interfaces/Review'
 import { Note } from '../shared/interfaces/Note'
 import { Review } from '../shared/interfaces/Review'
-
-// interface ScannedProductState {
-//     products: (Product & {
-//         reviews: Review[]
-//         userReview: Review
-//     })[]
-//     upsertScannedProduct: (product: Product) => void
-//     upsertUserReview: (barcode: string, userReview: Review | undefined) => void
-//     setUserNotes: (barcode: string, userNotes: Note[]) => void
-//     addUserNote: (barcode: string, noteText: string) => void
-// }
 
 export const useScannedProductsState = create<any>((set) => ({
     products: [],

@@ -4,13 +4,7 @@ import { ScrollView } from 'react-native'
 import { CarouselProduct } from './CarouselProduct'
 import { Product } from '@/src/shared/interfaces/Product'
 
-export const Carousel = ({
-    onAddOpinion,
-    onUpdateUserOpinion,
-    onUpdateProductInfo,
-    onAddNote,
-    products,
-}: any) => {
+export const Carousel = ({ onUpdateProductInfo, onAddNote, products }: any) => {
     const scrollViewRef = useRef<ScrollView>(null)
     const { width } = Dimensions.get('window')
 
@@ -53,8 +47,6 @@ export const Carousel = ({
                         ]}
                     >
                         <CarouselProduct
-                            onAddOpinion={onAddOpinion}
-                            onUpdateUserOpinion={onUpdateUserOpinion}
                             onUpdateProductInfo={onUpdateProductInfo}
                             onAddNote={onAddNote}
                             product={product}

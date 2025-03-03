@@ -1,22 +1,25 @@
-import { View, Text, StyleSheet, FlatList, Button } from 'react-native'
+import { View, Text, StyleSheet, Button } from 'react-native'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Colors } from '@/styles/colors'
 import { Texts } from '@/styles/common'
-import { Sentiments } from '@/src/shared/constants/sentiments'
-import { UserOpinion } from '@/src/shared/components/UserOpinion'
 import { useAuthState } from '@/src/store/authState'
 import { Image } from 'react-native'
 import { useFavoriteActions } from '@/src/useCases/useFavoritesActions'
 import { Product } from '@/src/shared/interfaces/Product'
 import { Note } from '@/src/shared/interfaces/Note'
+import React from 'react'
+
+interface CarouselProductProps {
+    onUpdateProductInfo: (barcode: string) => void
+    onAddNote: (barcode: string) => void
+    product: Product
+}
 
 export const CarouselProduct = ({
-    onAddOpinion,
-    onUpdateUserOpinion,
     onUpdateProductInfo,
     onAddNote,
     product,
-}: any) => {
+}: CarouselProductProps) => {
     const { user } = useAuthState()
     const { removeFav, addFav } = useFavoriteActions()
 
@@ -31,35 +34,31 @@ export const CarouselProduct = ({
     return (
         <View style={styles.slideContent}>
             <View style={styles.cardHeader}>
-                <Text style={Texts.title}>
-                    {product.name || product.barcode}
-                </Text>
-                {user?.isAdmin && (
-                    <Button
-                        onPress={() => onUpdateProductInfo(product.barcode)}
-                        title="Update"
-                    ></Button>
-                )}
-                {user &&
-                    (product.isFav ? (
-                        <GenericButton
-                            text="Guardat!"
-                            icon="heart-fill"
-                            action={() => handleRemove(product)}
-                        ></GenericButton>
-                    ) : (
-                        <GenericButton
-                            text="Guardar"
-                            icon="heart"
-                            action={() => handleAdd(product)}
-                        ></GenericButton>
-                    ))}
+                <View>
+                    <Text style={Texts.title}>
+                        {product.name || product.barcode}
+                    </Text>
+                    <Text style={Texts.lightTitle}>{product.brand}</Text>
+                </View>
                 {user && (
-                    <GenericButton
-                        text="Nota"
-                        icon="heart"
-                        action={() => onAddNote(product.barcode)}
-                    ></GenericButton>
+                    <View style={styles.buttonContainer}>
+                        {product.isFav ? (
+                            <GenericButton
+                                icon="bookmark-slash"
+                                fill={true}
+                                action={() => handleRemove(product)}
+                            ></GenericButton>
+                        ) : (
+                            <GenericButton
+                                icon="bookmark"
+                                action={() => handleAdd(product)}
+                            ></GenericButton>
+                        )}
+                        <GenericButton
+                            icon="plus"
+                            action={() => onAddNote(product.barcode)}
+                        ></GenericButton>
+                    </View>
                 )}
             </View>
             {product.image_url && (
@@ -70,44 +69,34 @@ export const CarouselProduct = ({
             )}
             <View style={styles.cardContent}>
                 <View>
-                    {product?.userOpinion ? (
-                        <UserOpinion
-                            title="La teva opinió"
-                            productBarcode={product.barcode}
-                            opinion={product.userOpinion}
-                            onUpdateUserOpinion={onUpdateUserOpinion}
-                        ></UserOpinion>
-                    ) : (
-                        <GenericButton
-                            text="Valorar"
-                            icon="plus"
-                            action={() => onAddOpinion(product.barcode)}
-                        ></GenericButton>
-                    )}
-                    {product?.userNotes &&
+                    {product?.userNotes && product.userNotes.length > 0 ? (
                         product.userNotes.map((note: Note, index: number) => (
                             <Text key={index}>{note.note}</Text>
-                        ))}
-                </View>
-                <View>
-                    <Text style={Texts.title}>Altres opinions</Text>
-                    <FlatList
-                        data={product.opinions}
-                        style={styles.otherOpinionsList}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <View style={styles.opinionItem}>
-                                <Text>{item.opinion}</Text>
-                                <Text>{Sentiments[item.sentiment]}</Text>
-                            </View>
-                        )}
-                        ListEmptyComponent={
+                        ))
+                    ) : (
+                        <>
                             <Text>
-                                Encara no s'ha valorat aquet producte. Sigues el
-                                primer!
+                                Afegeix notes al producte! Pots apuntar-te el
+                                que vulguis i recordar-ho sempre que l'escanegis
+                                (o anar directament a la llista de notes).
                             </Text>
-                        }
-                    />
+                            <Text style={[Texts.lightTitle, Texts.italic]}>
+                                😊 Aquets cereals son els que li agraden a la
+                                meva parella
+                            </Text>
+                            <Text style={[Texts.lightTitle, Texts.italic]}>
+                                😡 No comprar mai més aquesta marca!
+                            </Text>
+                        </>
+                    )}
+                </View>
+                <View style={styles.cardFooter}>
+                    {user?.isAdmin && (
+                        <Button
+                            onPress={() => onUpdateProductInfo(product.barcode)}
+                            title="Update"
+                        ></Button>
+                    )}
                 </View>
             </View>
         </View>
@@ -135,13 +124,17 @@ const styles = StyleSheet.create({
     cardContent: {
         flexDirection: 'column',
         gap: 15,
+        display: 'flex',
+        flex: 1,
     },
-    otherOpinionsList: {
-        marginTop: 5,
+    cardFooter: {
+        flexDirection: 'row',
+        gap: 15,
+        marginTop: 'auto',
     },
-    opinionItem: {
-        padding: 10,
-        borderLeftWidth: 2,
-        borderLeftColor: Colors.gray,
+    buttonContainer: {
+        marginLeft: 'auto',
+        flexDirection: 'row',
+        gap: 10,
     },
 })

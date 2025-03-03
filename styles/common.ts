@@ -15,4 +15,11 @@ export const Texts = StyleSheet.create({
         fontSize: 14,
         fontWeight: 900,
     },
+    lightTitle: {
+        fontSize: 14,
+        fontWeight: 400,
+    },
+    italic: {
+        fontStyle: 'italic',
+    },
 })

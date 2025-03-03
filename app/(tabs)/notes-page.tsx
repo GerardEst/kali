@@ -3,46 +3,49 @@ import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pages, Texts } from '@/styles/common'
 import { useEffect } from 'react'
-import { getAllOpinionsByUser } from '@/src/core/api/products/products-api'
+import { getNotesByUser } from '@/src/core/api/products/notes-api'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
-import { useUserOpinionsState } from '@/src/store/userOpinionsState'
-import { UserOpinion } from '@/src/shared/components/UserOpinion'
+import { useUserNotesState } from '@/src/store/userNotesState'
+import { UserNote } from '@/src/shared/components/UserNote'
 
-export default function Opinions() {
+export default function Notes() {
     const { user } = useAuthState()
-    const { opinions, setUserOpinions } = useUserOpinionsState()
+    const { notes, setUserNotes } = useUserNotesState()
 
     useEffect(() => {
         const userId = user?.id
         if (!userId) return
 
-        getAllOpinionsByUser(userId).then((data) => {
-            setUserOpinions(data)
+        getNotesByUser(userId).then((data) => {
+            setUserNotes(data)
         })
     }, [user])
 
     return (
         <SafeAreaView style={Pages}>
-            <Text style={Texts.title}>Les teves opinions</Text>
+            <Text style={Texts.title}>Les teves notes</Text>
+            <Text style={Texts.lightTitle}>
+                Consulta totes les notes que has posat als productes
+            </Text>
 
             {user ? (
-                <View style={styles.opinionsList}>
+                <View style={styles.notesList}>
                     <FlatList
-                        data={opinions}
-                        keyExtractor={(opinion) => opinion.id.toString()}
+                        data={notes}
+                        keyExtractor={(note) => note.id.toString()}
                         renderItem={({ item }) => (
-                            <View style={styles.userOpinion}>
-                                <UserOpinion
-                                    title={item.products.name}
+                            <View style={styles.userNote}>
+                                <UserNote
+                                    title={item.productData?.name}
                                     productBarcode="null"
-                                    opinion={item}
-                                ></UserOpinion>
+                                    note={item}
+                                ></UserNote>
                             </View>
                         )}
                         ListEmptyComponent={
                             <Text>
-                                Encara no has valorat cap producte. A què
-                                esperes?
+                                Encara no has afegit cap nota a cap producte. A
+                                què esperes?
                             </Text>
                         }
                     />
@@ -57,11 +60,11 @@ export default function Opinions() {
 }
 
 const styles = StyleSheet.create({
-    opinionsList: {
+    notesList: {
         marginTop: 20,
         paddingBottom: 85,
     },
-    userOpinion: {
+    userNote: {
         marginTop: 15,
     },
 })
