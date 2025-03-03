@@ -5,19 +5,30 @@ import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
 import 'react-native-reanimated'
-import { checkExistingSession } from '@/src/core/auth/auth.service'
+import { checkUserSession } from '@/src/core/auth/usecases/checkUserSession'
+import { useAuthState } from '@/src/store/authState'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
+    const { setUser, cleanUser } = useAuthState()
     const [loaded] = useFonts({
         SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
     })
 
     useEffect(() => {
-        checkExistingSession()
+        autoLogin()
     }, [])
+
+    async function autoLogin() {
+        const userSession: any = await checkUserSession()
+        if (userSession?.error) {
+            cleanUser()
+        } else {
+            setUser(userSession)
+        }
+    }
 
     useEffect(() => {
         if (loaded) {

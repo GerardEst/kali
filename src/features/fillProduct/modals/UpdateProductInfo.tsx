@@ -38,6 +38,9 @@ export function UpdateProductInfoModal({
                     {
                         barcode: product.barcode,
                         name: product.name,
+                        brand: product.brand,
+                        tags: product.tags,
+                        short_description: product.short_description,
                     },
                 ])
                 .select()
@@ -77,15 +80,44 @@ export function UpdateProductInfoModal({
                     <View style={styles.modalContent}>
                         <TextInput
                             value={product.name}
+                            placeholder="Nom"
                             editable
-                            multiline
-                            numberOfLines={4}
-                            maxLength={150}
                             onChangeText={(text) =>
                                 setProduct({ ...product, name: text })
                             }
                             style={styles.opinion}
                         />
+                        <TextInput
+                            value={product.description}
+                            placeholder="Petita descripció"
+                            editable
+                            multiline
+                            numberOfLines={4}
+                            maxLength={150}
+                            onChangeText={(text) =>
+                                setProduct({ ...product, description: text })
+                            }
+                            style={styles.opinion}
+                        />
+                        <TextInput
+                            value={product.brand}
+                            editable
+                            placeholder="Marca"
+                            onChangeText={(text) =>
+                                setProduct({ ...product, brand: text })
+                            }
+                            style={styles.opinion}
+                        />
+                        <TextInput
+                            value={product.tags}
+                            editable
+                            placeholder="Tags"
+                            onChangeText={(text) =>
+                                setProduct({ ...product, tags: text })
+                            }
+                            style={styles.opinion}
+                        />
+
                         <View style={styles.modalFooter}>
                             <GenericButton
                                 text="Publicar"

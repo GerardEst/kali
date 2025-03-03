@@ -13,6 +13,7 @@ export async function getProductInfo(barcode: string) {
         return {
             productName: response?.product.generic_name_es,
             imageUrl: response?.product.image_front_small_url,
+            tags: response?.product.tags,
         } as any
     } catch (error) {
         console.error({

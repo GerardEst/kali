@@ -25,7 +25,8 @@ export const getProductByBarcode = async (
                 barcode,
                 barcodeType,
                 product?.productName,
-                product?.imageUrl
+                product?.imageUrl,
+                product?.tags
             )
 
             return createdProduct as Product
@@ -120,7 +121,8 @@ export const createNewProduct = async (
     barcode: string,
     barcodeType: string,
     productName: string | null = null,
-    imageUrl: string | null = null
+    imageUrl: string | null = null,
+    tags: string | null = null
 ) => {
     try {
         const { data: product, error } = await supabase
@@ -131,6 +133,7 @@ export const createNewProduct = async (
                     name: productName,
                     barcode_type: barcodeType,
                     image_url: imageUrl,
+                    tags: tags,
                 },
             ])
             .select()

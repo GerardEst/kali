@@ -12,8 +12,6 @@ export default function SigninButton() {
     const handleSignin = async () => {
         const userLogged = await loginUser()
 
-        console.log(userLogged)
-
         if (userLogged.error) {
             const code = userLogged.error.code
             if (code === statusCodes.SIGN_IN_CANCELLED) {
@@ -40,8 +38,6 @@ export default function SigninButton() {
             }
         } else {
             setUser(userLogged)
-
-            console.log(user)
         }
     }
 

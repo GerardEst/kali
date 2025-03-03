@@ -5,12 +5,9 @@ import {
 } from '@react-native-google-signin/google-signin'
 import { supabase } from '@/src/core/supabase'
 import { logger } from '@/src/shared/utils/logger'
-import { webClientId } from './config'
-import { useAuthState } from '@/src/store/authState'
+import { webClientId } from '../config'
 
-export const checkExistingSession = async () => {
-    const { setUser, cleanUser } = useAuthState()
-
+export const checkUserSession = async () => {
     GoogleSignin.configure({
         webClientId,
     })
@@ -35,15 +32,16 @@ export const checkExistingSession = async () => {
                     authData.user.email === 'davidestevebusquets@gmail.com' ||
                     authData.user.email === 'rosamariabn@hotmail.com'
 
-                // Update the user state
-                setUser({ ...authData.user, isAdmin })
-
                 logger({
                     type: 'success',
                     title: 'Auto startup signin',
                     message:
                         response.data.user.email + ' successfully signed in',
                 })
+
+                const user = { ...authData.user, isAdmin }
+
+                return user
             } else if (isNoSavedCredentialFoundResponse(response)) {
                 throw new Error('No saved credentials found response')
             }
@@ -62,6 +60,7 @@ export const checkExistingSession = async () => {
 
         // Clean up on error
         await GoogleSignin.signOut()
-        cleanUser()
+
+        return { error }
     }
 }
