@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { Opinion } from '@/src/shared/interfaces/Opinion'
+import { Opinion } from '@/src/shared/interfaces/Review'
 
 export const useUserOpinionsState = create<any>((set) => ({
     opinions: [],

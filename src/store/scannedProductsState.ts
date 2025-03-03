@@ -1,20 +1,21 @@
 import { create } from 'zustand'
 import { Product } from '@/src/shared/interfaces/Product'
-import { Opinion } from '@/src/shared/interfaces/Opinion'
+// import { Opinion } from '@/src/shared/interfaces/Review'
 import { Note } from '../shared/interfaces/Note'
+import { Review } from '../shared/interfaces/Review'
 
-interface ScannedProductState {
-    products: (Product & {
-        opinions: Opinion[]
-        userOpinion: Opinion
-    })[]
-    upsertScannedProduct: (product: Product) => void
-    upsertUserOpinion: (barcode: string, userOpinion: Opinion) => void
-    setUserNotes: (barcode: string, userNotes: Note[]) => void
-    addUserNote: (barcode: string, noteText: string) => void
-}
+// interface ScannedProductState {
+//     products: (Product & {
+//         reviews: Review[]
+//         userReview: Review
+//     })[]
+//     upsertScannedProduct: (product: Product) => void
+//     upsertUserReview: (barcode: string, userReview: Review | undefined) => void
+//     setUserNotes: (barcode: string, userNotes: Note[]) => void
+//     addUserNote: (barcode: string, noteText: string) => void
+// }
 
-export const useScannedProductsState = create<ScannedProductState>((set) => ({
+export const useScannedProductsState = create<any>((set) => ({
     products: [],
 
     upsertScannedProduct: (product: Product) =>
@@ -29,16 +30,18 @@ export const useScannedProductsState = create<ScannedProductState>((set) => ({
             }
         }),
 
-    upsertUserOpinion: (barcode: string, userOpinion: Opinion) =>
+    upsertUserReview: (barcode: string, userReview: Review) =>
         //@ts-ignore
         set((state) => {
+            const products = state.products.map((product: Product) =>
+                // TODO -> Cuidado que aqui necessitem == perquè tenim number i string, sembla
+                product.barcode == barcode
+                    ? { ...product, userReview }
+                    : product
+            )
+
             return {
-                products: state.products.map((product: Product) =>
-                    // TODO -> Cuidado que aqui necessitem == perquè tenim number i string, sembla
-                    product.barcode == barcode
-                        ? { ...product, userOpinion: userOpinion }
-                        : product
-                ),
+                products,
             }
         }),
 

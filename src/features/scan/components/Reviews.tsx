@@ -1,29 +1,28 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useState } from 'react'
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons'
+import React from 'react'
 
 interface ReviewsProps {
-    style?: any
     productScore?: number
     packagingScore?: number
-    exoScore?: number
+    ecoScore?: number
 }
 
 export default function Reviews({
-    style,
     productScore,
     packagingScore,
-    exoScore,
+    ecoScore,
 }: ReviewsProps) {
     const [showPopup, setShowPopup] = useState(false)
 
-    const handlePress = () => {
+    const openReviews = () => {
         setShowPopup(!showPopup)
     }
 
     return (
-        <View style={style}>
-            <TouchableOpacity onPress={handlePress} style={styles.container}>
+        <>
+            <TouchableOpacity onPress={openReviews} style={styles.container}>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.score}>
                         {productScore?.toFixed(1) || '?'}
@@ -38,7 +37,7 @@ export default function Reviews({
                 </View>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.score}>
-                        {exoScore?.toFixed(1) || '?'}
+                        {ecoScore?.toFixed(1) || '?'}
                     </Text>
                     <Text style={styles.label}>Eco</Text>
                 </View>
@@ -49,7 +48,7 @@ export default function Reviews({
                     <Text>Popup content will go here</Text>
                 </View>
             )}
-        </View>
+        </>
     )
 }
 

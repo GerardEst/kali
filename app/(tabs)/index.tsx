@@ -1,4 +1,11 @@
-import { StyleSheet, View, Text, Platform, StatusBar } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    Text,
+    Platform,
+    StatusBar,
+    TouchableOpacity,
+} from 'react-native'
 import {
     useCameraDevice,
     useCameraPermission,
@@ -9,6 +16,7 @@ import { useState } from 'react'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { UpdateProductInfoModal } from '@/src/features/fillProduct/modals/UpdateProductInfo'
 import { AddOpinionModal } from '@/src/features/evaluateProduct/modals/AddOpinion'
+import { ReviewFormModal } from '@/src/features/evaluateProduct/modals/ReviewFormModal'
 import { supportedBarcodeTypes } from '@/src/features/scan/scanParameters'
 import { useScan } from '@/src/features/scan/hooks/useScan'
 import { Carousel } from '@/src/features/scan/components/Carousel'
@@ -22,8 +30,9 @@ export default function HomeScreen() {
     const [modalVisible, setModalVisible] = useState(false)
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
+    const [reviewFormVisible, setReviewFormVisible] = useState(false)
     const [activeBarcode, setActiveBarcode] = useState<string | null>(null)
-    const [scan] = useScan()
+    const { scannedCode, scan } = useScan()
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
@@ -61,6 +70,12 @@ export default function HomeScreen() {
                 visible={infoModalVisible}
                 onClose={() => setInfoModalVisible(false)}
             ></UpdateProductInfoModal>
+            <ReviewFormModal
+                style={styles.modal}
+                productBarcode={scannedCode}
+                visible={reviewFormVisible}
+                onClose={() => setReviewFormVisible(false)}
+            />
             <Camera
                 style={StyleSheet.absoluteFill}
                 device={device}
@@ -74,8 +89,21 @@ export default function HomeScreen() {
             )}
             {products && products.length > 0 ? (
                 <>
-                    <Reviews style={styles.reviews}></Reviews>
-
+                    <View style={styles.reviews}>
+                        <Reviews
+                            productScore={products[0].product_score_avg}
+                            packagingScore={products[0].packaging_score_avg}
+                            ecoScore={products[0].eco_score_avg}
+                        ></Reviews>
+                        <TouchableOpacity
+                            style={styles.reviewButton}
+                            onPress={() => setReviewFormVisible(true)}
+                        >
+                            <Text style={styles.reviewButtonText}>
+                                Add Review
+                            </Text>
+                        </TouchableOpacity>
+                    </View>
                     <View style={styles.scannerContent}>
                         <Carousel
                             onAddOpinion={(barcode: string) => {
@@ -144,5 +172,17 @@ const styles = StyleSheet.create({
         top: 10,
         width: '95%',
         paddingTop: Platform.OS === 'android' ? StatusBar.currentHeight : 0,
+    },
+    reviewButton: {
+        backgroundColor: '#2196F3',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderRadius: 20,
+        marginTop: 10,
+    },
+    reviewButtonText: {
+        color: 'white',
+        fontSize: 16,
+        fontWeight: '600',
     },
 })

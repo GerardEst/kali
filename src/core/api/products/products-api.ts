@@ -1,7 +1,4 @@
-import {
-    Opinion,
-    UserOpinionWithProductName,
-} from '@/src/shared/interfaces/Opinion'
+import { Review } from '@/src/shared/interfaces/Review'
 import { Product } from '@/src/shared/interfaces/Product'
 import { supabase } from '@/src/core/supabase'
 import { getProductInfo } from '../openFood-api'
@@ -32,13 +29,18 @@ export const getProductByBarcode = async (
             return createdProduct as Product
         }
 
-        // TODO - Limitar la quantitat d'opinions, o deixar definir a les propietats
-        const productOpinions = await getProductOpinionsByBarcode(barcode)
+        const scannedProductAverageScores =
+            await getProductAverageScores(barcode)
+
+        if (!scannedProductAverageScores) return
 
         if (error) throw error
         return {
             ...product?.[0],
-            opinions: productOpinions,
+            reviews: [],
+            product_score_avg: scannedProductAverageScores.productScore,
+            packaging_score_avg: scannedProductAverageScores.packagingScore,
+            eco_score_avg: scannedProductAverageScores.ecoScore,
         } as Product
     } catch (error) {
         console.error(error)
@@ -67,50 +69,49 @@ export const getFavStateOfProductForUser = async (
     }
 }
 
-export const getProductOpinionsByBarcode = async (barcode: string) => {
+export const getProductAverageScores = async (productBarcode: string) => {
     try {
-        let { data: opinions, error } = await supabase
-            .from('opinions')
-            .select('*')
-            .eq('product', barcode)
+        const { data, error } = await supabase
+            .from('product_average_scores')
+            .select('product_score_avg, packaging_score_avg, eco_score_avg')
+            .eq('product', productBarcode)
+            .select()
 
         if (error) throw error
-        return opinions as Opinion[]
-    } catch (error) {
+        if (!data[0])
+            return {
+                productScore: -1,
+                packagingScore: -1,
+                ecoScore: -1,
+            }
+
+        return {
+            productScore: data[0].product_score_avg,
+            packagingScore: data[0].packaging_score_avg,
+            ecoScore: data[0].eco_score_avg,
+        }
+    } catch (error: any) {
         console.error(error)
-        throw new Error('Error getting product opinions')
+        throw new Error('Error getting average product scores')
     }
 }
 
-export const getProductOpinionByUser = async (
-    productBarcode: string,
+export const getProductReviewByUser = async (
+    barcode: string,
     userId: string
 ) => {
     try {
         const { data, error } = await supabase
-            .from('opinions')
-            .select('*')
-            .eq('product', productBarcode)
+            .from('reviews')
+            .select(
+                'product_comment, product_score, packaging_comment, packaging_score, eco_comment, eco_score'
+            )
             .eq('profile', userId)
-
-        if (error) throw error
-        return data[0] as Opinion
-    } catch (error: any) {
-        console.error(error)
-        throw new Error('Error getting user opinion')
-    }
-}
-
-export const getAllOpinionsByUser = async (userId: string) => {
-    try {
-        const { data, error } = await supabase
-            .from('opinions')
-            .select('id, opinion, sentiment, products (name)')
-            .eq('profile', userId)
+            .eq('product', barcode)
 
         if (error) throw error
 
-        return data as UserOpinionWithProductName[]
+        return data[0] as Review
     } catch (error: any) {
         console.error(error)
         throw new Error('Error getting user opinion')
@@ -146,21 +147,24 @@ export const createNewProduct = async (
     }
 }
 
-export const updateOpinionForProduct = async (
+export const updateReviewForProduct = async (
     barcode: string,
-    opinion: string,
-    sentiment: number,
+    review: Review,
     userId: string
 ) => {
     try {
+        console.log('review', review)
+
         const { data, error } = await supabase
-            .from('opinions')
+            .from('reviews')
             .update([
                 {
-                    product: barcode,
-                    profile: userId,
-                    opinion: opinion,
-                    sentiment: sentiment,
+                    product_comment: review.product_comment,
+                    product_score: review.product_score,
+                    packaging_comment: review.packaging_comment,
+                    packaging_score: review.packaging_score,
+                    eco_comment: review.eco_comment,
+                    eco_score: review.eco_score,
                 },
             ])
             .eq('product', barcode)
@@ -169,34 +173,37 @@ export const updateOpinionForProduct = async (
 
         if (error) throw error
 
-        return data[0] as Opinion
+        return data[0] as Review
     } catch (error) {
         console.error(error)
-        throw new Error('Error posting new opinion')
+        throw new Error('Error posting updated opinion')
     }
 }
 
-export const createNewOpinionForProduct = async (
+export const createNewReviewForProduct = async (
     barcode: string,
-    opinion: string,
-    sentiment: number,
+    review: Review,
     userId: string
 ) => {
     try {
         const { data, error } = await supabase
-            .from('opinions')
+            .from('reviews')
             .insert([
                 {
                     product: barcode,
                     profile: userId,
-                    opinion: opinion,
-                    sentiment: sentiment,
+                    product_comment: review.product_comment,
+                    product_score: review.product_score,
+                    packaging_comment: review.packaging_comment,
+                    packaging_score: review.packaging_score,
+                    eco_comment: review.eco_comment,
+                    eco_score: review.eco_score,
                 },
             ])
             .select()
 
         if (error) throw error
-        return data[0] as Opinion
+        return data[0] as Review
     } catch (error) {
         console.error(error)
         throw new Error('Error posting new opinion')

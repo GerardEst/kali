@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { checkTimes } from '../scanParameters'
 import {
     getProductByBarcode,
-    getProductOpinionByUser,
+    getProductReviewByUser,
     getFavStateOfProductForUser,
 } from '@/src/core/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
@@ -16,7 +16,7 @@ export const useScan = () => {
     const [checkCode, setCheckCode] = useState<string>('')
     const [timesChecked, setTimesChecked] = useState<number>(0)
     const [scannedCode, setScannedCode] = useState<string>('')
-    const { upsertScannedProduct, upsertUserOpinion, setUserNotes } =
+    const { products, upsertScannedProduct, upsertUserReview, setUserNotes } =
         useScannedProductsState()
 
     async function scan(codes: Code[]) {
@@ -65,27 +65,28 @@ export const useScan = () => {
             upsertScannedProduct(scannedProductInfo)
         }
 
+        // I si té una review
         if (user) {
-            const scannedProductUserOpinion = await getProductOpinionByUser(
+            const scannedProductUserReview = await getProductReviewByUser(
                 scannedCode,
                 user.id
             )
-            if (scannedProductUserOpinion) {
-                upsertUserOpinion(
-                    parseInt(scannedCode),
-                    scannedProductUserOpinion
-                )
+            if (scannedProductUserReview) {
+                upsertUserReview(scannedCode, scannedProductUserReview)
             }
+        }
 
+        // I si té notes
+        if (user) {
             const scannedProductUserNotes = await getProductNotesForUser(
                 scannedCode,
                 user.id
             )
             if (scannedProductUserNotes) {
-                setUserNotes(parseInt(scannedCode), scannedProductUserNotes)
+                setUserNotes(scannedCode, scannedProductUserNotes)
             }
         }
     }
 
-    return [scan]
+    return { scannedCode, scan }
 }

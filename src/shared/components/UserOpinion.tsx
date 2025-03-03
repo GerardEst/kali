@@ -3,7 +3,7 @@ import { Texts } from '@/styles/common'
 import { Sentiments } from '@/src/shared/constants/sentiments'
 import { GenericButton } from './buttons/GenericButton'
 import { Colors, SentimentColors } from '@/styles/colors'
-import { Opinion } from '@/src/shared/interfaces/Opinion'
+import { Opinion } from '@/src/shared/interfaces/Review'
 
 interface UserOpinionComponent {
     title?: string

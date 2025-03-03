@@ -1,5 +1,5 @@
 import { Note } from './Note'
-import { Opinion } from './Opinion'
+import { Review } from './Review'
 
 export interface Product {
     barcode: string
@@ -9,8 +9,11 @@ export interface Product {
     short_description?: string
     tags?: string
     image_url?: string
-    opinions?: Opinion[]
-    userOpinion?: Opinion
+    reviews?: Review[]
+    product_score_avg?: number
+    packaging_score_avg?: number
+    eco_score_avg?: number
     userNotes?: Note[]
+    userReview?: Review
     isFav?: Boolean
 }
