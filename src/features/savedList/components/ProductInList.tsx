@@ -1,7 +1,7 @@
 import { StyleSheet, View, Text, Image } from 'react-native'
 import React from 'react'
 import { Product } from '@/src/shared/interfaces/Product'
-import { GenericButton } from '@/src/shared/components/GenericButton'
+import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { useFavoriteActions } from '@/src/useCases/useFavoritesActions'
 
 export const ProductInList = ({ product }: { product: Product }) => {

@@ -11,13 +11,13 @@ import Modal from 'react-native-modal'
 import { useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/src/store/authState'
-import GoogleSign from '@/src/shared/components/signInButton'
+import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import {
     createNewOpinionForProduct,
     updateOpinionForProduct,
 } from '@/src/core/api/products/products-api'
-import { GenericButton } from '../../../shared/components/GenericButton'
+import { GenericButton } from '../../../shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { SentimentSelector } from '../components/sentiment-selector'
 

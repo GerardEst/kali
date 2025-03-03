@@ -1,6 +1,6 @@
 import { StyleSheet, View } from 'react-native'
-import GoogleSign from '@/src/shared/components/signInButton'
-import LogoutButton from '@/src/shared/components/logoutButton'
+import GoogleSign from '@/src/shared/components/buttons/SignInButton'
+import LogoutButton from '@/src/shared/components/buttons/LogoutButton'
 import { useAuthState } from '@/src/store/authState'
 import VersionDisplay from '@/src/shared/components/app-version'
 import { SafeAreaView } from 'react-native-safe-area-context'

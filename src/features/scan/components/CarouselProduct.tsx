@@ -1,5 +1,5 @@
 import { View, Text, StyleSheet, FlatList, Button } from 'react-native'
-import { GenericButton } from '@/src/shared/components/GenericButton'
+import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Colors } from '@/styles/colors'
 import { Texts } from '@/styles/common'
 import { Sentiments } from '@/src/shared/constants/sentiments'

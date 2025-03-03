@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pages, Texts } from '@/styles/common'
 import { useEffect } from 'react'
 import { getAllOpinionsByUser } from '@/src/core/api/products/products-api'
-import GoogleSign from '@/src/shared/components/signInButton'
+import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { useUserOpinionsState } from '@/src/store/userOpinionsState'
 import { UserOpinion } from '@/src/shared/components/UserOpinion'
 
