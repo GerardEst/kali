@@ -3,10 +3,10 @@ import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pages, Texts } from '@/styles/common'
 import { useEffect } from 'react'
-import { getSavedProductsForUser } from '@/src/core/api/products/lists-api'
+import { getSavedProductsForUser } from '@/src/api/products/lists-api'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { useListsState } from '@/src/store/listsState'
-import { ProductInList } from '@/src/features/savedList/components/ProductInList'
+import { ProductInList } from '@/src/features/saved-page/components/ProductInList'
 
 export default function Saved() {
     const { user } = useAuthState()

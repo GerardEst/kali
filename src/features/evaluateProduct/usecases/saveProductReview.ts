@@ -1,7 +1,7 @@
 import {
     createNewReviewForProduct,
     updateReviewForProduct,
-} from '@/src/core/api/products/products-api'
+} from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
 import { Product } from '@/src/shared/interfaces/Product'
 import { Review } from '@/src/shared/interfaces/Review'

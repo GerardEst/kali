@@ -4,11 +4,11 @@ import {
     getProductByBarcode,
     getProductReviewByUser,
     getFavStateOfProductForUser,
-} from '@/src/core/api/products/products-api'
+} from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { Code } from 'react-native-vision-camera'
-import { getProductNotesForUser } from '@/src/core/api/products/notes-api'
+import { getProductNotesForUser } from '@/src/api/products/notes-api'
 
 export const useScan = () => {
     const { user } = useAuthState()

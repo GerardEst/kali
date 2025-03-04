@@ -1,6 +1,6 @@
 import { Product } from '@/src/shared/interfaces/Product'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
-import { saveNoteToProduct as saveNoteToProductApi } from '@/src/core/api/products/notes-api'
+import { saveNoteToProduct as saveNoteToProductApi } from '@/src/api/products/notes-api'
 import { useAuthState } from '@/src/store/authState'
 
 export const saveNoteOnProduct = async (product: Product, note: string) => {

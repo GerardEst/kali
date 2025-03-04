@@ -1,4 +1,4 @@
-import { updateProduct } from '@/src/core/api/products/products-api'
+import { updateProduct } from '@/src/api/products/products-api'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 

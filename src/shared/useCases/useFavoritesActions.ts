@@ -5,7 +5,7 @@ import { Product } from '@/src/shared/interfaces/Product'
 import {
     saveProductForUser,
     unsaveProductForUser,
-} from '@/src/core/api/products/lists-api'
+} from '@/src/api/products/lists-api'
 
 export const useFavoriteActions: any = () => {
     const { user } = useAuthState()
