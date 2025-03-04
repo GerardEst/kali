@@ -27,7 +27,7 @@ export const LanguageSelector = () => {
                             i18n.language === 'en' && styles.selectedOptionText,
                         ]}
                     >
-                        {t('settings.english')}
+                        {t('settings.catalan')}
                     </Text>
                 </Pressable>
                 <Pressable

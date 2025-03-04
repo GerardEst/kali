@@ -1,13 +1,13 @@
 export default {
     common: {
-        version: 'Versión',
-        unknown: 'Desconocido',
+        version: 'Versió',
+        unknown: 'Desconegut',
     },
     tabs: {
-        saved: 'Guardados',
-        notes: 'Notas',
+        saved: 'Guardats',
+        notes: 'Notes',
         search: 'Buscador',
-        options: 'Opciones',
+        options: 'Opcions',
     },
     settings: {
         language: 'Idioma',
