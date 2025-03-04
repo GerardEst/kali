@@ -2,7 +2,7 @@ import { StyleSheet, View, Text, Image } from 'react-native'
 import React from 'react'
 import { Product } from '@/src/shared/interfaces/Product'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
-import { useFavoriteActions } from '@/src/useCases/useFavoritesActions'
+import { useFavoriteActions } from '@/src/shared/useCases/useFavoritesActions'
 
 export const ProductInList = ({ product }: { product: Product }) => {
     const { removeFav } = useFavoriteActions()

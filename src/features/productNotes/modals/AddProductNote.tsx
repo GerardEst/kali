@@ -9,37 +9,33 @@ import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
-import { saveNote } from '@/src/core/api/products/notes-api'
+import { saveNoteOnProduct } from '../usecases/saveNote'
 
 export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
     const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { products, upsertScannedProduct, addUserNote } =
-        useScannedProductsState()
+    const { products } = useScannedProductsState()
     const { user } = useAuthState()
     const [product, setProduct] = useState<Product>()
     const [note, setNote] = useState<any>({})
 
     useEffect(() => {
         const product = products.find(
-            (product) => product.barcode == productBarcode
+            (product: Product) => product.barcode == productBarcode
         )
         if (product) {
             setProduct(product)
         }
     }, [visible, productBarcode])
 
-    const onSaveNote = (text: string) => {
-        if (product && user) {
-            saveNote(product.barcode, text, user.id)
-            // TODO - Nomes afegir a l'estat si el save ha anat bé
-            addUserNote(product.barcode, text)
+    const onSaveNote = async (text: string) => {
+        setIsLoading(true)
+        if (product) {
+            const savedProduct = await saveNoteOnProduct(product, text)
+            if (savedProduct) {
+                setIsLoading(false)
+                onClose()
+            }
         }
-
-        // Tancar
-        onClose()
-
-        // Actualitzem la store afegint el product + el cambi que acabem de fer
-        // upsertScannedProduct({ ...product, ...data[0] })
     }
 
     return (

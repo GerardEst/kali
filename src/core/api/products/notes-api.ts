@@ -50,7 +50,7 @@ export const getNotesByUser = async (profileId: string) => {
     }
 }
 
-export const saveNote = async (
+export const saveNoteToProduct = async (
     productBarcode: string,
     note: string,
     profileId: string
