@@ -3,8 +3,11 @@ import React from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { Colors } from '@/styles/colors'
+import { useTranslation } from 'react-i18next'
 
 export default function TabLayout() {
+    const { t } = useTranslation()
+
     return (
         <Tabs
             screenOptions={{
@@ -27,7 +30,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="saved-page"
                 options={{
-                    title: 'Guardats',
+                    title: t('tabs.saved'),
                     tabBarIcon: ({ color }) => (
                         <AntDesign name="heart" size={24} color={color} />
                     ),
@@ -37,7 +40,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="notes-page"
                 options={{
-                    title: 'Notes',
+                    title: t('tabs.notes'),
                     tabBarIcon: ({ color }) => (
                         <FontAwesome6
                             name="sticky-note"
@@ -51,7 +54,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: 'Buscador',
+                    title: t('tabs.search'),
                     tabBarIcon: ({ color }) => (
                         <AntDesign name="search1" size={24} color={color} />
                     ),
@@ -61,7 +64,7 @@ export default function TabLayout() {
             <Tabs.Screen
                 name="settings-page"
                 options={{
-                    title: 'Opcions',
+                    title: t('tabs.options'),
                     tabBarIcon: ({ color }) => (
                         <AntDesign size={24} name="setting" color={color} />
                     ),

@@ -4,6 +4,7 @@ import LogoutButton from '@/src/shared/components/buttons/LogoutButton'
 import { useAuthState } from '@/src/store/authState'
 import VersionDisplay from '@/src/shared/components/app-version'
 import { SafeAreaView } from 'react-native-safe-area-context'
+import { LanguageSelector } from '@/src/shared/components/language-selector'
 
 export default function TabTwoScreen() {
     const { user } = useAuthState()
@@ -11,6 +12,7 @@ export default function TabTwoScreen() {
     return (
         <SafeAreaView style={styles.container}>
             <VersionDisplay />
+            <LanguageSelector />
 
             <View style={styles.authContainer}>
                 {user ? <LogoutButton /> : <GoogleSign />}
