@@ -1,86 +1,50 @@
-import React, { useEffect, useRef } from 'react'
-import {
-    StyleSheet,
-    View,
-    Text,
-    Pressable,
-    TextInput,
-    Alert,
-} from 'react-native'
+import React, { useEffect } from 'react'
+import { StyleSheet, View, Text, Pressable } from 'react-native'
 import Modal from 'react-native-modal'
 import { useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/src/store/authState'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
-import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { GenericButton } from '../../../shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
-import { SentimentSelector } from '../components/sentiment-selector'
-import { Review } from '@/src/shared/interfaces/Review'
 import { Product } from '@/src/shared/interfaces/Product'
-import {
-    updateReviewForProduct,
-    createNewReviewForProduct,
-} from '@/src/core/api/products/products-api'
-export function ReviewFormModal({ productBarcode, visible, onClose }: any) {
-    const [productReview, setProductReview] = useState<Review>()
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { products, upsertUserReview } = useScannedProductsState()
+import { saveProductReview } from '../usecases/saveProductReview'
+import FieldEvaluation from '../components/field-evaluation'
+
+export function ReviewFormModal({
+    visible,
+    product,
+    onClose,
+}: {
+    visible: boolean
+    product: Product
+    onClose: () => void
+}) {
     const { user } = useAuthState()
-    const [product, setProduct] = useState<Product>()
+
+    const [productReview, setProductReview] = useState<any>()
+    const [isLoading, setIsLoading] = useState<boolean>(false)
 
     useEffect(() => {
-        const productFromBarcode = products.find(
-            (product: Product) => product.barcode == productBarcode
-        )
-        if (productFromBarcode) setProduct(productFromBarcode)
-
-        const userReview = productFromBarcode?.userReview
-        if (userReview) {
-            setProductReview(userReview)
-        }
-    }, [visible, productBarcode])
-
-    useEffect(() => {
-        if (product) {
-            const updatedProduct = products.find(
-                (p: Product) => p.barcode === productBarcode
-            )
-            if (updatedProduct && updatedProduct.userReview) {
-                setProductReview(updatedProduct.userReview)
-            }
-        }
-    }, [products, productBarcode])
+        setProductReview({
+            product_score: product?.userReview?.product_score,
+            product_comment: product?.userReview?.product_comment,
+            packaging_score: product?.userReview?.packaging_score,
+            packaging_comment: product?.userReview?.packaging_comment,
+            eco_score: product?.userReview?.eco_score,
+            eco_comment: product?.userReview?.eco_comment,
+        })
+    }, [visible])
 
     const submitProductOpinion = async () => {
+        if (!productReview) return
+
         setIsLoading(true)
-        try {
-            if (!user) throw new Error('User not found')
-            if (!productReview) throw new Error('Review not found')
-            if (!product) throw new Error('Product not found')
-
-            let review
-            if (product.userReview) {
-                review = await updateReviewForProduct(
-                    productBarcode,
-                    productReview,
-                    user.id
-                )
-            } else {
-                review = await createNewReviewForProduct(
-                    productBarcode,
-                    productReview,
-                    user.id
-                )
-            }
-
-            upsertUserReview(productBarcode, review)
-        } catch (error: any) {
-            Alert.alert('Error adding a new opinion', error.message)
-        } finally {
-            setIsLoading(false)
+        const savedReview = await saveProductReview(productReview, product)
+        if (savedReview) {
             onClose()
         }
+        setIsLoading(false)
     }
 
     return (
@@ -95,84 +59,63 @@ export function ReviewFormModal({ productBarcode, visible, onClose }: any) {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
                         <Text style={[Texts.smallTitle, styles.modalTitle]}>
-                            {product?.name || productBarcode}
+                            {product?.name || product.barcode}
                         </Text>
                         <Pressable style={styles.closeButton} onPress={onClose}>
                             <AntDesign name="close" size={24} color="black" />
                         </Pressable>
                     </View>
                     <View style={styles.modalContent}>
-                        <Text>Producte</Text>
-                        <SentimentSelector
-                            sentiment={productReview?.product_score}
-                            onSelectedSentiment={(sentiment: number) =>
-                                upsertUserReview(productBarcode, {
+                        <FieldEvaluation
+                            title="Producte"
+                            score={productReview?.product_score}
+                            comment={productReview?.product_comment}
+                            onUpdateScore={(score: number) =>
+                                setProductReview({
                                     ...productReview,
-                                    product_score: sentiment,
+                                    product_score: score,
                                 })
                             }
-                        ></SentimentSelector>
-                        <TextInput
-                            value={productReview?.product_comment}
-                            editable
-                            multiline
-                            numberOfLines={4}
-                            maxLength={150}
-                            onChangeText={(text) =>
-                                upsertUserReview(productBarcode, {
+                            onUpdateComment={(comment: string) =>
+                                setProductReview({
                                     ...productReview,
-                                    product_comment: text,
+                                    product_comment: comment,
                                 })
                             }
-                            style={styles.opinion}
                         />
-                        <Text>Packaging</Text>
-                        <SentimentSelector
-                            sentiment={productReview?.packaging_score}
-                            onSelectedSentiment={(sentiment: number) =>
-                                upsertUserReview(productBarcode, {
+                        <FieldEvaluation
+                            title="Packaging"
+                            score={productReview?.packaging_score}
+                            comment={productReview?.packaging_comment}
+                            onUpdateScore={(score: number) =>
+                                setProductReview({
                                     ...productReview,
-                                    packaging_score: sentiment,
+                                    packaging_score: score,
                                 })
                             }
-                        ></SentimentSelector>
-                        <TextInput
-                            value={productReview?.packaging_comment}
-                            editable
-                            multiline
-                            numberOfLines={4}
-                            maxLength={150}
-                            onChangeText={(text) =>
-                                upsertUserReview(productBarcode, {
+                            onUpdateComment={(comment: string) =>
+                                setProductReview({
                                     ...productReview,
-                                    packaging_comment: text,
+                                    packaging_comment: comment,
                                 })
                             }
-                            style={styles.opinion}
                         />
-                        <Text>Eco</Text>
-                        <SentimentSelector
-                            sentiment={productReview?.eco_score}
-                            onSelectedSentiment={(sentiment: number) =>
-                                upsertUserReview(productBarcode, {
+                        <FieldEvaluation
+                            title="Eco"
+                            score={productReview?.eco_score}
+                            comment={productReview?.eco_comment}
+                            onUpdateScore={(score: number) =>
+                                setProductReview({
                                     ...productReview,
-                                    eco_score: sentiment,
+                                    eco_score: score,
                                 })
                             }
-                        ></SentimentSelector>
-                        <TextInput
-                            value={productReview?.eco_comment}
-                            editable
-                            multiline
-                            numberOfLines={4}
-                            maxLength={150}
-                            onChangeText={(text) =>
-                                upsertUserReview(productBarcode, {
+                            onUpdateComment={(comment: string) =>
+                                setProductReview({
                                     ...productReview,
-                                    eco_comment: text,
+                                    eco_comment: comment,
                                 })
                             }
-                            style={styles.opinion}
                         />
                         <View style={styles.modalFooter}>
                             <GenericButton
@@ -197,6 +140,8 @@ export function ReviewFormModal({ productBarcode, visible, onClose }: any) {
 
 const styles = StyleSheet.create({
     centeredView: {
+        position: 'absolute',
+        bottom: 0,
         alignItems: 'center',
     },
     modalContainer: {
@@ -236,13 +181,7 @@ const styles = StyleSheet.create({
         width: '100%',
         justifyContent: 'flex-end',
     },
-    opinion: {
-        borderWidth: 1,
-        borderColor: 'gray',
-        padding: 10,
-        width: '100%',
-        borderRadius: 10,
-    },
+
     closeButton: {
         padding: 15,
     },

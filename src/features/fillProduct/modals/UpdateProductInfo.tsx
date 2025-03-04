@@ -1,62 +1,35 @@
-import React, { useEffect } from 'react'
 import { StyleSheet, View, Text, Pressable, TextInput } from 'react-native'
 import Modal from 'react-native-modal'
 import { useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/src/store/authState'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
-import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
-import { supabase } from '@/src/core/supabase'
+import { updateProductUsecase } from '../usecases/updateProduct'
 
 export function UpdateProductInfoModal({
-    productBarcode,
     visible,
+    product,
     onClose,
-}: any) {
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { products, upsertScannedProduct } = useScannedProductsState()
+}: {
+    visible: boolean
+    product: Product
+    onClose: () => void
+}) {
     const { user } = useAuthState()
-    const [product, setProduct] = useState<any>({})
 
-    useEffect(() => {
-        const product = products.find(
-            (product) => product.barcode == productBarcode
-        )
-        if (product) {
-            setProduct(product)
-        }
-    }, [visible, productBarcode])
+    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [formProduct, setFormProduct] = useState<Product>(product)
 
-    const saveProduct = async (product: Product) => {
-        try {
-            const { data, error } = await supabase
-                .from('products')
-                .upsert([
-                    {
-                        barcode: product.barcode,
-                        name: product.name,
-                        brand: product.brand,
-                        tags: product.tags,
-                        short_description: product.short_description,
-                    },
-                ])
-                .select()
-
-            if (error) throw error
-
-            // Actualitzem la store afegint el product + el cambi que acabem de fer
-            upsertScannedProduct({ ...product, ...data[0] })
-
+    const onSaveProduct = async () => {
+        setIsLoading(true)
+        const updatedProduct = await updateProductUsecase(formProduct)
+        if (updatedProduct) {
             onClose()
-
-            return data[0] as Product
-        } catch (error) {
-            console.error(error)
-            throw new Error('Error creating a new product')
         }
+        setIsLoading(false)
     }
 
     return (
@@ -71,7 +44,7 @@ export function UpdateProductInfoModal({
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
                         <Text style={[Texts.smallTitle, styles.modalTitle]}>
-                            {product.name || productBarcode}
+                            {product.name || product.barcode}
                         </Text>
                         <Pressable style={styles.closeButton} onPress={onClose}>
                             <AntDesign name="close" size={24} color="black" />
@@ -83,19 +56,22 @@ export function UpdateProductInfoModal({
                             placeholder="Nom"
                             editable
                             onChangeText={(text) =>
-                                setProduct({ ...product, name: text })
+                                setFormProduct({ ...formProduct, name: text })
                             }
                             style={styles.opinion}
                         />
                         <TextInput
-                            value={product.description}
+                            value={product.short_description}
                             placeholder="Petita descripció"
                             editable
                             multiline
                             numberOfLines={4}
                             maxLength={150}
                             onChangeText={(text) =>
-                                setProduct({ ...product, description: text })
+                                setFormProduct({
+                                    ...formProduct,
+                                    short_description: text,
+                                })
                             }
                             style={styles.opinion}
                         />
@@ -104,7 +80,7 @@ export function UpdateProductInfoModal({
                             editable
                             placeholder="Marca"
                             onChangeText={(text) =>
-                                setProduct({ ...product, brand: text })
+                                setFormProduct({ ...formProduct, brand: text })
                             }
                             style={styles.opinion}
                         />
@@ -113,7 +89,7 @@ export function UpdateProductInfoModal({
                             editable
                             placeholder="Tags"
                             onChangeText={(text) =>
-                                setProduct({ ...product, tags: text })
+                                setFormProduct({ ...formProduct, tags: text })
                             }
                             style={styles.opinion}
                         />
@@ -123,7 +99,7 @@ export function UpdateProductInfoModal({
                                 text="Publicar"
                                 icon="check"
                                 type="success"
-                                action={() => saveProduct(product)}
+                                action={() => onSaveProduct()}
                                 disabled={isLoading}
                             ></GenericButton>
                         </View>
@@ -187,23 +163,5 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         padding: 15,
-    },
-    faceContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-        marginBottom: 10,
-    },
-    faceButton: {
-        padding: 10,
-        borderRadius: 25,
-        borderWidth: 2,
-        borderColor: 'transparent',
-    },
-    selectedSentiment: {
-        borderColor: '#007AFF',
-    },
-    faceEmoji: {
-        fontSize: 24,
     },
 })

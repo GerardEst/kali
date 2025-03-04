@@ -1,41 +1,37 @@
-import React, { useEffect } from 'react'
 import { StyleSheet, View, Text, Pressable, TextInput } from 'react-native'
 import Modal from 'react-native-modal'
 import { useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/src/store/authState'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
-import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
 import { saveNoteOnProduct } from '../usecases/saveNote'
 
-export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const { products } = useScannedProductsState()
+export function AddProductNoteModal({
+    visible,
+    product,
+    onClose,
+}: {
+    visible: boolean
+    product: Product
+    onClose: () => void
+}) {
     const { user } = useAuthState()
-    const [product, setProduct] = useState<Product>()
+
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [note, setNote] = useState<any>({})
 
-    useEffect(() => {
-        const product = products.find(
-            (product: Product) => product.barcode == productBarcode
-        )
-        if (product) {
-            setProduct(product)
-        }
-    }, [visible, productBarcode])
-
-    const onSaveNote = async (text: string) => {
+    const onSaveNote = async () => {
         setIsLoading(true)
         if (product) {
-            const savedProduct = await saveNoteOnProduct(product, text)
+            const savedProduct = await saveNoteOnProduct(product, note)
             if (savedProduct) {
-                setIsLoading(false)
                 onClose()
             }
         }
+        setIsLoading(false)
     }
 
     return (
@@ -50,7 +46,7 @@ export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
                 <View style={styles.modalContainer}>
                     <View style={styles.modalHeader}>
                         <Text style={[Texts.smallTitle, styles.modalTitle]}>
-                            {product?.name || productBarcode}
+                            {product?.name || product.barcode}
                         </Text>
                         <Pressable style={styles.closeButton} onPress={onClose}>
                             <AntDesign name="close" size={24} color="black" />
@@ -58,7 +54,6 @@ export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
                     </View>
                     <View style={styles.modalContent}>
                         <TextInput
-                            value={note}
                             editable
                             multiline
                             numberOfLines={4}
@@ -71,7 +66,7 @@ export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
                                 text="Guardar"
                                 icon="check"
                                 type="success"
-                                action={() => onSaveNote(note)}
+                                action={() => onSaveNote()}
                                 disabled={isLoading}
                             ></GenericButton>
                         </View>
@@ -88,6 +83,8 @@ export function AddProductNoteModal({ productBarcode, visible, onClose }: any) {
 }
 const styles = StyleSheet.create({
     centeredView: {
+        position: 'absolute',
+        bottom: 0,
         alignItems: 'center',
     },
     modalContainer: {
@@ -134,23 +131,5 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         padding: 15,
-    },
-    faceContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-around',
-        width: '100%',
-        marginBottom: 10,
-    },
-    faceButton: {
-        padding: 10,
-        borderRadius: 25,
-        borderWidth: 2,
-        borderColor: 'transparent',
-    },
-    selectedSentiment: {
-        borderColor: '#007AFF',
-    },
-    faceEmoji: {
-        fontSize: 24,
     },
 })

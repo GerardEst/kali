@@ -1,11 +1,4 @@
-import {
-    StyleSheet,
-    View,
-    Text,
-    Platform,
-    StatusBar,
-    TouchableOpacity,
-} from 'react-native'
+import { StyleSheet, View, Text, Platform, StatusBar } from 'react-native'
 import {
     useCameraDevice,
     useCameraPermission,
@@ -23,6 +16,7 @@ import { AddProductNoteModal } from '@/src/features/productNotes/modals/AddProdu
 import Reviews from '@/src/features/scan/components/Reviews'
 import React from 'react'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
+import { Product } from '@/src/shared/interfaces/Product'
 
 export default function HomeScreen() {
     const { hasPermission, requestPermission } = useCameraPermission()
@@ -30,8 +24,15 @@ export default function HomeScreen() {
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
-    const [activeBarcode, setActiveBarcode] = useState<string | null>(null)
+    const [activeProduct, setActiveProduct] = useState<Product>()
     const { scannedCode, scan } = useScan()
+
+    // TODO - Es defineix l'activeProduct quan li donem a afegir nota o alguna acció.
+    // Seria millor si es definís quan passem endavant o endarrere al carousel, és a dir que
+    // sempre estigués actualitzat l'actiu, no només al final quan interaccionem amb ell
+
+    // TODO - I el reviews son sempre de l'últim, s'haurien d'actualitzar també qua nes fa swipe, és a dir
+    // quan s'actualitzi l'activeProduct
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
@@ -51,24 +52,25 @@ export default function HomeScreen() {
 
     return (
         <View style={styles.scanner}>
-            <AddProductNoteModal
-                style={styles.modal}
-                productBarcode={activeBarcode}
-                visible={noteModalVisible}
-                onClose={() => setNoteModalVisible(false)}
-            ></AddProductNoteModal>
-            <UpdateProductInfoModal
-                style={styles.modal}
-                productBarcode={activeBarcode}
-                visible={infoModalVisible}
-                onClose={() => setInfoModalVisible(false)}
-            ></UpdateProductInfoModal>
-            <ReviewFormModal
-                style={styles.modal}
-                productBarcode={scannedCode}
-                visible={reviewFormVisible}
-                onClose={() => setReviewFormVisible(false)}
-            />
+            {activeProduct && (
+                <>
+                    <AddProductNoteModal
+                        visible={noteModalVisible}
+                        product={activeProduct}
+                        onClose={() => setNoteModalVisible(false)}
+                    ></AddProductNoteModal>
+                    <UpdateProductInfoModal
+                        visible={infoModalVisible}
+                        product={activeProduct}
+                        onClose={() => setInfoModalVisible(false)}
+                    ></UpdateProductInfoModal>
+                    <ReviewFormModal
+                        visible={reviewFormVisible}
+                        product={activeProduct}
+                        onClose={() => setReviewFormVisible(false)}
+                    />
+                </>
+            )}
             <Camera
                 style={StyleSheet.absoluteFill}
                 device={device}
@@ -92,18 +94,36 @@ export default function HomeScreen() {
                             style={styles.reviewButton}
                             text="Deixa una valoració"
                             icon="plus"
-                            action={() => setReviewFormVisible(true)}
+                            action={() => {
+                                setReviewFormVisible(true)
+                                setActiveProduct(
+                                    products.find(
+                                        (product: Product) =>
+                                            product.barcode == scannedCode
+                                    )
+                                )
+                            }}
                         ></GenericButton>
                     </View>
                     <View style={styles.scannerContent}>
                         <Carousel
                             onUpdateProductInfo={(barcode: string) => {
                                 setInfoModalVisible(true)
-                                setActiveBarcode(barcode)
+                                setActiveProduct(
+                                    products.find(
+                                        (product: Product) =>
+                                            product.barcode == barcode
+                                    )
+                                )
                             }}
                             onAddNote={(barcode: string) => {
                                 setNoteModalVisible(true)
-                                setActiveBarcode(barcode)
+                                setActiveProduct(
+                                    products.find(
+                                        (product: Product) =>
+                                            product.barcode == barcode
+                                    )
+                                )
                             }}
                             products={products}
                         ></Carousel>
@@ -143,10 +163,6 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         position: 'absolute',
         bottom: 85,
-    },
-    modal: {
-        position: 'absolute',
-        top: 0,
     },
     reviewSection: {
         position: 'absolute',

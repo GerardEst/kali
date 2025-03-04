@@ -147,6 +147,30 @@ export const createNewProduct = async (
     }
 }
 
+export const updateProduct = async (product: Product) => {
+    try {
+        const { data, error } = await supabase
+            .from('products')
+            .upsert([
+                {
+                    barcode: product.barcode,
+                    name: product.name,
+                    brand: product.brand,
+                    tags: product.tags,
+                    short_description: product.short_description,
+                },
+            ])
+            .select()
+
+        if (error) throw error
+
+        return data[0] as Product
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error creating a new product')
+    }
+}
+
 export const updateReviewForProduct = async (
     barcode: string,
     review: Review,
