@@ -7,8 +7,10 @@ import { getNotesByUser } from '@/src/api/products/notes-api'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { useUserNotesState } from '@/src/store/userNotesState'
 import { UserNote } from '@/src/shared/components/UserNote'
+import { useTranslation } from 'react-i18next'
 
 export default function Notes() {
+    const { t } = useTranslation()
     const { user } = useAuthState()
     const { notes, setUserNotes } = useUserNotesState()
 
@@ -23,10 +25,8 @@ export default function Notes() {
 
     return (
         <SafeAreaView style={Pages}>
-            <Text style={Texts.title}>Les teves notes</Text>
-            <Text style={Texts.lightTitle}>
-                Consulta totes les notes que has posat als productes
-            </Text>
+            <Text style={Texts.title}>{t('notes.title')}</Text>
+            <Text style={Texts.lightTitle}>{t('notes.description')}</Text>
 
             {user ? (
                 <View style={styles.notesList}>
@@ -43,10 +43,7 @@ export default function Notes() {
                             </View>
                         )}
                         ListEmptyComponent={
-                            <Text>
-                                Encara no has afegit cap nota a cap producte. A
-                                què esperes?
-                            </Text>
+                            <Text>{t('notes.emptyState')}</Text>
                         }
                     />
                 </View>

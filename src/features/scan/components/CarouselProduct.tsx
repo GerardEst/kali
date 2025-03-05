@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, Button } from 'react-native'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
-import { Colors } from '@/styles/colors'
 import { Texts } from '@/styles/common'
 import { useAuthState } from '@/src/store/authState'
 import { Image } from 'react-native'
@@ -8,6 +7,7 @@ import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { Product } from '@/src/shared/interfaces/Product'
 import { Note } from '@/src/shared/interfaces/Note'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface CarouselProductProps {
     onUpdateProductInfo: (barcode: string) => void
@@ -22,6 +22,7 @@ export const CarouselProduct = ({
 }: CarouselProductProps) => {
     const { user } = useAuthState()
     const { removeFav, addFav } = useFavoriteActions()
+    const { t } = useTranslation()
 
     const handleRemove = async (product: Product) => {
         await removeFav(product)
@@ -75,17 +76,12 @@ export const CarouselProduct = ({
                         ))
                     ) : (
                         <>
-                            <Text>
-                                Afegeix notes al producte! Pots apuntar-te el
-                                que vulguis i recordar-ho sempre que l'escanegis
-                                (o anar directament a la llista de notes).
+                            <Text>{t('carousel.addNote')}</Text>
+                            <Text style={[Texts.lightTitle, Texts.italic]}>
+                                {t('carousel.addNoteDetail')}
                             </Text>
                             <Text style={[Texts.lightTitle, Texts.italic]}>
-                                😊 Aquets cereals son els que li agraden a la
-                                meva parella
-                            </Text>
-                            <Text style={[Texts.lightTitle, Texts.italic]}>
-                                😡 No comprar mai més aquesta marca!
+                                {t('carousel.addNoteDetailNegative')}
                             </Text>
                         </>
                     )}

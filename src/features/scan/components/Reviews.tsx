@@ -1,6 +1,7 @@
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useState } from 'react'
 import React from 'react'
+import { useTranslation } from 'react-i18next'
 
 interface ReviewsProps {
     productScore?: number
@@ -14,7 +15,7 @@ export default function Reviews({
     ecoScore,
 }: ReviewsProps) {
     const [showPopup, setShowPopup] = useState(false)
-
+    const { t } = useTranslation()
     const openReviews = () => {
         setShowPopup(!showPopup)
     }
@@ -26,19 +27,19 @@ export default function Reviews({
                     <Text style={styles.score}>
                         {productScore?.toFixed(1) || '?'}
                     </Text>
-                    <Text style={styles.label}>Producte</Text>
+                    <Text style={styles.label}>{t('reviews.product')}</Text>
                 </View>
                 <View style={[styles.scoreContainer, styles.middleScore]}>
                     <Text style={styles.score}>
                         {packagingScore?.toFixed(1) || '?'}
                     </Text>
-                    <Text style={styles.label}>Paquet</Text>
+                    <Text style={styles.label}>{t('reviews.packaging')}</Text>
                 </View>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.score}>
                         {ecoScore?.toFixed(1) || '?'}
                     </Text>
-                    <Text style={styles.label}>Eco</Text>
+                    <Text style={styles.label}>{t('reviews.eco')}</Text>
                 </View>
             </TouchableOpacity>
 

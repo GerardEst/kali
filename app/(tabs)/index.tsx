@@ -17,8 +17,10 @@ import Reviews from '@/src/features/scan/components/Reviews'
 import React from 'react'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Product } from '@/src/shared/interfaces/Product'
+import { useTranslation } from 'react-i18next'
 
 export default function HomeScreen() {
+    const { t } = useTranslation()
     const { hasPermission, requestPermission } = useCameraPermission()
     const { products } = useScannedProductsState()
     const [infoModalVisible, setInfoModalVisible] = useState(false)
@@ -76,15 +78,14 @@ export default function HomeScreen() {
             ) : (
                 <View style={styles.permissionMessage}>
                     <Text style={styles.permissionTitle}>
-                        Permisos de cámara requeridos
+                        {t('scanner.cameraPermission.title')}
                     </Text>
                     <Text style={styles.permissionText}>
-                        Para poder escanear códigos de barras, necesitas dar
-                        permiso para usar la cámara.
+                        {t('scanner.cameraPermission.message')}
                     </Text>
                     <GenericButton
                         style={styles.permissionButton}
-                        text="Dar permiso de cámara"
+                        text={t('scanner.cameraPermission.button')}
                         action={requestPermission}
                     />
                 </View>
@@ -99,7 +100,7 @@ export default function HomeScreen() {
                         ></Reviews>
                         <GenericButton
                             style={styles.reviewButton}
-                            text="Deixa una valoració"
+                            text={t('scanner.review.button')}
                             icon="plus"
                             action={() => {
                                 setReviewFormVisible(true)
@@ -138,16 +139,11 @@ export default function HomeScreen() {
                 </>
             ) : (
                 <View style={styles.message}>
-                    <Text>Apunta amb la cámara a un códi de barres per:</Text>
-                    <Text>
-                        🤝 Veure opinions d'altres usuaris sobre el producte
-                    </Text>
-                    <Text>🏷️ Afegir una nota o un recordatori al producte</Text>
-                    <Text>💡 Trobar informació sobre el producte</Text>
-                    <Text>
-                        🌟 Comparar diferents productes i triar el millor,
-                        sempre
-                    </Text>
+                    <Text>{t('scanner.emptyState.title')}</Text>
+                    <Text>{t('scanner.emptyState.options.reviews')}</Text>
+                    <Text>{t('scanner.emptyState.options.notes')}</Text>
+                    <Text>{t('scanner.emptyState.options.info')}</Text>
+                    <Text>{t('scanner.emptyState.options.compare')}</Text>
                 </View>
             )}
         </View>

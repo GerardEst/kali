@@ -7,10 +7,11 @@ import { getSavedProductsForUser } from '@/src/api/products/lists-api'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { useListsState } from '@/src/store/listsState'
 import { ProductInList } from '@/src/features/saved-page/components/ProductInList'
-
+import { useTranslation } from 'react-i18next'
 export default function Saved() {
     const { user } = useAuthState()
     const { favs, setUserFavs } = useListsState()
+    const { t } = useTranslation()
 
     useEffect(() => {
         const userId = user?.id
@@ -23,7 +24,8 @@ export default function Saved() {
 
     return (
         <SafeAreaView style={Pages}>
-            <Text style={Texts.title}>Productes guardats</Text>
+            <Text style={Texts.title}>{t('saved.title')}</Text>
+            <Text style={Texts.lightTitle}>{t('saved.description')}</Text>
 
             {user ? (
                 <View style={styles.savedList}>
@@ -36,10 +38,7 @@ export default function Saved() {
                             </View>
                         )}
                         ListEmptyComponent={
-                            <Text>
-                                Pots guardar-te productes i t'apareixeran aquí
-                                perquè els trobis ràpidament
-                            </Text>
+                            <Text>{t('saved.emptyState')}</Text>
                         }
                     />
                 </View>
