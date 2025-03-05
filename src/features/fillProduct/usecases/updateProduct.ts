@@ -1,17 +1,22 @@
-import { updateProduct } from '@/src/api/products/products-api'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
+import { updateProduct as updateProductApi } from '@/src/api/products/products-api'
 
-export const updateProductUsecase = async (product: Product) => {
+export const updateProductUsecase = () => {
     const { upsertScannedProduct } = useScannedProductsState()
+    
+    const updateProduct = async (product: Product) => {
+        const updatedProduct = await updateProductApi(product)
 
-    const updatedProduct = await updateProduct(product)
+        if (updatedProduct) {
+            // Actualitzem la store afegint el product + el cambi que acabem de fer
+            upsertScannedProduct({ ...product, ...updatedProduct })
+            return true
+        }
 
-    if (updatedProduct) {
-        // Actualitzem la store afegint el product + el cambi que acabem de fer
-        upsertScannedProduct({ ...product, ...updatedProduct })
-        return true
+        return false
+    
     }
 
-    return false
+    return {updateProduct}
 }

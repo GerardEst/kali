@@ -22,10 +22,11 @@ export function UpdateProductInfoModal({
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [formProduct, setFormProduct] = useState<Product>(product)
+    const { updateProduct } = updateProductUsecase()
 
     const onSaveProduct = async () => {
         setIsLoading(true)
-        const updatedProduct = await updateProductUsecase(formProduct)
+        const updatedProduct = await updateProduct(formProduct)
         if (updatedProduct) {
             onClose()
         }
@@ -52,7 +53,7 @@ export function UpdateProductInfoModal({
                     </View>
                     <View style={styles.modalContent}>
                         <TextInput
-                            value={product.name}
+                            value={formProduct.name}
                             placeholder="Nom"
                             editable
                             onChangeText={(text) =>
@@ -61,7 +62,7 @@ export function UpdateProductInfoModal({
                             style={styles.opinion}
                         />
                         <TextInput
-                            value={product.short_description}
+                            value={formProduct.short_description}
                             placeholder="Petita descripció"
                             editable
                             multiline
@@ -76,7 +77,7 @@ export function UpdateProductInfoModal({
                             style={styles.opinion}
                         />
                         <TextInput
-                            value={product.brand}
+                            value={formProduct.brand}
                             editable
                             placeholder="Marca"
                             onChangeText={(text) =>
@@ -85,7 +86,7 @@ export function UpdateProductInfoModal({
                             style={styles.opinion}
                         />
                         <TextInput
-                            value={product.tags}
+                            value={formProduct.tags}
                             editable
                             placeholder="Tags"
                             onChangeText={(text) =>

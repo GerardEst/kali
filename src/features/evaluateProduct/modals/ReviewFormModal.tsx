@@ -8,7 +8,7 @@ import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { GenericButton } from '../../../shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
-import { saveProductReview } from '../usecases/saveProductReview'
+import { useProductReview } from '../usecases/saveProductReview'
 import FieldEvaluation from '../components/field-evaluation'
 
 export function ReviewFormModal({
@@ -21,26 +21,34 @@ export function ReviewFormModal({
     onClose: () => void
 }) {
     const { user } = useAuthState()
+    const { saveProductReview } = useProductReview()
 
-    const [productReview, setProductReview] = useState<any>()
+    const [formData, setFormData] = useState<any>()
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
+    const handleChange = (field: string, value: string | number) => {
+        setFormData((prev: any) => ({
+            ...prev,
+            [field]: value,
+        }))
+    }
+
     useEffect(() => {
-        setProductReview({
-            product_score: product?.userReview?.product_score,
-            product_comment: product?.userReview?.product_comment,
-            packaging_score: product?.userReview?.packaging_score,
-            packaging_comment: product?.userReview?.packaging_comment,
-            eco_score: product?.userReview?.eco_score,
-            eco_comment: product?.userReview?.eco_comment,
+        setFormData({
+            product_score: product?.userReview?.product_score || 0,
+            product_comment: product?.userReview?.product_comment || '',
+            packaging_score: product?.userReview?.packaging_score || 0,
+            packaging_comment: product?.userReview?.packaging_comment || '',
+            eco_score: product?.userReview?.eco_score || 0,
+            eco_comment: product?.userReview?.eco_comment || '',
         })
     }, [visible])
 
     const submitProductOpinion = async () => {
-        if (!productReview) return
+        if (!formData) return
 
         setIsLoading(true)
-        const savedReview = await saveProductReview(productReview, product)
+        const savedReview = await saveProductReview(formData, product)
         if (savedReview) {
             onClose()
         }
@@ -68,53 +76,35 @@ export function ReviewFormModal({
                     <View style={styles.modalContent}>
                         <FieldEvaluation
                             title="Producte"
-                            score={productReview?.product_score}
-                            comment={productReview?.product_comment}
+                            score={formData?.product_score}
+                            comment={formData?.product_comment}
                             onUpdateScore={(score: number) =>
-                                setProductReview({
-                                    ...productReview,
-                                    product_score: score,
-                                })
+                                handleChange('product_score', score)
                             }
                             onUpdateComment={(comment: string) =>
-                                setProductReview({
-                                    ...productReview,
-                                    product_comment: comment,
-                                })
+                                handleChange('product_comment', comment)
                             }
                         />
                         <FieldEvaluation
                             title="Packaging"
-                            score={productReview?.packaging_score}
-                            comment={productReview?.packaging_comment}
+                            score={formData?.packaging_score}
+                            comment={formData?.packaging_comment}
                             onUpdateScore={(score: number) =>
-                                setProductReview({
-                                    ...productReview,
-                                    packaging_score: score,
-                                })
+                                handleChange('packaging_score', score)
                             }
                             onUpdateComment={(comment: string) =>
-                                setProductReview({
-                                    ...productReview,
-                                    packaging_comment: comment,
-                                })
+                                handleChange('packaging_comment', comment)
                             }
                         />
                         <FieldEvaluation
                             title="Eco"
-                            score={productReview?.eco_score}
-                            comment={productReview?.eco_comment}
+                            score={formData?.eco_score}
+                            comment={formData?.eco_comment}
                             onUpdateScore={(score: number) =>
-                                setProductReview({
-                                    ...productReview,
-                                    eco_score: score,
-                                })
+                                handleChange('eco_score', score)
                             }
                             onUpdateComment={(comment: string) =>
-                                setProductReview({
-                                    ...productReview,
-                                    eco_comment: comment,
-                                })
+                                handleChange('eco_comment', comment)
                             }
                         />
                         <View style={styles.modalFooter}>

@@ -154,10 +154,10 @@ export const updateProduct = async (product: Product) => {
             .upsert([
                 {
                     barcode: product.barcode,
+                    short_description: product.short_description,
                     name: product.name,
                     brand: product.brand,
                     tags: product.tags,
-                    short_description: product.short_description,
                 },
             ])
             .select()
