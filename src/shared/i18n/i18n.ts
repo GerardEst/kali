@@ -52,7 +52,7 @@ i18n.use(LANGUAGE_DETECTOR)
     .use(initReactI18next)
     .init({
         resources: {
-            en: {
+            ca: {
                 translation: ca,
             },
             es: {

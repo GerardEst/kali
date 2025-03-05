@@ -40,11 +40,6 @@ export default function HomeScreen() {
         onCodeScanned: (codes) => scan(codes),
     })
 
-    if (!hasPermission) {
-        console.log("User didn't allow camera")
-        requestPermission()
-        return null
-    }
     if (!device) {
         console.error('User dont have a camera')
         return null
@@ -71,16 +66,28 @@ export default function HomeScreen() {
                     />
                 </>
             )}
-            <Camera
-                style={StyleSheet.absoluteFill}
-                device={device}
-                isActive={true}
-                codeScanner={codeScanner}
-            />
-            {!hasPermission && (
-                <Text>
-                    Has de donar permis a la càmara des de les opcions d'android
-                </Text>
+            {hasPermission ? (
+                <Camera
+                    style={StyleSheet.absoluteFill}
+                    device={device}
+                    isActive={true}
+                    codeScanner={codeScanner}
+                />
+            ) : (
+                <View style={styles.permissionMessage}>
+                    <Text style={styles.permissionTitle}>
+                        Permisos de cámara requeridos
+                    </Text>
+                    <Text style={styles.permissionText}>
+                        Para poder escanear códigos de barras, necesitas dar
+                        permiso para usar la cámara.
+                    </Text>
+                    <GenericButton
+                        style={styles.permissionButton}
+                        text="Dar permiso de cámara"
+                        action={requestPermission}
+                    />
+                </View>
             )}
             {products && products.length > 0 ? (
                 <>
@@ -179,5 +186,27 @@ const styles = StyleSheet.create({
         color: 'white',
         fontSize: 16,
         fontWeight: '600',
+    },
+    permissionMessage: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 20,
+        backgroundColor: '#ffffff',
+    },
+    permissionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    permissionText: {
+        fontSize: 16,
+        textAlign: 'center',
+        marginBottom: 20,
+        color: '#666666',
+    },
+    permissionButton: {
+        width: '80%',
     },
 })
