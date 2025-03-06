@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef } from 'react'
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import Modal from 'react-native-modal'
 import { useState } from 'react'
@@ -23,32 +23,32 @@ export function ReviewFormModal({
     const { user } = useAuthState()
     const { saveProductReview } = useProductReview()
 
-    const [formData, setFormData] = useState<any>()
+    const formDataRef = useRef<any>()
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
     const handleChange = (field: string, value: string | number) => {
-        setFormData((prev: any) => ({
-            ...prev,
-            [field]: value,
-        }))
+        formDataRef.current[field] = value
     }
 
     useEffect(() => {
-        setFormData({
+        formDataRef.current = {
             product_score: product?.userReview?.product_score || 0,
             product_comment: product?.userReview?.product_comment || '',
             packaging_score: product?.userReview?.packaging_score || 0,
             packaging_comment: product?.userReview?.packaging_comment || '',
             eco_score: product?.userReview?.eco_score || 0,
             eco_comment: product?.userReview?.eco_comment || '',
-        })
+        }
     }, [visible])
 
     const submitProductOpinion = async () => {
-        if (!formData) return
+        if (!formDataRef) return
 
         setIsLoading(true)
-        const savedReview = await saveProductReview(formData, product)
+        const savedReview = await saveProductReview(
+            formDataRef.current,
+            product
+        )
         if (savedReview) {
             onClose()
         }
@@ -76,8 +76,8 @@ export function ReviewFormModal({
                     <View style={styles.modalContent}>
                         <FieldEvaluation
                             title="Producte"
-                            score={formData?.product_score}
-                            comment={formData?.product_comment}
+                            score={formDataRef.current?.product_score}
+                            comment={formDataRef.current?.product_comment}
                             onUpdateScore={(score: number) =>
                                 handleChange('product_score', score)
                             }
@@ -87,8 +87,8 @@ export function ReviewFormModal({
                         />
                         <FieldEvaluation
                             title="Packaging"
-                            score={formData?.packaging_score}
-                            comment={formData?.packaging_comment}
+                            score={formDataRef.current?.packaging_score}
+                            comment={formDataRef.current?.packaging_comment}
                             onUpdateScore={(score: number) =>
                                 handleChange('packaging_score', score)
                             }
@@ -98,8 +98,8 @@ export function ReviewFormModal({
                         />
                         <FieldEvaluation
                             title="Eco"
-                            score={formData?.eco_score}
-                            comment={formData?.eco_comment}
+                            score={formDataRef.current?.eco_score}
+                            comment={formDataRef.current?.eco_comment}
                             onUpdateScore={(score: number) =>
                                 handleChange('eco_score', score)
                             }
