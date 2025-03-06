@@ -12,7 +12,6 @@ export const LanguageSelector = () => {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.title}>{t('settings.language')}</Text>
             <View style={styles.optionsContainer}>
                 <Pressable
                     style={[

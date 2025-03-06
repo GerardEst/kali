@@ -1,22 +1,58 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text, ScrollView } from 'react-native'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import LogoutButton from '@/src/shared/components/buttons/LogoutButton'
 import { useAuthState } from '@/src/store/authState'
 import VersionDisplay from '@/src/shared/components/app-version'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LanguageSelector } from '@/src/shared/components/language-selector'
+import { useTranslation } from 'react-i18next'
+import { Colors } from '@/styles/colors'
+import { Texts } from '@/styles/common'
+import AntDesign from '@expo/vector-icons/AntDesign'
 
 export default function TabTwoScreen() {
     const { user } = useAuthState()
+    const { t } = useTranslation()
 
     return (
         <SafeAreaView style={styles.container}>
-            <VersionDisplay />
-            <LanguageSelector />
+            <ScrollView style={styles.scrollView}>
+                {/* Header Section */}
+                <View style={styles.header}>
+                    <Text style={[Texts.title, styles.headerTitle]}>
+                        {t('settings.title')}
+                    </Text>
+                    {user && (
+                        <View style={styles.userInfo}>
+                            <AntDesign
+                                name="user"
+                                size={16}
+                                color={Colors.gray}
+                            />
+                            <Text style={styles.userEmail}>{user.email}</Text>
+                            <View style={styles.authContainer}>
+                                {user ? <LogoutButton /> : <GoogleSign />}
+                            </View>
+                        </View>
+                    )}
+                </View>
 
-            <View style={styles.authContainer}>
-                {user ? <LogoutButton /> : <GoogleSign />}
-            </View>
+                {/* Language Section */}
+                <View style={styles.section}>
+                    <Text style={[Texts.smallTitle, styles.sectionTitle]}>
+                        {t('settings.language')}
+                    </Text>
+                    <LanguageSelector />
+                </View>
+
+                {/* App Info Section */}
+                <View style={styles.section}>
+                    <Text style={[Texts.smallTitle, styles.sectionTitle]}>
+                        {t('common.version')}
+                    </Text>
+                    <VersionDisplay />
+                </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -24,7 +60,37 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        backgroundColor: Colors.background,
+    },
+    scrollView: {
+        flex: 1,
+    },
+    header: {
+        padding: 20,
         backgroundColor: '#fff',
+        borderBottomWidth: 1,
+        borderBottomColor: Colors.background,
+    },
+    headerTitle: {
+        color: Colors.gray,
+        marginBottom: 8,
+    },
+    userInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    userEmail: {
+        color: Colors.gray,
+        fontSize: 14,
+    },
+    section: {
+        backgroundColor: '#fff',
+    },
+    sectionTitle: {
+        color: Colors.gray,
+        padding: 20,
+        paddingBottom: 0,
     },
     authContainer: {
         padding: 20,

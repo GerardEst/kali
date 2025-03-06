@@ -4,6 +4,7 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { Colors } from '@/styles/colors'
 import { useTranslation } from 'react-i18next'
+import Octicons from '@expo/vector-icons/Octicons'
 
 export default function TabLayout() {
     const { t } = useTranslation()
@@ -32,7 +33,7 @@ export default function TabLayout() {
                 options={{
                     title: t('tabs.saved'),
                     tabBarIcon: ({ color }) => (
-                        <AntDesign name="heart" size={24} color={color} />
+                        <Octicons name="bookmark" size={24} color={color} />
                     ),
                     tabBarActiveTintColor: Colors.love,
                 }}

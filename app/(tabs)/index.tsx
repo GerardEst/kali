@@ -1,11 +1,18 @@
-import { StyleSheet, View, Text, Platform, StatusBar } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    Text,
+    Platform,
+    StatusBar,
+    AppState,
+} from 'react-native'
 import {
     useCameraDevice,
     useCameraPermission,
     useCodeScanner,
     Camera,
 } from 'react-native-vision-camera'
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { UpdateProductInfoModal } from '@/src/features/fillProduct/modals/UpdateProductInfo'
 import { ReviewFormModal } from '@/src/features/evaluateProduct/modals/ReviewFormModal'
@@ -27,14 +34,30 @@ export default function HomeScreen() {
     const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
     const [activeProduct, setActiveProduct] = useState<Product>()
+    const [isCameraActive, setIsCameraActive] = useState(true)
     const { scannedCode, scan } = useScan()
+    const appState = useRef(AppState.currentState)
 
-    // TODO - Es defineix l'activeProduct quan li donem a afegir nota o alguna acció.
-    // Seria millor si es definís quan passem endavant o endarrere al carousel, és a dir que
-    // sempre estigués actualitzat l'actiu, no només al final quan interaccionem amb ell
+    useEffect(() => {
+        const subscription = AppState.addEventListener(
+            'change',
+            (nextAppState) => {
+                if (
+                    appState.current.match(/inactive|background/) &&
+                    nextAppState === 'active'
+                ) {
+                    // App has come to foreground
+                    setIsCameraActive(false)
+                    setTimeout(() => setIsCameraActive(true), 100)
+                }
+                appState.current = nextAppState
+            }
+        )
 
-    // TODO - I el reviews son sempre de l'últim, s'haurien d'actualitzar també qua nes fa swipe, és a dir
-    // quan s'actualitzi l'activeProduct
+        return () => {
+            subscription.remove()
+        }
+    }, [])
 
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
@@ -72,7 +95,7 @@ export default function HomeScreen() {
                 <Camera
                     style={StyleSheet.absoluteFill}
                     device={device}
-                    isActive={true}
+                    isActive={isCameraActive}
                     codeScanner={codeScanner}
                 />
             ) : (

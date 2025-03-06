@@ -7,7 +7,7 @@ import { useEffect } from 'react'
 import 'react-native-reanimated'
 import { checkUserSession } from '@/src/core/auth/usecases/checkUserSession'
 import { useAuthState } from '@/src/store/authState'
-import '@/src/shared/i18n/i18n'
+import '@/src/core/i18n/i18n'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
