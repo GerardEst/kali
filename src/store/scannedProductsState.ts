@@ -5,6 +5,7 @@ import { Review } from '../shared/interfaces/Review'
 
 export const useScannedProductsState = create<any>((set) => ({
     products: [],
+    scannedCount: 0,
 
     addScannedProduct: (product: Product) =>
         //@ts-ignore
@@ -13,12 +14,14 @@ export const useScannedProductsState = create<any>((set) => ({
             const filteredProducts = state.products.filter(
                 (p: Product) => p.barcode !== product.barcode
             )
+
             return {
                 products: [product, ...filteredProducts],
+                scannedCount: state.scannedCount + 1,
             }
         }),
 
-    upsertScannedProduct: (product: Product) =>
+    updateScannedProduct: (product: Product) =>
         //@ts-ignore
         set((state) => {
             const productIndex = state.products.findIndex(

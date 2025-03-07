@@ -3,20 +3,19 @@ import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { updateProduct as updateProductApi } from '@/src/api/products/products-api'
 
 export const updateProductUsecase = () => {
-    const { upsertScannedProduct } = useScannedProductsState()
-    
+    const { updateScannedProduct } = useScannedProductsState()
+
     const updateProduct = async (product: Product) => {
         const updatedProduct = await updateProductApi(product)
 
         if (updatedProduct) {
             // Actualitzem la store afegint el product + el cambi que acabem de fer
-            upsertScannedProduct({ ...product, ...updatedProduct })
+            updateScannedProduct({ ...product, ...updatedProduct })
             return true
         }
 
         return false
-    
     }
 
-    return {updateProduct}
+    return { updateProduct }
 }

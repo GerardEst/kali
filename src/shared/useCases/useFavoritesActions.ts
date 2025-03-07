@@ -9,7 +9,7 @@ import {
 
 export const useFavoriteActions: any = () => {
     const { user } = useAuthState()
-    const { upsertScannedProduct } = useScannedProductsState()
+    const { updateScannedProduct } = useScannedProductsState()
     const { removeUserFav, addUserFav } = useListsState()
 
     if (!user) return
@@ -21,7 +21,7 @@ export const useFavoriteActions: any = () => {
         )
         if (unsavedProduct) {
             removeUserFav(product)
-            upsertScannedProduct({ ...product, isFav: false })
+            updateScannedProduct({ ...product, isFav: false })
         }
     }
 
@@ -31,7 +31,7 @@ export const useFavoriteActions: any = () => {
         const savedProduct = await saveProductForUser(user.id, product.barcode)
         if (savedProduct) {
             addUserFav({ ...product, isFav: true })
-            upsertScannedProduct({ ...product, isFav: true })
+            updateScannedProduct({ ...product, isFav: true })
         }
     }
 

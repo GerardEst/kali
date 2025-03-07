@@ -3,39 +3,49 @@ import { Dimensions, View, StyleSheet, Animated } from 'react-native'
 import { ScrollView } from 'react-native'
 import { CarouselProduct } from './CarouselProduct'
 import { Product } from '@/src/shared/interfaces/Product'
+import { useScannedProductsState } from '@/src/store/scannedProductsState'
 
 export const Carousel = ({ onUpdateProductInfo, onAddNote, products }: any) => {
     const scrollViewRef = useRef<ScrollView>(null)
     const { width } = Dimensions.get('window')
+    const { scannedCount } = useScannedProductsState()
 
+    const scrollX = useRef(0)
     const fadeAnimRef = useRef(new Animated.Value(0))
     const fadeAnim = fadeAnimRef.current
 
     useEffect(() => {
-        // TODO - A vegades fa l'animació i altres no
-        // Sembla que quan passa de 2 i escaneja una cosa nova, va
-        // pero quan son pocs o escaneja algo que ja hi havia, no
+        if (scrollX.current === 0) {
+            scrollViewRef.current?.scrollTo({ x: width, animated: false })
+            scrollViewRef.current?.scrollTo({ x: 0, animated: true })
+        } else {
+            scrollViewRef.current?.scrollTo({ x: 0, animated: true })
+        }
+        fadeIn()
+    }, [scannedCount])
 
-        // Quan tenim un nou escaner, ens posicionem al segon immediatament
-        scrollViewRef.current?.scrollTo({ x: width, animated: false })
-        // Just després, ens desplaçem al principi per veure l'animació
-        scrollViewRef.current?.scrollTo({ x: 0, animated: true })
-
+    const fadeIn = () => {
         fadeAnim.setValue(0)
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 700,
             useNativeDriver: true,
         }).start()
-    }, [products.length]) // L'effect només corre quan afegim o treiem algo de products
+    }
+
+    const handleScroll = (event: any) => {
+        scrollX.current = event.nativeEvent.contentOffset.x
+    }
 
     return (
         <View style={styles.container}>
             <ScrollView
                 ref={scrollViewRef}
+                onScroll={handleScroll}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
+                decelerationRate={'fast'}
             >
                 {products.map((product: Product, index: number) => (
                     <Animated.View

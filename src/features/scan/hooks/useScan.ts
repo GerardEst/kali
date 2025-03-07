@@ -16,12 +16,8 @@ export const useScan = () => {
     const [checkCode, setCheckCode] = useState<string>('')
     const [timesChecked, setTimesChecked] = useState<number>(0)
     const [scannedCode, setScannedCode] = useState<string>('')
-    const {
-        addScannedProduct,
-        upsertScannedProduct,
-        upsertUserReview,
-        setUserNotes,
-    } = useScannedProductsState()
+    const { addScannedProduct, upsertUserReview, setUserNotes } =
+        useScannedProductsState()
 
     async function scan(codes: Code[]) {
         if (!codes[0]?.value) return
