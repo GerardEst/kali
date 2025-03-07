@@ -27,7 +27,7 @@ export const Carousel = ({
     // TODO - Això ho vaig fer bastant amb IA. Netejar i entendre què passa. Era per la part de l'scroll
     // i de fer slide a un costat automaticament, d'enviar al pare l'element actiu, etc
     useEffect(() => {
-        if (scrollXRef.current === 0) {
+        if (scrollXRef.current === 0 && scannedCount > 1) {
             // When a new item is scanned, first scroll to position 1 instantly
             flatListRef.current?.scrollToIndex({
                 index: 1,

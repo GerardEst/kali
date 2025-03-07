@@ -7,7 +7,7 @@ import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
-import { saveNoteOnProduct } from '../usecases/saveNote'
+import { useSaveNote } from '../usecases/saveNote'
 
 export function AddProductNoteModal({
     visible,
@@ -19,14 +19,14 @@ export function AddProductNoteModal({
     onClose: () => void
 }) {
     const { user } = useAuthState()
-
+    const { saveNoteToProduct } = useSaveNote()
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [note, setNote] = useState<any>({})
 
     const onSaveNote = async () => {
         setIsLoading(true)
         if (product) {
-            const savedProduct = await saveNoteOnProduct(product, note)
+            const savedProduct = await saveNoteToProduct(product, note)
             if (savedProduct) {
                 onClose()
             }
