@@ -6,15 +6,38 @@ import { Review } from '../shared/interfaces/Review'
 export const useScannedProductsState = create<any>((set) => ({
     products: [],
 
-    upsertScannedProduct: (product: Product) =>
+    addScannedProduct: (product: Product) =>
         //@ts-ignore
         set((state) => {
+            // Remove product if it already exists
             const filteredProducts = state.products.filter(
                 (p: Product) => p.barcode !== product.barcode
             )
-
             return {
                 products: [product, ...filteredProducts],
+            }
+        }),
+
+    upsertScannedProduct: (product: Product) =>
+        //@ts-ignore
+        set((state) => {
+            const productIndex = state.products.findIndex(
+                (p: Product) => p.barcode === product.barcode
+            )
+
+            if (productIndex === -1) {
+                // If product doesn't exist, add it to the beginning
+                return {
+                    products: [product, ...state.products],
+                }
+            }
+
+            // If product exists, update it in place
+            const updatedProducts = [...state.products]
+            updatedProducts[productIndex] = product
+
+            return {
+                products: updatedProducts,
             }
         }),
 

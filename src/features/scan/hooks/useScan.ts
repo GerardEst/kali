@@ -16,8 +16,12 @@ export const useScan = () => {
     const [checkCode, setCheckCode] = useState<string>('')
     const [timesChecked, setTimesChecked] = useState<number>(0)
     const [scannedCode, setScannedCode] = useState<string>('')
-    const { products, upsertScannedProduct, upsertUserReview, setUserNotes } =
-        useScannedProductsState()
+    const {
+        addScannedProduct,
+        upsertScannedProduct,
+        upsertUserReview,
+        setUserNotes,
+    } = useScannedProductsState()
 
     async function scan(codes: Code[]) {
         if (!codes[0]?.value) return
@@ -57,12 +61,12 @@ export const useScan = () => {
                 scannedCode
             )
 
-            upsertScannedProduct({
+            addScannedProduct({
                 ...scannedProductInfo,
                 isFav: productFavState,
             })
         } else {
-            upsertScannedProduct(scannedProductInfo)
+            addScannedProduct(scannedProductInfo)
         }
 
         // I si té una review
