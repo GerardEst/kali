@@ -111,6 +111,8 @@ export const Carousel = ({
                 onViewableItemsChanged={onViewableItemsChanged}
                 viewabilityConfig={viewabilityConfig}
                 onScroll={handleScroll}
+                snapToInterval={width}
+                snapToAlignment="center"
                 getItemLayout={(_, index) => ({
                     length: width,
                     offset: width * index,
