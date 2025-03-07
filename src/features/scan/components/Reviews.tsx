@@ -10,9 +10,9 @@ interface ReviewsProps {
 }
 
 export default function Reviews({
-    productScore,
-    packagingScore,
-    ecoScore,
+    productScore = -1,
+    packagingScore = -1,
+    ecoScore = -1,
 }: ReviewsProps) {
     const [showPopup, setShowPopup] = useState(false)
     const { t } = useTranslation()
@@ -25,29 +25,31 @@ export default function Reviews({
             <TouchableOpacity onPress={openReviews} style={styles.container}>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.score}>
-                        {productScore?.toFixed(1) || '?'}
+                        {productScore === -1 ? '-' : productScore.toFixed(1)}
                     </Text>
                     <Text style={styles.label}>{t('reviews.product')}</Text>
                 </View>
                 <View style={[styles.scoreContainer, styles.middleScore]}>
                     <Text style={styles.score}>
-                        {packagingScore?.toFixed(1) || '?'}
+                        {packagingScore === -1
+                            ? '-'
+                            : packagingScore.toFixed(1)}
                     </Text>
                     <Text style={styles.label}>{t('reviews.packaging')}</Text>
                 </View>
                 <View style={styles.scoreContainer}>
                     <Text style={styles.score}>
-                        {ecoScore?.toFixed(1) || '?'}
+                        {ecoScore === -1 ? '-' : ecoScore.toFixed(1)}
                     </Text>
                     <Text style={styles.label}>{t('reviews.eco')}</Text>
                 </View>
             </TouchableOpacity>
 
-            {showPopup && (
+            {/* {showPopup && (
                 <View style={styles.popup}>
-                    <Text>Popup content will go here</Text>
+                    <Text></Text>
                 </View>
-            )}
+            )} */}
         </>
     )
 }

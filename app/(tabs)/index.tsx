@@ -39,6 +39,10 @@ export default function HomeScreen() {
     const appState = useRef(AppState.currentState)
 
     useEffect(() => {
+        console.log('activeProduct', activeProduct)
+    }, [activeProduct])
+
+    useEffect(() => {
         const subscription = AppState.addEventListener(
             'change',
             (nextAppState) => {
@@ -116,11 +120,15 @@ export default function HomeScreen() {
             {products && products.length > 0 ? (
                 <>
                     <View style={styles.reviewSection}>
-                        <Reviews
-                            productScore={products[0].product_score_avg}
-                            packagingScore={products[0].packaging_score_avg}
-                            ecoScore={products[0].eco_score_avg}
-                        ></Reviews>
+                        {activeProduct && (
+                            <Reviews
+                                productScore={activeProduct.product_score_avg}
+                                packagingScore={
+                                    activeProduct.packaging_score_avg
+                                }
+                                ecoScore={activeProduct.eco_score_avg}
+                            ></Reviews>
+                        )}
                         <GenericButton
                             style={styles.reviewButton}
                             text={t('scanner.review.button')}
@@ -138,6 +146,9 @@ export default function HomeScreen() {
                     </View>
                     <View style={styles.scannerContent}>
                         <Carousel
+                            onProductVisible={(product: Product) => {
+                                setActiveProduct(product)
+                            }}
                             onUpdateProductInfo={(barcode: string) => {
                                 setInfoModalVisible(true)
                                 setActiveProduct(
@@ -178,6 +189,7 @@ const styles = StyleSheet.create({
     },
     scannerContent: {
         position: 'absolute',
+        height: 500,
         bottom: 85,
     },
     message: {

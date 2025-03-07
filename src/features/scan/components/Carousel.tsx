@@ -1,28 +1,59 @@
-import { useEffect, useRef } from 'react'
-import { Dimensions, View, StyleSheet, Animated } from 'react-native'
-import { ScrollView } from 'react-native'
+import { useEffect, useRef, useState } from 'react'
+import {
+    Dimensions,
+    View,
+    StyleSheet,
+    Animated,
+    FlatList,
+    ViewToken,
+} from 'react-native'
 import { CarouselProduct } from './CarouselProduct'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 
-export const Carousel = ({ onUpdateProductInfo, onAddNote, products }: any) => {
-    const scrollViewRef = useRef<ScrollView>(null)
+export const Carousel = ({
+    onProductVisible,
+    onUpdateProductInfo,
+    onAddNote,
+    products,
+}: any) => {
     const { width } = Dimensions.get('window')
     const { scannedCount } = useScannedProductsState()
-
-    const scrollX = useRef(0)
+    const flatListRef = useRef<FlatList>(null)
     const fadeAnimRef = useRef(new Animated.Value(0))
     const fadeAnim = fadeAnimRef.current
+    const scrollXRef = useRef(0)
 
+    // TODO - Això ho vaig fer bastant amb IA. Netejar i entendre què passa. Era per la part de l'scroll
+    // i de fer slide a un costat automaticament, d'enviar al pare l'element actiu, etc
     useEffect(() => {
-        if (scrollX.current === 0) {
-            scrollViewRef.current?.scrollTo({ x: width, animated: false })
-            scrollViewRef.current?.scrollTo({ x: 0, animated: true })
+        if (scrollXRef.current === 0) {
+            // When a new item is scanned, first scroll to position 1 instantly
+            flatListRef.current?.scrollToIndex({
+                index: 1,
+                animated: false,
+            })
+
+            // Then immediately trigger both the fade and the scroll to position 0
+            requestAnimationFrame(() => {
+                flatListRef.current?.scrollToIndex({
+                    index: 0,
+                    animated: true,
+                })
+                fadeIn()
+            })
         } else {
-            scrollViewRef.current?.scrollTo({ x: 0, animated: true })
+            flatListRef.current?.scrollToIndex({
+                index: 0,
+                animated: true,
+            })
+            fadeIn()
         }
-        fadeIn()
     }, [scannedCount])
+
+    const handleScroll = (event: any) => {
+        scrollXRef.current = event.nativeEvent.contentOffset.x
+    }
 
     const fadeIn = () => {
         fadeAnim.setValue(0)
@@ -33,43 +64,66 @@ export const Carousel = ({ onUpdateProductInfo, onAddNote, products }: any) => {
         }).start()
     }
 
-    const handleScroll = (event: any) => {
-        scrollX.current = event.nativeEvent.contentOffset.x
-    }
+    const onViewableItemsChanged = useRef(
+        ({ viewableItems }: { viewableItems: ViewToken[] }) => {
+            if (viewableItems.length > 0 && viewableItems[0].item) {
+                onProductVisible(viewableItems[0].item)
+            }
+        }
+    ).current
+
+    const viewabilityConfig = useRef({
+        itemVisiblePercentThreshold: 50,
+    }).current
+
+    const renderItem = ({
+        item: product,
+        index,
+    }: {
+        item: Product
+        index: number
+    }) => (
+        <Animated.View
+            style={[
+                styles.slide,
+                { width },
+                { opacity: index === 0 ? fadeAnim : 1 },
+            ]}
+        >
+            <CarouselProduct
+                onUpdateProductInfo={onUpdateProductInfo}
+                onAddNote={onAddNote}
+                product={product}
+            />
+        </Animated.View>
+    )
 
     return (
         <View style={styles.container}>
-            <ScrollView
-                ref={scrollViewRef}
-                onScroll={handleScroll}
+            <FlatList
+                ref={flatListRef}
+                data={products}
+                renderItem={renderItem}
                 horizontal
                 pagingEnabled
                 showsHorizontalScrollIndicator={false}
-                decelerationRate={'fast'}
-            >
-                {products.map((product: Product, index: number) => (
-                    <Animated.View
-                        key={index}
-                        style={[
-                            styles.slide,
-                            { width },
-                            { opacity: index === 0 ? fadeAnim : 1 },
-                        ]}
-                    >
-                        <CarouselProduct
-                            onUpdateProductInfo={onUpdateProductInfo}
-                            onAddNote={onAddNote}
-                            product={product}
-                        ></CarouselProduct>
-                    </Animated.View>
-                ))}
-            </ScrollView>
+                decelerationRate="fast"
+                onViewableItemsChanged={onViewableItemsChanged}
+                viewabilityConfig={viewabilityConfig}
+                onScroll={handleScroll}
+                getItemLayout={(_, index) => ({
+                    length: width,
+                    offset: width * index,
+                    index,
+                })}
+            />
         </View>
     )
 }
+
 const styles = StyleSheet.create({
     container: {
-        height: 300,
+        height: '100%',
     },
     slide: {
         alignItems: 'center',
