@@ -6,6 +6,8 @@ import {
     Animated,
     FlatList,
     ViewToken,
+    useAnimatedValue,
+    Easing,
 } from 'react-native'
 import { CarouselProduct } from './CarouselProduct'
 import { Product } from '@/src/shared/interfaces/Product'
@@ -20,14 +22,17 @@ export const Carousel = ({
     const { width } = Dimensions.get('window')
     const { scannedCount } = useScannedProductsState()
     const flatListRef = useRef<FlatList>(null)
-    const fadeAnimRef = useRef(new Animated.Value(0))
-    const fadeAnim = fadeAnimRef.current
+    const fadeInAnim = useAnimatedValue(0)
+    const slideInAnim = useAnimatedValue(50)
     const scrollXRef = useRef(0)
 
-    // TODO - Això ho vaig fer bastant amb IA. Netejar i entendre què passa. Era per la part de l'scroll
-    // i de fer slide a un costat automaticament, d'enviar al pare l'element actiu, etc
+    // Initialize scroll position
+
     useEffect(() => {
-        if (scrollXRef.current === 0 && scannedCount > 1) {
+        console.log('scannedCount', scannedCount)
+        console.log('scrollXRef', scrollXRef.current)
+
+        if (scannedCount > 1) {
             // When a new item is scanned, first scroll to position 1 instantly
             flatListRef.current?.scrollToIndex({
                 index: 1,
@@ -35,13 +40,12 @@ export const Carousel = ({
             })
 
             // Then immediately trigger both the fade and the scroll to position 0
-            requestAnimationFrame(() => {
-                flatListRef.current?.scrollToIndex({
-                    index: 0,
-                    animated: true,
-                })
-                fadeIn()
+            flatListRef.current?.scrollToIndex({
+                index: 0,
+                animated: true,
             })
+
+            fadeIn()
         } else {
             flatListRef.current?.scrollToIndex({
                 index: 0,
@@ -53,15 +57,6 @@ export const Carousel = ({
 
     const handleScroll = (event: any) => {
         scrollXRef.current = event.nativeEvent.contentOffset.x
-    }
-
-    const fadeIn = () => {
-        fadeAnim.setValue(0)
-        Animated.timing(fadeAnim, {
-            toValue: 1,
-            duration: 700,
-            useNativeDriver: true,
-        }).start()
     }
 
     const onViewableItemsChanged = useRef(
@@ -76,6 +71,22 @@ export const Carousel = ({
         itemVisiblePercentThreshold: 50,
     }).current
 
+    const fadeIn = () => {
+        fadeInAnim.setValue(0)
+        slideInAnim.setValue(50)
+        Animated.timing(fadeInAnim, {
+            toValue: 1,
+            duration: 700,
+            useNativeDriver: true,
+        }).start()
+        Animated.timing(slideInAnim, {
+            toValue: 0,
+            duration: 700,
+            easing: Easing.elastic(1),
+            useNativeDriver: true,
+        }).start()
+    }
+
     const renderItem = ({
         item: product,
         index,
@@ -87,7 +98,10 @@ export const Carousel = ({
             style={[
                 styles.slide,
                 { width },
-                { opacity: index === 0 ? fadeAnim : 1 },
+                {
+                    opacity: index === 0 ? fadeInAnim : 1,
+                    transform: index === 0 ? [{ translateY: slideInAnim }] : [],
+                },
             ]}
         >
             <CarouselProduct

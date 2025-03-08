@@ -35,12 +35,8 @@ export default function HomeScreen() {
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
     const [activeProduct, setActiveProduct] = useState<Product>()
     const [isCameraActive, setIsCameraActive] = useState(true)
-    const { scannedCode, scan } = useScan()
+    const { scan } = useScan()
     const appState = useRef(AppState.currentState)
-
-    useEffect(() => {
-        console.log('activeProduct', activeProduct)
-    }, [activeProduct])
 
     useEffect(() => {
         const subscription = AppState.addEventListener(
@@ -135,12 +131,6 @@ export default function HomeScreen() {
                             icon="plus"
                             action={() => {
                                 setReviewFormVisible(true)
-                                setActiveProduct(
-                                    products.find(
-                                        (product: Product) =>
-                                            product.barcode == scannedCode
-                                    )
-                                )
                             }}
                         ></GenericButton>
                     </View>
@@ -151,21 +141,9 @@ export default function HomeScreen() {
                             }}
                             onUpdateProductInfo={(barcode: string) => {
                                 setInfoModalVisible(true)
-                                setActiveProduct(
-                                    products.find(
-                                        (product: Product) =>
-                                            product.barcode == barcode
-                                    )
-                                )
                             }}
                             onAddNote={(barcode: string) => {
                                 setNoteModalVisible(true)
-                                setActiveProduct(
-                                    products.find(
-                                        (product: Product) =>
-                                            product.barcode == barcode
-                                    )
-                                )
                             }}
                             products={products}
                         ></Carousel>

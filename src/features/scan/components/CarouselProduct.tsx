@@ -114,8 +114,6 @@ const styles = StyleSheet.create({
         transform: [{ translateY: '-100%' }],
         top: -10,
         zIndex: 0,
-        // borderTopLeftRadius: 10,
-        // borderTopRightRadius: 10,
         borderRadius: 10,
         overflow: 'hidden',
         backgroundColor: 'white',
@@ -126,7 +124,7 @@ const styles = StyleSheet.create({
         bottom: 0,
     },
     card: {
-        height: '100%',
+        height: 250,
         borderRadius: 10,
         padding: 10,
         backgroundColor: 'white',

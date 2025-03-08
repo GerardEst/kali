@@ -1,5 +1,5 @@
 import { StyleSheet, View, Text, Pressable, TextInput } from 'react-native'
-import Modal from 'react-native-modal'
+import CustomModal from '@/src/shared/components/customModal'
 import { useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/src/store/authState'
@@ -34,15 +34,9 @@ export function UpdateProductInfoModal({
     }
 
     return (
-        <Modal
-            isVisible={visible}
-            onBackdropPress={onClose}
-            onBackButtonPress={onClose}
-            statusBarTranslucent={true}
-            style={styles.centeredView}
-        >
+        <CustomModal visible={visible} onClose={onClose}>
             {user ? (
-                <View style={styles.modalContainer}>
+                <View>
                     <View style={styles.modalHeader}>
                         <Text style={[Texts.smallTitle, styles.modalTitle]}>
                             {product.name || product.barcode}
@@ -107,35 +101,16 @@ export function UpdateProductInfoModal({
                     </View>
                 </View>
             ) : (
-                <View style={styles.modalContainer}>
+                <View>
                     <Text>Registra't per poder afegir opinions</Text>
                     <GoogleSign></GoogleSign>
                 </View>
             )}
-        </Modal>
+        </CustomModal>
     )
 }
 
 const styles = StyleSheet.create({
-    centeredView: {
-        alignItems: 'center',
-    },
-    modalContainer: {
-        backgroundColor: 'white',
-        width: '80%',
-        minWidth: 200,
-        borderRadius: 10,
-        alignItems: 'center',
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5,
-        gap: 10,
-    },
     modalHeader: {
         display: 'flex',
         flexDirection: 'row',
