@@ -21,7 +21,6 @@ export default function CustomModal({
     const fadeInAnim = useAnimatedValue(50)
 
     const fadeIn = () => {
-        console.log('fadeIn')
         Animated.timing(fadeInAnim, {
             toValue: 0,
             duration: 500,

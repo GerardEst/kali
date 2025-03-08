@@ -4,6 +4,8 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { useTranslation } from 'react-i18next'
+import { Texts } from '@/styles/common'
+import UserNote from '@/src/features/scan/components/UserNote'
 
 export const ProductInList = ({ product }: { product: Product }) => {
     const { removeFav } = useFavoriteActions()
@@ -15,28 +17,58 @@ export const ProductInList = ({ product }: { product: Product }) => {
 
     return (
         <View style={styles.productContainer}>
-            <Image
-                source={{ uri: product.image_url }}
-                style={styles.productImage}
-            ></Image>
-            <Text>{product.name}</Text>
-            {product.isFav && (
-                <GenericButton
-                    text={t('buttons.remove')}
-                    icon="bookmark-slash"
-                    action={() => handleRemove(product)}
-                ></GenericButton>
+            {product.image_url && (
+                <Image
+                    source={{ uri: product.image_url }}
+                    style={styles.productImage}
+                ></Image>
             )}
+            <View style={styles.productInfo}>
+                <Text style={Texts.title}>
+                    {product.name || product.barcode}
+                </Text>
+                {product.short_description && (
+                    <Text style={Texts.lightTitle}>
+                        {product.short_description}
+                    </Text>
+                )}
+                {product.brand && (
+                    <Text style={Texts.lightTitle}>{product.brand}</Text>
+                )}
+            </View>
+            <View style={styles.productActions}>
+                {product.isFav && (
+                    <GenericButton
+                        icon="bookmark-slash"
+                        action={() => handleRemove(product)}
+                    ></GenericButton>
+                )}
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     productContainer: {
-        borderWidth: 2,
+        borderWidth: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        height: 100,
+        justifyContent: 'space-between',
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     productImage: {
-        width: 50,
-        height: 50,
+        aspectRatio: 1,
+        height: '100%',
+    },
+    productInfo: {
+        flex: 1,
+        padding: 10,
+        height: '100%',
+    },
+    productActions: {
+        padding: 10,
+        height: '100%',
     },
 })

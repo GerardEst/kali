@@ -33,7 +33,8 @@ export default {
             },
         },
         review: {
-            button: 'Deixa una valoració',
+            buttonAdd: 'Deixa una valoració',
+            buttonEdit: 'Edita la teva valoració',
         },
     },
     notes: {

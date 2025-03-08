@@ -32,7 +32,8 @@ export default {
             },
         },
         review: {
-            button: 'Deja una valoración',
+            buttonAdd: 'Deja una valoración',
+            buttonEdit: 'Edita tu valoración',
         },
     },
     notes: {

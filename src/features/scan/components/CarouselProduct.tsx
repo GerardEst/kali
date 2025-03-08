@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Button } from 'react-native'
+import { View, Text, StyleSheet, Button, ScrollView } from 'react-native'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { useAuthState } from '@/src/store/authState'
@@ -8,6 +8,7 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { Note } from '@/src/shared/interfaces/Note'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import UserNote from '@/src/features/scan/components/UserNote'
 
 interface CarouselProductProps {
     onUpdateProductInfo: (barcode: string) => void
@@ -71,15 +72,20 @@ export const CarouselProduct = ({
                     )}
                 </View>
                 <View style={styles.cardContent}>
-                    <View>
-                        {product?.userNotes && product.userNotes.length > 0 ? (
+                    <ScrollView style={styles.cardContentNotes}>
+                        {product?.userNotes &&
+                            product.userNotes.length > 0 &&
                             product.userNotes.map(
                                 (note: Note, index: number) => (
-                                    <Text key={index}>{note.note}</Text>
+                                    <UserNote
+                                        key={index}
+                                        note={note}
+                                        style={styles.cardContentNote}
+                                    />
                                 )
-                            )
-                        ) : (
-                            <>
+                            )}
+                        {product && !product.userNotes && (
+                            <View>
                                 <Text>{t('carousel.addNote')}</Text>
                                 <Text style={[Texts.lightTitle, Texts.italic]}>
                                     {t('carousel.addNoteDetail')}
@@ -87,9 +93,9 @@ export const CarouselProduct = ({
                                 <Text style={[Texts.lightTitle, Texts.italic]}>
                                     {t('carousel.addNoteDetailNegative')}
                                 </Text>
-                            </>
+                            </View>
                         )}
-                    </View>
+                    </ScrollView>
                     <View style={styles.cardFooter}>
                         {user?.isAdmin && (
                             <Button
@@ -151,5 +157,13 @@ const styles = StyleSheet.create({
         marginLeft: 'auto',
         flexDirection: 'row',
         gap: 10,
+    },
+    cardContentNotes: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 10,
+    },
+    cardContentNote: {
+        marginBottom: 10,
     },
 })

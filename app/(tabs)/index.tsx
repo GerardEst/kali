@@ -133,14 +133,25 @@ export default function HomeScreen() {
                                 ecoScore={activeProduct.eco_score_avg}
                             ></Reviews>
                         )}
-                        <GenericButton
-                            style={styles.reviewButton}
-                            text={t('scanner.review.button')}
-                            icon="plus"
-                            action={() => {
-                                setReviewFormVisible(true)
-                            }}
-                        ></GenericButton>
+                        {activeProduct?.userReview ? (
+                            <GenericButton
+                                style={styles.reviewButton}
+                                text={t('scanner.review.buttonEdit')}
+                                icon="pencil"
+                                action={() => {
+                                    setReviewFormVisible(true)
+                                }}
+                            ></GenericButton>
+                        ) : (
+                            <GenericButton
+                                style={styles.reviewButton}
+                                text={t('scanner.review.buttonAdd')}
+                                icon="plus"
+                                action={() => {
+                                    setReviewFormVisible(true)
+                                }}
+                            ></GenericButton>
+                        )}
                     </View>
                     <View style={styles.scannerContent}>
                         <Carousel
