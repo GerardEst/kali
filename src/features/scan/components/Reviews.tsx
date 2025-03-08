@@ -2,6 +2,8 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
 import { useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
+import { Sentiments } from '@/src/shared/constants/sentiments'
+import { SentimentColors } from '@/styles/colors'
 
 interface ReviewsProps {
     productScore?: number
@@ -23,25 +25,56 @@ export default function Reviews({
     return (
         <>
             <TouchableOpacity onPress={openReviews} style={styles.container}>
-                <View style={styles.scoreContainer}>
+                <View
+                    style={[
+                        styles.scoreContainer,
+                        {
+                            borderColor:
+                                SentimentColors[
+                                    productScore === -1 ? 5 : productScore
+                                ],
+                        },
+                    ]}
+                >
                     <Text style={styles.score}>
-                        {productScore === -1 ? '-' : productScore.toFixed(1)}
+                        {Sentiments[productScore === -1 ? 5 : productScore]}
                     </Text>
-                    <Text style={styles.label}>{t('reviews.product')}</Text>
+                    <Text style={styles.label}>
+                        {t('evaluateProduct.product')}
+                    </Text>
                 </View>
-                <View style={[styles.scoreContainer, styles.middleScore]}>
+                <View
+                    style={[
+                        styles.scoreContainer,
+                        styles.middleScore,
+                        {
+                            borderColor:
+                                SentimentColors[
+                                    packagingScore === -1 ? 5 : packagingScore
+                                ],
+                        },
+                    ]}
+                >
                     <Text style={styles.score}>
-                        {packagingScore === -1
-                            ? '-'
-                            : packagingScore.toFixed(1)}
+                        {Sentiments[packagingScore === -1 ? 5 : packagingScore]}
                     </Text>
-                    <Text style={styles.label}>{t('reviews.packaging')}</Text>
+                    <Text style={styles.label}>
+                        {t('evaluateProduct.packaging')}
+                    </Text>
                 </View>
-                <View style={styles.scoreContainer}>
+                <View
+                    style={[
+                        styles.scoreContainer,
+                        {
+                            borderColor:
+                                SentimentColors[ecoScore === -1 ? 5 : ecoScore],
+                        },
+                    ]}
+                >
                     <Text style={styles.score}>
-                        {ecoScore === -1 ? '-' : ecoScore.toFixed(1)}
+                        {Sentiments[ecoScore === -1 ? 5 : ecoScore]}
                     </Text>
-                    <Text style={styles.label}>{t('reviews.eco')}</Text>
+                    <Text style={styles.label}>{t('evaluateProduct.eco')}</Text>
                 </View>
             </TouchableOpacity>
 
@@ -56,12 +89,9 @@ export default function Reviews({
 
 const styles = StyleSheet.create({
     container: {
-        width: 200,
         flexDirection: 'row',
-        paddingHorizontal: 12,
-        paddingVertical: 8,
         backgroundColor: '#ffffff',
-        borderRadius: 12,
+        borderRadius: 7,
         shadowColor: '#000',
         shadowOffset: {
             width: 0,
@@ -70,19 +100,18 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
+        overflow: 'hidden',
+        borderColor: 'white',
     },
     scoreContainer: {
         alignItems: 'center',
-        flex: 1,
-        paddingVertical: 4,
+        width: 70,
+        paddingHorizontal: 12,
+        paddingTop: 8,
+        paddingBottom: 10,
+        borderBottomWidth: 10,
     },
-    middleScore: {
-        borderLeftWidth: 1,
-        borderRightWidth: 1,
-        borderColor: '#f0f0f0',
-        marginHorizontal: 8,
-        paddingHorizontal: 8,
-    },
+    middleScore: {},
     label: {
         fontSize: 11,
         color: '#666666',

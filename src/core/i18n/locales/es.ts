@@ -55,9 +55,13 @@ export default {
         addNoteDetail: '😊 Estos cereales son los que le gustan a mi pareja',
         addNoteDetailNegative: '😡 No comprar nunca más esta marca!',
     },
-    reviews: {
+    evaluateProduct: {
         product: 'Producto',
         packaging: 'Paquete',
         eco: 'Eco',
+        productDescription: '¿Es un producto de calidad?',
+        packagingDescription:
+            '¿Es difícil de abrir? ¿Es bonito? ¿Hay algo destacable?',
+        ecoDescription: '¿De dónde proviene? ¿Cuánto plástico gasta?',
     },
 }

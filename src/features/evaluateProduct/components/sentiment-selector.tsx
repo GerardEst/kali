@@ -9,81 +9,54 @@ export function SentimentSelector({ sentiment, onSelectedSentiment }: any) {
                 style={[
                     styles.faceButton,
                     sentiment === 0 && styles.selectedSentiment,
+
+                    { borderColor: SentimentColors[0] },
                 ]}
                 onPress={() => onSelectedSentiment(0)}
             >
-                <Text
-                    style={[
-                        styles.faceEmoji,
-                        { backgroundColor: SentimentColors[0] },
-                    ]}
-                >
-                    {Sentiments[0]}
-                </Text>
+                <Text style={[styles.faceEmoji]}>{Sentiments[0]}</Text>
             </Pressable>
             <Pressable
                 style={[
                     styles.faceButton,
                     sentiment === 1 && styles.selectedSentiment,
+
+                    { borderColor: SentimentColors[1] },
                 ]}
                 onPress={() => onSelectedSentiment(1)}
             >
-                <Text
-                    style={[
-                        styles.faceEmoji,
-                        { backgroundColor: SentimentColors[1] },
-                    ]}
-                >
-                    {Sentiments[1]}
-                </Text>
+                <Text style={[styles.faceEmoji]}>{Sentiments[1]}</Text>
             </Pressable>
             <Pressable
                 style={[
                     styles.faceButton,
                     sentiment === 2 && styles.selectedSentiment,
+
+                    { borderColor: SentimentColors[2] },
                 ]}
                 onPress={() => onSelectedSentiment(2)}
             >
-                <Text
-                    style={[
-                        styles.faceEmoji,
-                        { backgroundColor: SentimentColors[2] },
-                    ]}
-                >
-                    {Sentiments[2]}
-                </Text>
+                <Text style={[styles.faceEmoji]}>{Sentiments[2]}</Text>
             </Pressable>
             <Pressable
                 style={[
                     styles.faceButton,
                     sentiment === 3 && styles.selectedSentiment,
+                    { borderColor: SentimentColors[3] },
                 ]}
                 onPress={() => onSelectedSentiment(3)}
             >
-                <Text
-                    style={[
-                        styles.faceEmoji,
-                        { backgroundColor: SentimentColors[3] },
-                    ]}
-                >
-                    {Sentiments[3]}
-                </Text>
+                <Text style={[styles.faceEmoji]}>{Sentiments[3]}</Text>
             </Pressable>
             <Pressable
                 style={[
                     styles.faceButton,
                     sentiment === 4 && styles.selectedSentiment,
+                    { borderColor: SentimentColors[4] },
                 ]}
                 onPress={() => onSelectedSentiment(4)}
             >
-                <Text
-                    style={[
-                        styles.faceEmoji,
-                        { backgroundColor: SentimentColors[4] },
-                    ]}
-                >
-                    {Sentiments[4]}
-                </Text>
+                <Text style={[styles.faceEmoji]}>{Sentiments[4]}</Text>
             </Pressable>
         </View>
     )
@@ -107,6 +80,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         paddingVertical: 10,
         height: '100%',
+        borderBottomWidth: 10,
     },
     selectedSentiment: {
         backgroundColor: Colors.gray,

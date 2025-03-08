@@ -57,9 +57,13 @@ export default {
             '😊 Aquets cereals son els que li agraden a la meva parella',
         addNoteDetailNegative: '😡 No comprar mai més aquesta marca!',
     },
-    reviews: {
+    evaluateProduct: {
         product: 'Producte',
         packaging: 'Paquet',
         eco: 'Eco',
+        productDescription: 'És un producte de qualitat?',
+        packagingDescription:
+            "És difícil d'obrir? És bonic? Hi ha algo a destacar?",
+        ecoDescription: "D'on prové? Quan de plàstic gasta?",
     },
 }

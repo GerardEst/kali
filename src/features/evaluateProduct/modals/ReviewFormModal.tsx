@@ -10,6 +10,7 @@ import { useProductReview } from '../usecases/saveProductReview'
 import { SentimentSelector } from '../components/sentiment-selector'
 import { useForm, Controller } from 'react-hook-form'
 import CustomModal from '@/src/shared/components/customModal'
+import { useTranslation } from 'react-i18next'
 
 interface ReviewFormData {
     id?: string // Optional since it's only needed for the API
@@ -31,6 +32,7 @@ export function ReviewFormModal({
     onClose: () => void
 }) {
     const { user } = useAuthState()
+    const { t } = useTranslation()
     const { saveProductReview } = useProductReview()
     const { control, handleSubmit, reset } = useForm<ReviewFormData>()
 
@@ -66,13 +68,14 @@ export function ReviewFormModal({
 
     return (
         <CustomModal visible={visible} onClose={onClose}>
-            <View style={styles.reviewModal}>
+            <View>
                 {user ? (
                     <>
                         <View style={styles.modalHeader}>
-                            <Text style={[Texts.smallTitle, styles.modalTitle]}>
+                            <Text style={[Texts.title, styles.modalTitle]}>
                                 {product?.name || product.barcode}
                             </Text>
+
                             <Pressable
                                 style={styles.closeButton}
                                 onPress={onClose}
@@ -86,7 +89,12 @@ export function ReviewFormModal({
                         </View>
                         <View style={styles.modalContent}>
                             <View>
-                                <Text>Producte</Text>
+                                <Text style={Texts.title}>
+                                    {t('evaluateProduct.product')}
+                                </Text>
+                                {/* <Text>
+                                    {t('evaluateProduct.productDescription')}
+                                </Text> */}
                                 <Controller
                                     control={control}
                                     name="product_score"
@@ -118,7 +126,12 @@ export function ReviewFormModal({
                                 />
                             </View>
                             <View>
-                                <Text>Packaging</Text>
+                                <Text style={Texts.title}>
+                                    {t('evaluateProduct.packaging')}
+                                </Text>
+                                {/* <Text>
+                                    {t('evaluateProduct.packagingDescription')}
+                                </Text> */}
                                 <Controller
                                     control={control}
                                     name="packaging_score"
@@ -150,7 +163,12 @@ export function ReviewFormModal({
                                 />
                             </View>
                             <View>
-                                <Text>Eco</Text>
+                                <Text style={Texts.title}>
+                                    {t('evaluateProduct.eco')}
+                                </Text>
+                                {/* <Text>
+                                    {t('evaluateProduct.ecoDescription')}
+                                </Text> */}
                                 <Controller
                                     control={control}
                                     name="eco_score"
@@ -203,9 +221,6 @@ export function ReviewFormModal({
 }
 
 const styles = StyleSheet.create({
-    reviewModal: {
-        gap: 10,
-    },
     modalHeader: {
         display: 'flex',
         flexDirection: 'row',
@@ -217,8 +232,9 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
     },
     modalContent: {
-        gap: 10,
-        padding: 15,
+        gap: 20,
+        paddingHorizontal: 15,
+        paddingBottom: 15,
         width: '100%',
         alignItems: 'center',
     },
