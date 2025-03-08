@@ -3,7 +3,17 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { Note } from '../shared/interfaces/Note'
 import { Review } from '../shared/interfaces/Review'
 
-export const useScannedProductsState = create<any>((set) => ({
+interface ScannedProductsState {
+    products: Product[]
+    scannedCount: number
+    addScannedProduct: (product: Product) => void
+    updateScannedProduct: (product: Product) => void
+    upsertUserReview: (barcode: string, userReview: Review) => void
+    setUserNotes: (barcode: string, notes: Note[]) => void
+    addUserNote: (barcode: string, noteText: string) => void
+}
+
+export const useScannedProductsState = create<ScannedProductsState>((set) => ({
     products: [],
     scannedCount: 0,
 

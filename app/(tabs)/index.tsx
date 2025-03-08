@@ -62,7 +62,15 @@ export default function HomeScreen() {
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
         codeTypes: supportedBarcodeTypes,
-        onCodeScanned: (codes) => scan(codes),
+        onCodeScanned: (codes) => {
+            const code = codes[0]
+            if (!code.value) return
+
+            scan(code)
+            setActiveProduct(
+                products.find((product) => product.barcode === code.value)
+            )
+        },
     })
 
     if (!device) {

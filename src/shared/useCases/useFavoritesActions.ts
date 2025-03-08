@@ -12,9 +12,9 @@ export const useFavoriteActions: any = () => {
     const { updateScannedProduct } = useScannedProductsState()
     const { removeUserFav, addUserFav } = useListsState()
 
-    if (!user) return
-
     const removeFav = async (product: Product) => {
+        if (!user) return
+
         const unsavedProduct = await unsaveProductForUser(
             user.id,
             product.barcode

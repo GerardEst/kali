@@ -19,11 +19,11 @@ export const useScan = () => {
     const { addScannedProduct, upsertUserReview, setUserNotes } =
         useScannedProductsState()
 
-    async function scan(codes: Code[]) {
-        if (!codes[0]?.value) return
+    async function scan(code: Code) {
+        if (!code.value) return
 
-        setScannedCode(codes[0].value)
-        const barcodeType = codes[0].type
+        setScannedCode(code.value)
+        const barcodeType = code.type
 
         if (!scannedCode) return
 
@@ -49,6 +49,8 @@ export const useScan = () => {
             scannedCode,
             barcodeType
         )
+
+        if (!scannedProductInfo) return
 
         // Busquem, si l'usuari està loguejat, si té el producte favejat
         if (user) {
