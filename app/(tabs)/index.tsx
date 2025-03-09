@@ -27,8 +27,9 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { useTranslation } from 'react-i18next'
 import {
     createNewProductFromBarcode,
-    getProductByBarcode,
+    getProductInfoBasic,
     getProductInfoWithUserData,
+    getProductInfoWithUserData_slow,
 } from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
 export default function HomeScreen() {
@@ -77,14 +78,12 @@ export default function HomeScreen() {
 
             let productInfo
             if (user?.id) {
-                console.log('get product info with user data')
-                productInfo = await getProductInfoWithUserData(
+                productInfo = await getProductInfoWithUserData_slow(
                     scannedCode.value,
                     user.id
                 )
             } else {
-                console.log('get simple product info')
-                productInfo = await getProductByBarcode(
+                productInfo = await getProductInfoBasic(
                     scannedCode.value,
                     scannedCode.type
                 )
@@ -97,18 +96,7 @@ export default function HomeScreen() {
                 productInfo = newProduct
             }
 
-            console.log('productInfo', productInfo)
-
-            // TODO - Com que no tenim res a products encara, no està definint cap activeProduct
-
-            /**
-             * A veure, jo necessito posar el producte a addScannedProduct perquè es posi a la llista d'scans
-             * I pude no cal fer el setActiveProduct aixi perque ja tinc el productInfo que en teoria té el
-             * mateix format
-             */
             addScannedProduct(productInfo)
-            setActiveProduct(productInfo)
-            console.log('activeProduct', activeProduct)
         },
     })
 
@@ -172,7 +160,7 @@ export default function HomeScreen() {
                                 ecoScore={activeProduct.eco_score_avg}
                             ></Reviews>
                         )}
-                        {activeProduct?.userReview ? (
+                        {activeProduct?.user_review ? (
                             <GenericButton
                                 style={styles.reviewButton}
                                 text={t('scanner.review.buttonEdit')}
@@ -195,9 +183,6 @@ export default function HomeScreen() {
                     <View style={styles.scannerContent}>
                         <Carousel
                             onProductVisible={(product: Product) => {
-                                console.log(
-                                    'setting activeProduct from carousel'
-                                )
                                 setActiveProduct(product)
                             }}
                             onUpdateProductInfo={(barcode: string) => {

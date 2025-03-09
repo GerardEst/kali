@@ -2,29 +2,6 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { supabase } from '@/src/core/supabase'
 import { getProductInfo } from '../openFood-api'
 import { getProductAverageScores } from './reviews-api'
-import { Review } from '@/src/shared/interfaces/Review'
-import { Note } from '@/src/shared/interfaces/Note'
-
-export const getFavStateOfProductForUser = async (
-    userId: string,
-    barcode: string
-): Promise<boolean> => {
-    try {
-        let { data, error } = await supabase
-            .from('user_listed_products')
-            .select('*')
-            .eq('barcode', barcode)
-            .eq('profile_id', userId)
-            .eq('list_name', 'favs')
-
-        if (error) throw error
-
-        return !!data?.[0]
-    } catch (error) {
-        console.error(error)
-        throw new Error('Error getting fav state of product')
-    }
-}
 
 export const createNewProduct = async (
     barcode: string,
@@ -79,17 +56,27 @@ export const updateProduct = async (product: Product) => {
     }
 }
 
-export const getProductByBarcode = async (
+export const getProductInfoBasic = async (
     barcode: string,
     barcodeType: string
 ) => {
     try {
-        let { data: product, error } = await supabase
+        const [{ data: product, error }, scannedProductAverageScores] = await Promise.all([
+            supabase
             .from('products')
-            .select('*')
+            .select(`
+                name,
+                barcode,
+                brand,
+                short_description,
+                tags,
+                image_url`)
             .eq('barcode', barcode)
+            .single(),
+            getProductAverageScores(barcode),
+        ])
 
-        if (product && product.length === 0) {
+        if (!product) {
             const product = await getProductInfo(barcode)
             const createdProduct = await createNewProduct(
                 barcode,
@@ -102,16 +89,9 @@ export const getProductByBarcode = async (
             return createdProduct as Product
         }
 
-        // TODO - L'average score també incluirlo a la funció, o treure'l fora perquè no retrassi
-        const scannedProductAverageScores =
-            await getProductAverageScores(barcode)
-
-        if (!scannedProductAverageScores) return
-
         if (error) throw error
         return {
-            ...product?.[0],
-            reviews: [],
+            ...product,
             product_score_avg: scannedProductAverageScores.productScore,
             packaging_score_avg: scannedProductAverageScores.packagingScore,
             eco_score_avg: scannedProductAverageScores.ecoScore,
@@ -125,70 +105,93 @@ export const getProductByBarcode = async (
 export const getProductInfoWithUserData = async (
     barcode: string,
     userId: string
-): Promise<any | undefined> => {
+): Promise<Product> => {
     console.time('getProductInfoWithUserData')
+    const { data, error } = await supabase
+        .rpc('get_product_details', {
+            p_barcode: barcode,
+            p_user_id: userId
+        })
+
+    if (error) throw error
+
+    console.timeEnd('getProductInfoWithUserData')
+    return data as Product
+}
+
+export const getProductInfoWithUserData_slow = async (
+    barcode: string,
+    userId: string
+): Promise<any | undefined> => {
+    console.time('getProductInfoWithUserData_slow')
     try {
-        let { data, error } = await supabase
-            .from('products')
-            .select(
+        const [{ data, error }, scannedProductAverageScores] = await Promise.all([
+            supabase
+                .from('products')
+                .select(
                 `
-                *,
-                reviews!left (
-                product_comment,
-                product_score,
-                packaging_comment,
-                packaging_score,
-                eco_comment,
-                eco_score
-                ),
-                lists_products!left (
-                list_id,
-                lists!inner (
                     name,
-                    profile_id
+                    barcode,
+                    brand,
+                    short_description,
+                    tags,
+                    image_url,
+                    reviews!left (
+                        id,
+                        product_comment,
+                        product_score,
+                        packaging_comment,
+                        packaging_score,
+                        eco_comment,
+                        eco_score
+                    ),
+                    lists_products!left (
+                        list_id,
+                        lists!inner (
+                            name,
+                            profile_id
+                        )
+                    ),
+                    notes!left (
+                        id,
+                        created_at,
+                        note
+                    )
+                `
                 )
-                ),
-                notes!left (
-                note
-                )
-            `
-            )
-            .eq('barcode', barcode)
-            .eq('reviews.profile', userId)
-            .eq('reviews.product', barcode)
-            .eq('lists_products.product_id', barcode)
-            .eq('lists_products.lists.profile_id', userId)
-            .eq('lists_products.lists.name', 'favs')
-            .eq('notes.profile', userId)
-            .eq('notes.product', barcode)
-            .single()
-        console.timeEnd('getProductInfoWithUserData')
+                .eq('barcode', barcode)
+                .eq('reviews.profile', userId)
+                .eq('reviews.product', barcode)
+                .eq('lists_products.product_id', barcode)
+                .eq('lists_products.lists.profile_id', userId)
+                .eq('lists_products.lists.name', 'favs')
+                .eq('notes.profile', userId)
+                .eq('notes.product', barcode)
+                .single(),
+            getProductAverageScores(barcode)
+        ])
+        console.timeEnd('getProductInfoWithUserData_slow')
 
+        
         if (error) throw error
-
-        const scannedProductAverageScores =
-            await getProductAverageScores(barcode)
-
-        // TODO - Revisar si aquesta data té el format necessari per Product
-        console.log('data', data)
-
-        // TODO - L'average score també incluirlo a la funció, o treure'l fora perquè no retrassi
-        return {
-            ...data[0],
-            reviews: data[0].reviews.map((review: Review) => ({
-                ...review,
-                product_score: review.product_score,
-                packaging_score: review.packaging_score,
-                eco_score: review.eco_score,
-            })),
-            notes: data[0].notes.map((note: Note) => ({
-                ...note,
-                note: note.note,
-            })),
+        if (!data) throw new Error('No data found')
+        
+        const mappedProduct = {
+            barcode: data.barcode,
+            name: data.name,
+            brand: data.brand,
+            short_description: data.short_description,
+            tags: data.tags,
+            image_url: data.image_url,
+            user_notes: data.notes,
+            user_review: data.reviews[0],
             product_score_avg: scannedProductAverageScores.productScore,
             packaging_score_avg: scannedProductAverageScores.packagingScore,
             eco_score_avg: scannedProductAverageScores.ecoScore,
+            isFav: data.lists_products.length > 0,
         } as Product
+        
+        return mappedProduct
     } catch (error) {
         console.error(error)
         throw new Error('Error getting product info with user data')
@@ -214,7 +217,6 @@ export const createNewProductFromBarcode = async (
         return {
             ...createdProduct,
             is_favorite: false,
-            user_review: null,
             product_score_avg: -1,
             packaging_score_avg: -1,
             eco_score_avg: -1,

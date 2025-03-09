@@ -70,9 +70,9 @@ export const CarouselProduct = ({
                 </View>
                 <View style={styles.cardContent}>
                     <ScrollView style={styles.cardContentNotes}>
-                        {product?.userNotes &&
-                            product.userNotes.length > 0 &&
-                            product.userNotes.map(
+                        {product?.user_notes &&
+                            product.user_notes.length > 0 &&
+                            product.user_notes.map(
                                 (note: Note, index: number) => (
                                     <UserNote
                                         key={index}
@@ -81,7 +81,7 @@ export const CarouselProduct = ({
                                     />
                                 )
                             )}
-                        {product && product.userNotes?.length === 0 && (
+                        {product && product.user_notes?.length === 0 && (
                             <View>
                                 <Text>{t('carousel.addNote')}</Text>
                                 <Text style={[Texts.lightTitle, Texts.italic]}>

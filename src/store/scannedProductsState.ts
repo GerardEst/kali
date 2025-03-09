@@ -8,7 +8,7 @@ interface ScannedProductsState {
     scannedCount: number
     addScannedProduct: (product: Product) => void
     updateScannedProduct: (product: Product) => void
-    upsertUserReview: (barcode: string, userReview: Review) => void
+    upsertUserReview: (barcode: string, user_review: Review) => void
     setUserNotes: (barcode: string, notes: Note[]) => void
     addUserNote: (barcode: string, noteText: string) => void
 }
@@ -54,13 +54,13 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
             }
         }),
 
-    upsertUserReview: (barcode: string, userReview: Review) =>
+    upsertUserReview: (barcode: string, user_review: Review) =>
         //@ts-ignore
         set((state) => {
             const products = state.products.map((product: Product) =>
                 // TODO -> Cuidado que aqui necessitem == perquè tenim number i string, sembla
                 product.barcode == barcode
-                    ? { ...product, userReview }
+                    ? { ...product, user_review }
                     : product
             )
 
@@ -77,7 +77,7 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
                     product.barcode == barcode
                         ? {
                               ...product,
-                              userNotes: notes,
+                              user_notes: notes,
                           }
                         : product
                 ),
@@ -93,9 +93,9 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
                         ? {
                               ...product,
                               // TODO - Estic casi segur de que això està malament
-                              userNotes: [
+                              user_notes: [
                                   //@ts-ignore
-                                  ...product.userNotes,
+                                  ...product.user_notes,
                                   {
                                       created_at: '',
                                       product: barcode,

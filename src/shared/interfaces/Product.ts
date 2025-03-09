@@ -13,7 +13,7 @@ export interface Product {
     product_score_avg?: number
     packaging_score_avg?: number
     eco_score_avg?: number
-    userNotes?: Note[]
-    userReview?: Review
+    user_notes?: Note[]
+    user_review?: Review
     isFav?: Boolean
 }

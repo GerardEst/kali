@@ -1,7 +1,7 @@
 import {
     createNewReviewForProduct,
     updateReviewForProduct,
-} from '@/src/api/products/products-api'
+} from '@/src/api/products/reviews-api'
 import { useAuthState } from '@/src/store/authState'
 import { Product } from '@/src/shared/interfaces/Product'
 import { Review } from '@/src/shared/interfaces/Review'
@@ -19,7 +19,7 @@ export const useProductReview = () => {
             if (!user) throw new Error('User not found')
     
             let review
-            if (product.userReview) {
+            if (product.user_review) {
                 review = await updateReviewForProduct(
                     product.barcode,
                     productReview,

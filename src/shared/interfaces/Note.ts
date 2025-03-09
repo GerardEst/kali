@@ -3,8 +3,8 @@ import { Product } from './Product'
 export interface Note {
     id: number
     created_at: string
-    product: string
+    product?: string
     productData?: Product
-    profile: string
+    profile?: string
     note: string
 }
