@@ -6,7 +6,7 @@ import { Image } from 'react-native'
 import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { Product } from '@/src/shared/interfaces/Product'
 import { Note } from '@/src/shared/interfaces/Note'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import UserNote from '@/src/features/scan/components/UserNote'
 
@@ -25,6 +25,10 @@ export const CarouselProduct = ({
     const { removeFav, addFav } = useFavoriteActions()
     const { t } = useTranslation()
 
+    useEffect(() => {
+        //console.log('product', product)
+    }, [product])
+
     const handleRemove = async (product: Product) => {
         await removeFav(product)
     }
@@ -35,13 +39,6 @@ export const CarouselProduct = ({
 
     return (
         <View style={styles.slideContent}>
-            {/* {product.image_url && (
-                <Image
-                    source={{ uri: product.image_url }}
-                    style={styles.productImage}
-                    resizeMode="contain"
-                ></Image>
-            )} */}
             <View style={styles.card}>
                 <View style={styles.cardHeader}>
                     <View>
@@ -84,7 +81,7 @@ export const CarouselProduct = ({
                                     />
                                 )
                             )}
-                        {product && !product.userNotes && (
+                        {product && product.userNotes?.length === 0 && (
                             <View>
                                 <Text>{t('carousel.addNote')}</Text>
                                 <Text style={[Texts.lightTitle, Texts.italic]}>

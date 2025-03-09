@@ -1,52 +1,9 @@
-import { Review } from '@/src/shared/interfaces/Review'
 import { Product } from '@/src/shared/interfaces/Product'
 import { supabase } from '@/src/core/supabase'
 import { getProductInfo } from '../openFood-api'
-
-export const getProductByBarcode = async (
-    barcode: string,
-    barcodeType: string
-) => {
-    // TODO - Altre cop estic fent varies calls quan potser podria ser menys
-    try {
-        let { data: product, error } = await supabase
-            .from('products')
-            .select('*')
-            .eq('barcode', barcode)
-
-        if (product && product.length === 0) {
-            const product = await getProductInfo(barcode)
-
-            // Si no hi ha producte, el creem i ens estalviem de pillar les opinions
-            const createdProduct = await createNewProduct(
-                barcode,
-                barcodeType,
-                product?.productName,
-                product?.imageUrl,
-                product?.tags
-            )
-
-            return createdProduct as Product
-        }
-
-        const scannedProductAverageScores =
-            await getProductAverageScores(barcode)
-
-        if (!scannedProductAverageScores) return
-
-        if (error) throw error
-        return {
-            ...product?.[0],
-            reviews: [],
-            product_score_avg: scannedProductAverageScores.productScore,
-            packaging_score_avg: scannedProductAverageScores.packagingScore,
-            eco_score_avg: scannedProductAverageScores.ecoScore,
-        } as Product
-    } catch (error) {
-        console.error(error)
-        throw new Error('Error getting product info')
-    }
-}
+import { getProductAverageScores } from './reviews-api'
+import { Review } from '@/src/shared/interfaces/Review'
+import { Note } from '@/src/shared/interfaces/Note'
 
 export const getFavStateOfProductForUser = async (
     userId: string,
@@ -66,55 +23,6 @@ export const getFavStateOfProductForUser = async (
     } catch (error) {
         console.error(error)
         throw new Error('Error getting fav state of product')
-    }
-}
-
-export const getProductAverageScores = async (productBarcode: string) => {
-    try {
-        const { data, error } = await supabase
-            .from('product_average_scores')
-            .select('product_score_avg, packaging_score_avg, eco_score_avg')
-            .eq('product', productBarcode)
-            .select()
-
-        if (error) throw error
-        if (!data[0])
-            return {
-                productScore: -1,
-                packagingScore: -1,
-                ecoScore: -1,
-            }
-
-        return {
-            productScore: data[0].product_score_avg,
-            packagingScore: data[0].packaging_score_avg,
-            ecoScore: data[0].eco_score_avg,
-        }
-    } catch (error: any) {
-        console.error(error)
-        throw new Error('Error getting average product scores')
-    }
-}
-
-export const getProductReviewByUser = async (
-    barcode: string,
-    userId: string
-) => {
-    try {
-        const { data, error } = await supabase
-            .from('reviews')
-            .select(
-                'product_comment, product_score, packaging_comment, packaging_score, eco_comment, eco_score'
-            )
-            .eq('profile', userId)
-            .eq('product', barcode)
-
-        if (error) throw error
-
-        return data[0] as Review
-    } catch (error: any) {
-        console.error(error)
-        throw new Error('Error getting user opinion')
     }
 }
 
@@ -171,65 +79,148 @@ export const updateProduct = async (product: Product) => {
     }
 }
 
-export const updateReviewForProduct = async (
+export const getProductByBarcode = async (
     barcode: string,
-    review: Review,
-    userId: string
+    barcodeType: string
 ) => {
     try {
-        console.log('review', review)
+        let { data: product, error } = await supabase
+            .from('products')
+            .select('*')
+            .eq('barcode', barcode)
 
-        const { data, error } = await supabase
-            .from('reviews')
-            .update([
-                {
-                    product_comment: review.product_comment,
-                    product_score: review.product_score,
-                    packaging_comment: review.packaging_comment,
-                    packaging_score: review.packaging_score,
-                    eco_comment: review.eco_comment,
-                    eco_score: review.eco_score,
-                },
-            ])
-            .eq('product', barcode)
-            .eq('profile', userId)
-            .select()
+        if (product && product.length === 0) {
+            const product = await getProductInfo(barcode)
+            const createdProduct = await createNewProduct(
+                barcode,
+                barcodeType,
+                product?.productName,
+                product?.imageUrl,
+                product?.tags
+            )
+
+            return createdProduct as Product
+        }
+
+        // TODO - L'average score també incluirlo a la funció, o treure'l fora perquè no retrassi
+        const scannedProductAverageScores =
+            await getProductAverageScores(barcode)
+
+        if (!scannedProductAverageScores) return
 
         if (error) throw error
-
-        return data[0] as Review
+        return {
+            ...product?.[0],
+            reviews: [],
+            product_score_avg: scannedProductAverageScores.productScore,
+            packaging_score_avg: scannedProductAverageScores.packagingScore,
+            eco_score_avg: scannedProductAverageScores.ecoScore,
+        } as Product
     } catch (error) {
         console.error(error)
-        throw new Error('Error posting updated opinion')
+        throw new Error('Error getting product info')
     }
 }
 
-export const createNewReviewForProduct = async (
+export const getProductInfoWithUserData = async (
     barcode: string,
-    review: Review,
     userId: string
-) => {
+): Promise<any | undefined> => {
+    console.time('getProductInfoWithUserData')
     try {
-        const { data, error } = await supabase
-            .from('reviews')
-            .insert([
-                {
-                    product: barcode,
-                    profile: userId,
-                    product_comment: review.product_comment,
-                    product_score: review.product_score,
-                    packaging_comment: review.packaging_comment,
-                    packaging_score: review.packaging_score,
-                    eco_comment: review.eco_comment,
-                    eco_score: review.eco_score,
-                },
-            ])
-            .select()
+        let { data, error } = await supabase
+            .from('products')
+            .select(
+                `
+                *,
+                reviews!left (
+                product_comment,
+                product_score,
+                packaging_comment,
+                packaging_score,
+                eco_comment,
+                eco_score
+                ),
+                lists_products!left (
+                list_id,
+                lists!inner (
+                    name,
+                    profile_id
+                )
+                ),
+                notes!left (
+                note
+                )
+            `
+            )
+            .eq('barcode', barcode)
+            .eq('reviews.profile', userId)
+            .eq('reviews.product', barcode)
+            .eq('lists_products.product_id', barcode)
+            .eq('lists_products.lists.profile_id', userId)
+            .eq('lists_products.lists.name', 'favs')
+            .eq('notes.profile', userId)
+            .eq('notes.product', barcode)
+            .single()
+        console.timeEnd('getProductInfoWithUserData')
 
         if (error) throw error
-        return data[0] as Review
+
+        const scannedProductAverageScores =
+            await getProductAverageScores(barcode)
+
+        // TODO - Revisar si aquesta data té el format necessari per Product
+        console.log('data', data)
+
+        // TODO - L'average score també incluirlo a la funció, o treure'l fora perquè no retrassi
+        return {
+            ...data[0],
+            reviews: data[0].reviews.map((review: Review) => ({
+                ...review,
+                product_score: review.product_score,
+                packaging_score: review.packaging_score,
+                eco_score: review.eco_score,
+            })),
+            notes: data[0].notes.map((note: Note) => ({
+                ...note,
+                note: note.note,
+            })),
+            product_score_avg: scannedProductAverageScores.productScore,
+            packaging_score_avg: scannedProductAverageScores.packagingScore,
+            eco_score_avg: scannedProductAverageScores.ecoScore,
+        } as Product
     } catch (error) {
         console.error(error)
-        throw new Error('Error posting new opinion')
+        throw new Error('Error getting product info with user data')
+    }
+}
+
+export const createNewProductFromBarcode = async (
+    barcode: string,
+    barcodeType: string
+) => {
+    try {
+        const openFoodProduct = await getProductInfo(barcode)
+        const createdProduct = await createNewProduct(
+            barcode,
+            barcodeType,
+            openFoodProduct?.productName,
+            openFoodProduct?.imageUrl,
+            openFoodProduct?.tags
+        )
+
+        if (!createdProduct) throw new Error('Error creating a new product')
+
+        return {
+            ...createdProduct,
+            is_favorite: false,
+            user_review: null,
+            product_score_avg: -1,
+            packaging_score_avg: -1,
+            eco_score_avg: -1,
+        } as Product
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error creating a new product')
     }
 }

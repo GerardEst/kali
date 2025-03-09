@@ -29,9 +29,6 @@ export const Carousel = ({
     // Initialize scroll position
 
     useEffect(() => {
-        console.log('scannedCount', scannedCount)
-        console.log('scrollXRef', scrollXRef.current)
-
         if (scannedCount > 1) {
             // When a new item is scanned, first scroll to position 1 instantly
             flatListRef.current?.scrollToIndex({

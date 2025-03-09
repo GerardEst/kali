@@ -12,7 +12,7 @@ import {
     useCodeScanner,
     Camera,
 } from 'react-native-vision-camera'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, act } from 'react'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { UpdateProductInfoModal } from '@/src/features/fillProduct/modals/UpdateProductInfo'
 import { ReviewFormModal } from '@/src/features/evaluateProduct/modals/ReviewFormModal'
@@ -25,11 +25,17 @@ import React from 'react'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useTranslation } from 'react-i18next'
-
+import {
+    createNewProductFromBarcode,
+    getProductByBarcode,
+    getProductInfoWithUserData,
+} from '@/src/api/products/products-api'
+import { useAuthState } from '@/src/store/authState'
 export default function HomeScreen() {
     const { t } = useTranslation()
+    const { user } = useAuthState()
     const { hasPermission, requestPermission } = useCameraPermission()
-    const { products } = useScannedProductsState()
+    const { products, addScannedProduct } = useScannedProductsState()
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
@@ -62,14 +68,47 @@ export default function HomeScreen() {
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
         codeTypes: supportedBarcodeTypes,
-        onCodeScanned: (codes) => {
+        onCodeScanned: async (codes) => {
             const code = codes[0]
             if (!code.value) return
 
-            scan(code)
-            setActiveProduct(
-                products.find((product) => product.barcode === code.value)
-            )
+            const scannedCode = scan(code)
+            if (!scannedCode?.value) return
+
+            let productInfo
+            if (user?.id) {
+                console.log('get product info with user data')
+                productInfo = await getProductInfoWithUserData(
+                    scannedCode.value,
+                    user.id
+                )
+            } else {
+                console.log('get simple product info')
+                productInfo = await getProductByBarcode(
+                    scannedCode.value,
+                    scannedCode.type
+                )
+            }
+            if (!productInfo) {
+                const newProduct = await createNewProductFromBarcode(
+                    scannedCode.value,
+                    scannedCode.type
+                )
+                productInfo = newProduct
+            }
+
+            console.log('productInfo', productInfo)
+
+            // TODO - Com que no tenim res a products encara, no està definint cap activeProduct
+
+            /**
+             * A veure, jo necessito posar el producte a addScannedProduct perquè es posi a la llista d'scans
+             * I pude no cal fer el setActiveProduct aixi perque ja tinc el productInfo que en teoria té el
+             * mateix format
+             */
+            addScannedProduct(productInfo)
+            setActiveProduct(productInfo)
+            console.log('activeProduct', activeProduct)
         },
     })
 
@@ -156,6 +195,9 @@ export default function HomeScreen() {
                     <View style={styles.scannerContent}>
                         <Carousel
                             onProductVisible={(product: Product) => {
+                                console.log(
+                                    'setting activeProduct from carousel'
+                                )
                                 setActiveProduct(product)
                             }}
                             onUpdateProductInfo={(barcode: string) => {
