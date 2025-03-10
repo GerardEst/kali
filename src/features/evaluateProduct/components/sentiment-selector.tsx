@@ -3,6 +3,7 @@ import { Sentiments } from '@/src/shared/constants/sentiments'
 import { Colors, SentimentColors } from '@/styles/colors'
 
 export function SentimentSelector({ sentiment, onSelectedSentiment }: any) {
+    console.log('sentiment', sentiment)
     return (
         <View style={styles.faceContainer}>
             <Pressable

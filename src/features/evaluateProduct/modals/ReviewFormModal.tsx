@@ -34,19 +34,18 @@ export function ReviewFormModal({
 
     useEffect(() => {
         if (visible && product) {
+            console.log('product_score', product.user_review?.product_score)
             reset({
-                id: product.user_review?.id || '',
-                product_score: product.user_review?.product_score || -1,
-                product_comment: product.user_review?.product_comment || '',
+                product_score: product.user_review?.product_score ?? -1,
+                product_comment: product.user_review?.product_comment ?? '',
             })
         }
-    }, [visible, product, reset])
+    }, [visible, product])
 
     const onSubmit = async (data: ReviewFormData) => {
         const reviewData = {
             product_score: data.product_score,
             product_comment: data.product_comment,
-            id: product.user_review?.id || '',
         }
         const savedReview = await saveProductReview(reviewData, product)
         if (savedReview) onClose()
@@ -75,12 +74,9 @@ export function ReviewFormModal({
                         </View>
                         <View style={styles.modalContent}>
                             <View>
-                                <Text style={Texts.title}>
-                                    {t('evaluateProduct.product')}
-                                </Text>
-                                {/* <Text>
+                                <Text>
                                     {t('evaluateProduct.productDescription')}
-                                </Text> */}
+                                </Text>
                                 <Controller
                                     control={control}
                                     name="product_score"
