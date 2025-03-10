@@ -93,8 +93,6 @@ export const getProductInfoBasic = async (
         return {
             ...product,
             product_score_avg: scannedProductAverageScores.productScore,
-            packaging_score_avg: scannedProductAverageScores.packagingScore,
-            eco_score_avg: scannedProductAverageScores.ecoScore,
         } as Product
     } catch (error) {
         console.error(error)
@@ -106,7 +104,6 @@ export const getProductInfoWithUserData = async (
     barcode: string,
     userId: string
 ): Promise<Product> => {
-    console.time('getProductInfoWithUserData')
     const { data, error } = await supabase
         .rpc('get_product_details', {
             p_barcode: barcode,
@@ -115,7 +112,6 @@ export const getProductInfoWithUserData = async (
 
     if (error) throw error
 
-    console.timeEnd('getProductInfoWithUserData')
     return data as Product
 }
 
@@ -123,7 +119,6 @@ export const getProductInfoWithUserData_slow = async (
     barcode: string,
     userId: string
 ): Promise<any | undefined> => {
-    console.time('getProductInfoWithUserData_slow')
     try {
         const [{ data, error }, scannedProductAverageScores] = await Promise.all([
             supabase
@@ -139,11 +134,7 @@ export const getProductInfoWithUserData_slow = async (
                     reviews!left (
                         id,
                         product_comment,
-                        product_score,
-                        packaging_comment,
-                        packaging_score,
-                        eco_comment,
-                        eco_score
+                        product_score
                     ),
                     lists_products!left (
                         list_id,
@@ -170,7 +161,6 @@ export const getProductInfoWithUserData_slow = async (
                 .single(),
             getProductAverageScores(barcode)
         ])
-        console.timeEnd('getProductInfoWithUserData_slow')
 
         
         if (error) throw error
@@ -186,8 +176,6 @@ export const getProductInfoWithUserData_slow = async (
             user_notes: data.notes,
             user_review: data.reviews[0],
             product_score_avg: scannedProductAverageScores.productScore,
-            packaging_score_avg: scannedProductAverageScores.packagingScore,
-            eco_score_avg: scannedProductAverageScores.ecoScore,
             isFav: data.lists_products.length > 0,
         } as Product
         
@@ -218,8 +206,6 @@ export const createNewProductFromBarcode = async (
             ...createdProduct,
             is_favorite: false,
             product_score_avg: -1,
-            packaging_score_avg: -1,
-            eco_score_avg: -1,
         } as Product
     } catch (error) {
         console.error(error)

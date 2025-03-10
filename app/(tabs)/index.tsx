@@ -78,7 +78,7 @@ export default function HomeScreen() {
 
             let productInfo
             if (user?.id) {
-                productInfo = await getProductInfoWithUserData_slow(
+                productInfo = await getProductInfoWithUserData(
                     scannedCode.value,
                     user.id
                 )
@@ -154,10 +154,6 @@ export default function HomeScreen() {
                         {activeProduct && (
                             <Reviews
                                 productScore={activeProduct.product_score_avg}
-                                packagingScore={
-                                    activeProduct.packaging_score_avg
-                                }
-                                ecoScore={activeProduct.eco_score_avg}
                             ></Reviews>
                         )}
                         {activeProduct?.user_review ? (

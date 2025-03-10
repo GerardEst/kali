@@ -7,15 +7,9 @@ import { SentimentColors } from '@/styles/colors'
 
 interface ReviewsProps {
     productScore?: number
-    packagingScore?: number
-    ecoScore?: number
 }
 
-export default function Reviews({
-    productScore = -1,
-    packagingScore = -1,
-    ecoScore = -1,
-}: ReviewsProps) {
+export default function Reviews({ productScore = -1 }: ReviewsProps) {
     const [showPopup, setShowPopup] = useState(false)
     const { t } = useTranslation()
     const openReviews = () => {
@@ -42,39 +36,6 @@ export default function Reviews({
                     <Text style={styles.label}>
                         {t('evaluateProduct.product')}
                     </Text>
-                </View>
-                <View
-                    style={[
-                        styles.scoreContainer,
-                        styles.middleScore,
-                        {
-                            borderColor:
-                                SentimentColors[
-                                    packagingScore === -1 ? 5 : packagingScore
-                                ],
-                        },
-                    ]}
-                >
-                    <Text style={styles.score}>
-                        {Sentiments[packagingScore === -1 ? 5 : packagingScore]}
-                    </Text>
-                    <Text style={styles.label}>
-                        {t('evaluateProduct.packaging')}
-                    </Text>
-                </View>
-                <View
-                    style={[
-                        styles.scoreContainer,
-                        {
-                            borderColor:
-                                SentimentColors[ecoScore === -1 ? 5 : ecoScore],
-                        },
-                    ]}
-                >
-                    <Text style={styles.score}>
-                        {Sentiments[ecoScore === -1 ? 5 : ecoScore]}
-                    </Text>
-                    <Text style={styles.label}>{t('evaluateProduct.eco')}</Text>
                 </View>
             </TouchableOpacity>
 

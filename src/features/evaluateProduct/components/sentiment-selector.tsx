@@ -48,16 +48,6 @@ export function SentimentSelector({ sentiment, onSelectedSentiment }: any) {
             >
                 <Text style={[styles.faceEmoji]}>{Sentiments[3]}</Text>
             </Pressable>
-            <Pressable
-                style={[
-                    styles.faceButton,
-                    sentiment === 4 && styles.selectedSentiment,
-                    { borderColor: SentimentColors[4] },
-                ]}
-                onPress={() => onSelectedSentiment(4)}
-            >
-                <Text style={[styles.faceEmoji]}>{Sentiments[4]}</Text>
-            </Pressable>
         </View>
     )
 }

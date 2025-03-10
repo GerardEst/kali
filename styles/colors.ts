@@ -17,7 +17,6 @@ export const ButtonColors = {
 export const SentimentColors = [
     '#ff8282',
     '#e8cc62',
-    '#e8bf65',
     '#c0d857',
     '#81c450',
     '#dddddd',

@@ -11,8 +11,6 @@ export interface Product {
     image_url?: string
     reviews?: Review[]
     product_score_avg?: number
-    packaging_score_avg?: number
-    eco_score_avg?: number
     user_notes?: Note[]
     user_review?: Review
     isFav?: Boolean

@@ -16,10 +16,6 @@ interface ReviewFormData {
     id?: string // Optional since it's only needed for the API
     product_score: number
     product_comment: string
-    packaging_score: number
-    packaging_comment: string
-    eco_score: number
-    eco_comment: string
 }
 
 export function ReviewFormModal({
@@ -42,10 +38,6 @@ export function ReviewFormModal({
                 id: product.user_review?.id || '',
                 product_score: product.user_review?.product_score || -1,
                 product_comment: product.user_review?.product_comment || '',
-                packaging_score: product.user_review?.packaging_score || -1,
-                packaging_comment: product.user_review?.packaging_comment || '',
-                eco_score: product.user_review?.eco_score || -1,
-                eco_comment: product.user_review?.eco_comment || '',
             })
         }
     }, [visible, product, reset])
@@ -54,16 +46,10 @@ export function ReviewFormModal({
         const reviewData = {
             product_score: data.product_score,
             product_comment: data.product_comment,
-            packaging_score: data.packaging_score,
-            packaging_comment: data.packaging_comment,
-            eco_score: data.eco_score,
-            eco_comment: data.eco_comment,
             id: product.user_review?.id || '',
         }
         const savedReview = await saveProductReview(reviewData, product)
-        if (savedReview) {
-            onClose()
-        }
+        if (savedReview) onClose()
     }
 
     return (
@@ -125,80 +111,7 @@ export function ReviewFormModal({
                                     )}
                                 />
                             </View>
-                            <View>
-                                <Text style={Texts.title}>
-                                    {t('evaluateProduct.packaging')}
-                                </Text>
-                                {/* <Text>
-                                    {t('evaluateProduct.packagingDescription')}
-                                </Text> */}
-                                <Controller
-                                    control={control}
-                                    name="packaging_score"
-                                    render={({
-                                        field: { onChange, value },
-                                    }) => (
-                                        <SentimentSelector
-                                            sentiment={value}
-                                            onSelectedSentiment={onChange}
-                                        />
-                                    )}
-                                />
-                                <Controller
-                                    control={control}
-                                    name="packaging_comment"
-                                    render={({
-                                        field: { onChange, value },
-                                    }) => (
-                                        <TextInput
-                                            value={value}
-                                            editable
-                                            multiline
-                                            numberOfLines={4}
-                                            maxLength={150}
-                                            onChangeText={onChange}
-                                            style={styles.opinion}
-                                        />
-                                    )}
-                                />
-                            </View>
-                            <View>
-                                <Text style={Texts.title}>
-                                    {t('evaluateProduct.eco')}
-                                </Text>
-                                {/* <Text>
-                                    {t('evaluateProduct.ecoDescription')}
-                                </Text> */}
-                                <Controller
-                                    control={control}
-                                    name="eco_score"
-                                    render={({
-                                        field: { onChange, value },
-                                    }) => (
-                                        <SentimentSelector
-                                            sentiment={value}
-                                            onSelectedSentiment={onChange}
-                                        />
-                                    )}
-                                />
-                                <Controller
-                                    control={control}
-                                    name="eco_comment"
-                                    render={({
-                                        field: { onChange, value },
-                                    }) => (
-                                        <TextInput
-                                            value={value}
-                                            editable
-                                            multiline
-                                            numberOfLines={4}
-                                            maxLength={150}
-                                            onChangeText={onChange}
-                                            style={styles.opinion}
-                                        />
-                                    )}
-                                />
-                            </View>
+
                             <View style={styles.modalFooter}>
                                 <GenericButton
                                     text="Publicar"
