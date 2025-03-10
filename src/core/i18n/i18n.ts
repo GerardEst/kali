@@ -18,7 +18,7 @@ const LANGUAGE_DETECTOR = {
 
             // Get device language using react-native-localize
             const locales = getLocales()
-            console.log('locales', locales)
+            
             if (locales.length > 0) {
                 // Get the first preferred language
                 const deviceLanguage = locales[0].languageCode.toLowerCase()

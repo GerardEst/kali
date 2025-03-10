@@ -30,8 +30,6 @@ export const Carousel = ({
 
     useEffect(() => {
         if (scannedCount > 1) {
-            console.log('scannedCount', scannedCount)
-
             // When a new item is scanned, first scroll to position 1 instantly
             flatListRef.current?.scrollToIndex({
                 index: 1,

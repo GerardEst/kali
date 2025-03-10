@@ -39,8 +39,6 @@ export const getNotesByUser = async (profileId: string) => {
 
         if (error) throw error
 
-        console.log('notesWithSingleProduct', data)
-
         // Necessari perquè es pensa que productData és un array, però de la db arriba sense array
         // @ts-ignore
         return data as Note[]

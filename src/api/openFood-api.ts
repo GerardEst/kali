@@ -6,7 +6,7 @@ export async function getProductInfo(barcode: string) {
         const response = await name.json()
 
         if (response.status === 'failure') {
-            console.log({ code: 'openFood_not_found' })
+            console.error({ code: 'openFood_not_found' })
             return false
         }
 

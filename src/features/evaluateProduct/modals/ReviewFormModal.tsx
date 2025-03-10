@@ -34,7 +34,6 @@ export function ReviewFormModal({
 
     useEffect(() => {
         if (visible && product) {
-            console.log('product_score', product.user_review?.product_score)
             reset({
                 product_score: product.user_review?.product_score ?? -1,
                 product_comment: product.user_review?.product_comment ?? '',

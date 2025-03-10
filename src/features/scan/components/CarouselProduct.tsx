@@ -25,10 +25,6 @@ export const CarouselProduct = ({
     const { removeFav, addFav } = useFavoriteActions()
     const { t } = useTranslation()
 
-    useEffect(() => {
-        //console.log('product', product)
-    }, [product])
-
     const handleRemove = async (product: Product) => {
         await removeFav(product)
     }
