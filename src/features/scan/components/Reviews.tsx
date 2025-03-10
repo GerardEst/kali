@@ -25,13 +25,13 @@ export default function Reviews({ productScore = -1 }: ReviewsProps) {
                         {
                             borderColor:
                                 SentimentColors[
-                                    productScore === -1 ? 5 : productScore
+                                    productScore === -1 ? 4 : productScore
                                 ],
                         },
                     ]}
                 >
                     <Text style={styles.score}>
-                        {Sentiments[productScore === -1 ? 5 : productScore]}
+                        {Sentiments[productScore === -1 ? 4 : productScore]}
                     </Text>
                     <Text style={styles.label}>
                         {t('evaluateProduct.product')}

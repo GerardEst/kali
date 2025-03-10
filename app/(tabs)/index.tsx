@@ -83,10 +83,7 @@ export default function HomeScreen() {
                     user.id
                 )
             } else {
-                productInfo = await getProductInfoBasic(
-                    scannedCode.value,
-                    scannedCode.type
-                )
+                productInfo = await getProductInfoBasic(scannedCode.value)
             }
             if (!productInfo) {
                 const newProduct = await createNewProductFromBarcode(

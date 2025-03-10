@@ -8,7 +8,8 @@ export const createNewProduct = async (
     barcodeType: string,
     productName: string | null = null,
     imageUrl: string | null = null,
-    tags: string | null = null
+    tags: string | null = null,
+    brands: string | null = null
 ) => {
     try {
         const { data: product, error } = await supabase
@@ -20,6 +21,7 @@ export const createNewProduct = async (
                     barcode_type: barcodeType,
                     image_url: imageUrl,
                     tags: tags,
+                    brands: brands,
                 },
             ])
             .select()
@@ -58,7 +60,6 @@ export const updateProduct = async (product: Product) => {
 
 export const getProductInfoBasic = async (
     barcode: string,
-    barcodeType: string
 ) => {
     try {
         const [{ data: product, error }, scannedProductAverageScores] = await Promise.all([
@@ -76,20 +77,9 @@ export const getProductInfoBasic = async (
             getProductAverageScores(barcode),
         ])
 
-        if (!product) {
-            const product = await getProductInfo(barcode)
-            const createdProduct = await createNewProduct(
-                barcode,
-                barcodeType,
-                product?.productName,
-                product?.imageUrl,
-                product?.tags
-            )
-
-            return createdProduct as Product
-        }
-
         if (error) throw error
+        if (!product) return null
+        
         return {
             ...product,
             product_score_avg: scannedProductAverageScores.productScore,
@@ -197,7 +187,8 @@ export const createNewProductFromBarcode = async (
             barcodeType,
             openFoodProduct?.productName,
             openFoodProduct?.imageUrl,
-            openFoodProduct?.tags
+            openFoodProduct?.tags,
+            openFoodProduct?.brands
         )
 
         if (!createdProduct) throw new Error('Error creating a new product')
