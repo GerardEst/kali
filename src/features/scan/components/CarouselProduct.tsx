@@ -25,6 +25,9 @@ export const CarouselProduct = ({
     const { removeFav, addFav } = useFavoriteActions()
     const { t } = useTranslation()
 
+    const PRODUCT_HAS_NOTES =
+        product.user_notes && product.user_notes?.length > 0
+
     const handleRemove = async (product: Product) => {
         await removeFav(product)
     }
@@ -37,11 +40,13 @@ export const CarouselProduct = ({
         <View style={styles.slideContent}>
             <View style={styles.card}>
                 <View style={styles.cardHeader}>
-                    <View>
+                    <View style={styles.productTitle}>
                         <Text style={Texts.title}>
                             {product.name || product.barcode}
                         </Text>
-                        <Text style={Texts.lightTitle}>{product.brand}</Text>
+                        <Text style={Texts.lightTitle}>
+                            {product.brands?.split(',').at(-1)}
+                        </Text>
                     </View>
                     {user && (
                         <View style={styles.buttonContainer}>
@@ -66,27 +71,34 @@ export const CarouselProduct = ({
                 </View>
                 <View style={styles.cardContent}>
                     <ScrollView style={styles.cardContentNotes}>
-                        {product?.user_notes &&
-                            product.user_notes.length > 0 &&
-                            product.user_notes.map(
-                                (note: Note, index: number) => (
-                                    <UserNote
-                                        key={index}
-                                        note={note}
-                                        style={styles.cardContentNote}
-                                    />
+                        {product ? (
+                            PRODUCT_HAS_NOTES ? (
+                                product.user_notes?.map(
+                                    (note: Note, index: number) => (
+                                        <UserNote
+                                            key={index}
+                                            note={note}
+                                            style={styles.cardContentNote}
+                                        />
+                                    )
                                 )
-                            )}
-                        {product && product.user_notes?.length === 0 && (
-                            <View>
-                                <Text>{t('carousel.addNote')}</Text>
-                                <Text style={[Texts.lightTitle, Texts.italic]}>
-                                    {t('carousel.addNoteDetail')}
-                                </Text>
-                                <Text style={[Texts.lightTitle, Texts.italic]}>
-                                    {t('carousel.addNoteDetailNegative')}
-                                </Text>
-                            </View>
+                            ) : (
+                                <View>
+                                    <Text>{t('carousel.addNote')}</Text>
+                                    <Text
+                                        style={[Texts.lightTitle, Texts.italic]}
+                                    >
+                                        {t('carousel.addNoteDetail')}
+                                    </Text>
+                                    <Text
+                                        style={[Texts.lightTitle, Texts.italic]}
+                                    >
+                                        {t('carousel.addNoteDetailNegative')}
+                                    </Text>
+                                </View>
+                            )
+                        ) : (
+                            <Text>{t('common.loading')}</Text>
                         )}
                     </ScrollView>
                     <View style={styles.cardFooter}>
@@ -135,6 +147,15 @@ const styles = StyleSheet.create({
         gap: 15,
         alignItems: 'center',
     },
+    productTitle: {
+        flex: 1,
+    },
+    buttonContainer: {
+        marginLeft: 'auto',
+        flexDirection: 'row',
+        gap: 10,
+        alignSelf: 'flex-start',
+    },
     cardContent: {
         flexDirection: 'column',
         gap: 15,
@@ -146,11 +167,7 @@ const styles = StyleSheet.create({
         gap: 15,
         marginTop: 'auto',
     },
-    buttonContainer: {
-        marginLeft: 'auto',
-        flexDirection: 'row',
-        gap: 10,
-    },
+
     cardContentNotes: {
         display: 'flex',
         flexDirection: 'column',

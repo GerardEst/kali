@@ -112,6 +112,7 @@ export default function HomeScreen() {
                     scannedCode.value,
                     scannedCode.type
                 )
+
                 productInfo = newProduct
             }
 

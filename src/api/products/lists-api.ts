@@ -3,9 +3,12 @@ import { supabase } from '@/src/core/supabase'
 const lists_ids: { favs: string | null } = {
     favs: null,
 }
+const saveFavListIdLocally = (favListId: string) => (lists_ids.favs = favListId)
 
 export const getSavedProductsForUser = async (userId: string) => {
     try {
+        console.warn('api-call - getSavedProductsForUser')
+        
         const { data, error } = await supabase
             .from('user_listed_products')
             .select('list_id, barcode, list_name, name, image_url')
@@ -28,6 +31,8 @@ export const saveProductForUser = async (
     productBarcode: string
 ) => {
     try {
+        console.warn('api-call - saveProductForUser')
+
         // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
         let favListId = lists_ids.favs || (await getUserFavListId(userId))
 
@@ -61,8 +66,11 @@ export const unsaveProductForUser = async (
     userId: string,
     productBarcode: string
 ) => {
-    // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
-    let favListId = lists_ids.favs || (await getUserFavListId(userId))
+    try {
+        console.warn('api-call - unsaveProductForUser')
+        
+        // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
+        let favListId = lists_ids.favs || (await getUserFavListId(userId))
 
     // Guardem l'id de la llista en local per no fer calls cada vegada
     saveFavListIdLocally(favListId)
@@ -76,13 +84,18 @@ export const unsaveProductForUser = async (
 
     if (error) throw error
 
-    return { unsavedProduct: productBarcode }
+        return { unsavedProduct: productBarcode }
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error unsaving product from favorites')
+    }
 }
 
-const saveFavListIdLocally = (favListId: string) => (lists_ids.favs = favListId)
+
 
 const getUserFavListId = async (userId: string) => {
     try {
+        console.warn('api-call - getUserFavListId')
         const { data, error } = await supabase
             .from('lists')
             .select('id')
@@ -99,6 +112,7 @@ const getUserFavListId = async (userId: string) => {
 
 const createFavListForUser = async (userId: string) => {
     try {
+        console.warn('api-call - createFavListForUser')
         const { data, error } = await supabase
             .from('lists')
             .insert([{ name: 'favs', profile_id: userId }])

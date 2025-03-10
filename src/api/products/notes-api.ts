@@ -6,6 +6,8 @@ export const getProductNotesForUser = async (
     profileId: string
 ) => {
     try {
+        console.warn('api-call - getProductNotesForUser')
+        
         const { data, error } = await supabase
             .from('notes')
             .select('note, created_at')
@@ -23,6 +25,8 @@ export const getProductNotesForUser = async (
 
 export const getNotesByUser = async (profileId: string) => {
     try {
+        console.warn('api-call - getNotesByUser')
+
         const { data, error } = await supabase
             .from('notes')
             .select(
@@ -54,6 +58,8 @@ export const saveNoteToProduct = async (
     profileId: string
 ) => {
     try {
+        console.warn('api-call - saveNoteToProduct')
+
         const { data, error } = await supabase
             .from('notes')
             .upsert([

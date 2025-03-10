@@ -3,12 +3,13 @@ import { supabase } from '@/src/core/supabase'
 
 export const getProductAverageScores = async (productBarcode: string) => {
     try {
+        console.warn('api-call - getProductAverageScores')
         const { data, error } = await supabase
             .from('product_average_scores')
             .select('product_score_avg')
             .eq('product', productBarcode)
-            .single()
-
+            .maybeSingle()
+        
         if (error) throw error
         if (!data)
             return {
@@ -29,6 +30,7 @@ export const getProductReviewByUser = async (
     userId: string
 ) => {
     try {
+        console.warn('api-call - getProductReviewByUser')
         const { data, error } = await supabase
             .from('reviews')
             .select(
@@ -36,7 +38,7 @@ export const getProductReviewByUser = async (
             )
             .eq('profile', userId)
             .eq('product', barcode)
-            .single()
+            .maybeSingle()
 
         if (error) throw error
 
@@ -53,6 +55,7 @@ export const updateReviewForProduct = async (
     userId: string
 ) => {
     try {
+        console.warn('api-call - updateReviewForProduct')
         const { data, error } = await supabase
             .from('reviews')
             .update([
@@ -83,6 +86,7 @@ export const createNewReviewForProduct = async (
     userId: string
 ) => {
     try {
+        console.warn('api-call - createNewReviewForProduct')
         const { data, error } = await supabase
             .from('reviews')
             .insert([
@@ -106,6 +110,7 @@ export const createNewReviewForProduct = async (
 
 export const getProductReviews = async (barcode: string) => {
     try {
+        console.warn('api-call - getProductReviews')
         const { data, error } = await supabase
             .from('reviews')
             .select('created_at, product_comment, product_score, profile(display_name)')

@@ -12,6 +12,8 @@ export const createNewProduct = async (
     brands: string | null = null
 ) => {
     try {
+        console.warn('api-call - createNewProduct')
+        
         const { data: product, error } = await supabase
             .from('products')
             .insert([
@@ -36,6 +38,8 @@ export const createNewProduct = async (
 
 export const updateProduct = async (product: Product) => {
     try {
+        console.warn('api-call - updateProduct')
+        
         const { data, error } = await supabase
             .from('products')
             .upsert([
@@ -43,7 +47,7 @@ export const updateProduct = async (product: Product) => {
                     barcode: product.barcode,
                     short_description: product.short_description,
                     name: product.name,
-                    brand: product.brand,
+                    brands: product.brands,
                     tags: product.tags,
                 },
             ])
@@ -62,22 +66,25 @@ export const getProductInfoBasic = async (
     barcode: string,
 ) => {
     try {
+        console.warn('api-call - getProductInfoBasic')
+        
         const [{ data: product, error }, scannedProductAverageScores] = await Promise.all([
             supabase
             .from('products')
             .select(`
                 name,
                 barcode,
-                brand,
+                brands,
                 short_description,
                 tags,
                 image_url`)
             .eq('barcode', barcode)
-            .single(),
+            .maybeSingle(),
             getProductAverageScores(barcode),
         ])
 
         if (error) throw error
+        
         if (!product) return null
         
         return {
@@ -93,16 +100,24 @@ export const getProductInfoBasic = async (
 export const getProductInfoWithUserData = async (
     barcode: string,
     userId: string
-): Promise<Product> => {
-    const { data, error } = await supabase
-        .rpc('get_product_details', {
-            p_barcode: barcode,
+): Promise<Product | null> => {
+    try {
+        console.warn('api-call - getProductInfoWithUserData')
+        
+        const { data, error } = await supabase
+            .rpc('get_product_details', {
+                p_barcode: barcode,
             p_user_id: userId
         })
 
-    if (error) throw error
-
-    return data as Product
+        if (error) throw error
+        if (!data.barcode) return null
+        
+        return data as Product
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting product info with user data')
+    }
 }
 
 export const getProductInfoWithUserData_slow = async (
@@ -110,6 +125,8 @@ export const getProductInfoWithUserData_slow = async (
     userId: string
 ): Promise<any | undefined> => {
     try {
+        console.warn('api-call - getProductInfoWithUserData_slow')
+        
         const [{ data, error }, scannedProductAverageScores] = await Promise.all([
             supabase
                 .from('products')
@@ -117,7 +134,7 @@ export const getProductInfoWithUserData_slow = async (
                 `
                     name,
                     barcode,
-                    brand,
+                    brands,
                     short_description,
                     tags,
                     image_url,
@@ -159,7 +176,7 @@ export const getProductInfoWithUserData_slow = async (
         const mappedProduct = {
             barcode: data.barcode,
             name: data.name,
-            brand: data.brand,
+            brands: data.brands,
             short_description: data.short_description,
             tags: data.tags,
             image_url: data.image_url,
@@ -181,6 +198,8 @@ export const createNewProductFromBarcode = async (
     barcodeType: string
 ) => {
     try {
+        console.warn('api-call - createNewProductFromBarcode')
+        
         const openFoodProduct = await getProductInfo(barcode)
         const createdProduct = await createNewProduct(
             barcode,
@@ -195,7 +214,8 @@ export const createNewProductFromBarcode = async (
 
         return {
             ...createdProduct,
-            is_favorite: false,
+            isFav: false,
+            reviews: [],
             product_score_avg: -1,
         } as Product
     } catch (error) {

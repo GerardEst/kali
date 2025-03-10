@@ -3,6 +3,7 @@ export default {
         version: 'Versión',
         unknown: 'Desconocido',
         anonymous: 'Anónimo',
+        loading: 'Cargando...',
     },
     tabs: {
         saved: 'Guardados',

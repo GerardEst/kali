@@ -3,6 +3,7 @@ export default {
         version: 'Versió',
         unknown: 'Desconegut',
         anonymous: 'Anònim',
+        loading: 'Carregant...',
     },
     tabs: {
         saved: 'Guardats',

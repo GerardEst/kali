@@ -5,7 +5,7 @@ import {
     StyleSheet,
     FlatList,
 } from 'react-native'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Sentiments } from '@/src/shared/constants/sentiments'
@@ -19,14 +19,23 @@ interface ReviewsProps {
 }
 
 export default function Reviews({ productScore = -1, barcode }: ReviewsProps) {
+    const [lastBarcode, setLastBarcode] = useState<string | null>(null)
     const [showPopup, setShowPopup] = useState(false)
     const [reviews, setReviews] = useState<Review[]>([])
     const { t } = useTranslation()
+
+    useEffect(() => {
+        if (lastBarcode !== barcode) {
+            setShowPopup(false)
+        }
+    }, [barcode])
+
     const openReviews = async () => {
         setReviews([])
         setShowPopup(!showPopup)
         if (!showPopup) {
             const reviews = await getProductReviews(barcode)
+            setLastBarcode(barcode)
             setReviews(reviews)
         }
     }

@@ -5,7 +5,7 @@ export interface Product {
     barcode: string
     name?: string
     barcode_type?: string
-    brand?: string
+    brands?: string
     short_description?: string
     tags?: string
     image_url?: string
