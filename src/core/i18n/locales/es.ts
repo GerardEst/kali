@@ -2,6 +2,7 @@ export default {
     common: {
         version: 'Versión',
         unknown: 'Desconocido',
+        anonymous: 'Anónimo',
     },
     tabs: {
         saved: 'Guardados',

@@ -1,9 +1,9 @@
-// TODO - Es fan servir les dues interfaces?
+import { Profile } from './Profile'
 
 export interface Review {
     id?: string
     product?: number
-    profile?: string
+    profile?: Profile
     product_score: number
     product_comment: string
 }

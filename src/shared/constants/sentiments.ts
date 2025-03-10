@@ -1,1 +1,1 @@
-export const Sentiments = ['🤬', '😠', '😌', '😄', '-']
+export const Sentiments = ['🤬', '😕', '😌', '😄', '-']

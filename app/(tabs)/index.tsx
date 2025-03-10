@@ -173,27 +173,23 @@ export default function HomeScreen() {
                         {activeProduct && (
                             <Reviews
                                 productScore={activeProduct.product_score_avg}
+                                barcode={activeProduct.barcode}
                             ></Reviews>
                         )}
-                        {activeProduct?.user_review ? (
-                            <GenericButton
-                                style={styles.reviewButton}
-                                text={t('scanner.review.buttonEdit')}
-                                icon="pencil"
-                                action={() => {
-                                    setReviewFormVisible(true)
-                                }}
-                            ></GenericButton>
-                        ) : (
-                            <GenericButton
-                                style={styles.reviewButton}
-                                text={t('scanner.review.buttonAdd')}
-                                icon="plus"
-                                action={() => {
-                                    setReviewFormVisible(true)
-                                }}
-                            ></GenericButton>
-                        )}
+                        <GenericButton
+                            style={styles.reviewButton}
+                            text={
+                                activeProduct?.user_review
+                                    ? t('scanner.review.buttonEdit')
+                                    : t('scanner.review.buttonAdd')
+                            }
+                            icon={
+                                activeProduct?.user_review ? 'pencil' : 'plus'
+                            }
+                            action={() => {
+                                setReviewFormVisible(true)
+                            }}
+                        ></GenericButton>
                     </View>
                     <View style={styles.scannerContent}>
                         <Carousel

@@ -1,19 +1,34 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native'
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    StyleSheet,
+    FlatList,
+} from 'react-native'
 import { useState } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import { Sentiments } from '@/src/shared/constants/sentiments'
 import { SentimentColors } from '@/styles/colors'
-
+import { getProductReviews } from '@/src/api/products/reviews-api'
+import { Review } from '@/src/shared/interfaces/Review'
+import ProductReview from './ProductReview'
 interface ReviewsProps {
     productScore?: number
+    barcode: string
 }
 
-export default function Reviews({ productScore = -1 }: ReviewsProps) {
+export default function Reviews({ productScore = -1, barcode }: ReviewsProps) {
     const [showPopup, setShowPopup] = useState(false)
+    const [reviews, setReviews] = useState<Review[]>([])
     const { t } = useTranslation()
-    const openReviews = () => {
+    const openReviews = async () => {
+        setReviews([])
         setShowPopup(!showPopup)
+        if (!showPopup) {
+            const reviews = await getProductReviews(barcode)
+            setReviews(reviews)
+        }
     }
 
     return (
@@ -39,11 +54,19 @@ export default function Reviews({ productScore = -1 }: ReviewsProps) {
                 </View>
             </TouchableOpacity>
 
-            {/* {showPopup && (
-                <View style={styles.popup}>
-                    <Text></Text>
-                </View>
-            )} */}
+            {showPopup && (
+                <FlatList
+                    style={styles.reviewsPopup}
+                    data={reviews}
+                    renderItem={({ item }) => (
+                        <ProductReview
+                            key={item.id}
+                            profile={item.profile}
+                            review={item}
+                        />
+                    )}
+                />
+            )}
         </>
     )
 }
@@ -84,7 +107,8 @@ const styles = StyleSheet.create({
         color: '#000000',
         marginTop: 2,
     },
-    popup: {
+    reviewsPopup: {
+        width: '80%',
         marginTop: 8,
         padding: 16,
         backgroundColor: '#ffffff',

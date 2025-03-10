@@ -103,3 +103,20 @@ export const createNewReviewForProduct = async (
         throw new Error('Error posting new opinion')
     }
 }
+
+export const getProductReviews = async (barcode: string) => {
+    try {
+        const { data, error } = await supabase
+            .from('reviews')
+            .select('created_at, product_comment, product_score, profile(display_name)')
+            .eq('product', barcode)
+            .order('created_at', { ascending: false })
+
+        if (error) throw error
+
+        return data as Review[]
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting product reviews')
+    }
+}
