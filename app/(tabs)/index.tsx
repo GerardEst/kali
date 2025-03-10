@@ -5,6 +5,8 @@ import {
     Platform,
     StatusBar,
     AppState,
+    Vibration,
+    PermissionsAndroid,
 } from 'react-native'
 import {
     useCameraDevice,
@@ -29,7 +31,6 @@ import {
     createNewProductFromBarcode,
     getProductInfoBasic,
     getProductInfoWithUserData,
-    getProductInfoWithUserData_slow,
 } from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
 export default function HomeScreen() {
@@ -40,10 +41,27 @@ export default function HomeScreen() {
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
+    const [isModalOpen, setIsModalOpen] = useState(false)
     const [activeProduct, setActiveProduct] = useState<Product>()
     const [isCameraActive, setIsCameraActive] = useState(true)
     const { scan } = useScan()
     const appState = useRef(AppState.currentState)
+
+    const vibrate = () => {
+        if (Platform.OS === 'android') {
+            Vibration.vibrate([50, 50, 50, 50], false)
+        } else {
+            Vibration.vibrate()
+        }
+    }
+
+    useEffect(() => {
+        if (reviewFormVisible || noteModalVisible || infoModalVisible) {
+            setIsModalOpen(true)
+        } else {
+            setIsModalOpen(false)
+        }
+    }, [reviewFormVisible, noteModalVisible, infoModalVisible])
 
     useEffect(() => {
         const subscription = AppState.addEventListener(
@@ -70,11 +88,15 @@ export default function HomeScreen() {
     const codeScanner = useCodeScanner({
         codeTypes: supportedBarcodeTypes,
         onCodeScanned: async (codes) => {
+            if (isModalOpen) return
+
             const code = codes[0]
             if (!code.value) return
 
             const scannedCode = scan(code)
             if (!scannedCode?.value) return
+
+            vibrate()
 
             let productInfo
             if (user?.id) {
