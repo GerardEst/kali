@@ -18,7 +18,7 @@ export const getSavedProductsForUser = async (userId: string) => {
         if (error) throw error
 
         return data.map((savedProduct) => {
-            return { ...savedProduct, isFav: true }
+            return { ...savedProduct, is_fav: true }
         })
     } catch (error) {
         console.error(error)

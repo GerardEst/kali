@@ -13,5 +13,5 @@ export interface Product {
     product_score_avg?: number
     user_notes?: Note[]
     user_review?: Review
-    isFav?: Boolean
+    is_fav?: Boolean
 }

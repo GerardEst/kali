@@ -37,7 +37,7 @@ export const ProductInList = ({ product }: { product: Product }) => {
                 )}
             </View>
             <View style={styles.productActions}>
-                {product.isFav && (
+                {product.is_fav && (
                     <GenericButton
                         icon="bookmark-slash"
                         action={() => handleRemove(product)}

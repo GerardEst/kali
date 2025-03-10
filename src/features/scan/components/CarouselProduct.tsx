@@ -50,7 +50,7 @@ export const CarouselProduct = ({
                     </View>
                     {user && (
                         <View style={styles.buttonContainer}>
-                            {product.isFav ? (
+                            {product.is_fav ? (
                                 <GenericButton
                                     icon="bookmark-slash"
                                     fill={true}

@@ -113,6 +113,9 @@ export const getProductInfoWithUserData = async (
         if (error) throw error
         if (!data.barcode) return null
         
+        
+        console.log('data', data)
+
         return data as Product
     } catch (error) {
         console.error(error)
@@ -183,9 +186,10 @@ export const getProductInfoWithUserData_slow = async (
             user_notes: data.notes,
             user_review: data.reviews[0],
             product_score_avg: scannedProductAverageScores.productScore,
-            isFav: data.lists_products.length > 0,
+            is_fav: data.lists_products.length > 0,
         } as Product
         
+
         return mappedProduct
     } catch (error) {
         console.error(error)
@@ -214,7 +218,7 @@ export const createNewProductFromBarcode = async (
 
         return {
             ...createdProduct,
-            isFav: false,
+            is_fav: false,
             reviews: [],
             product_score_avg: -1,
         } as Product
