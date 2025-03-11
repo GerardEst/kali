@@ -1,10 +1,13 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import AntDesign from '@expo/vector-icons/AntDesign'
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6'
 import { Colors } from '@/styles/colors'
 import { useTranslation } from 'react-i18next'
-import Octicons from '@expo/vector-icons/Octicons'
+import {
+    BookmarkIcon,
+    NotesIcon,
+    SearchIcon,
+    SettingsIcon,
+} from '@/src/shared/icons'
 
 export default function TabLayout() {
     const { t } = useTranslation()
@@ -32,9 +35,7 @@ export default function TabLayout() {
                 name="saved-page"
                 options={{
                     title: t('tabs.saved'),
-                    tabBarIcon: ({ color }) => (
-                        <Octicons name="bookmark" size={24} color={color} />
-                    ),
+                    tabBarIcon: ({ color }) => <BookmarkIcon color={color} />,
                     tabBarActiveTintColor: Colors.love,
                 }}
             />
@@ -42,13 +43,7 @@ export default function TabLayout() {
                 name="notes-page"
                 options={{
                     title: t('tabs.notes'),
-                    tabBarIcon: ({ color }) => (
-                        <FontAwesome6
-                            name="sticky-note"
-                            size={24}
-                            color={color}
-                        />
-                    ),
+                    tabBarIcon: ({ color }) => <NotesIcon color={color} />,
                     tabBarActiveTintColor: Colors.primary,
                 }}
             />
@@ -56,9 +51,7 @@ export default function TabLayout() {
                 name="index"
                 options={{
                     title: t('tabs.search'),
-                    tabBarIcon: ({ color }) => (
-                        <AntDesign name="search1" size={24} color={color} />
-                    ),
+                    tabBarIcon: ({ color }) => <SearchIcon color={color} />,
                     tabBarActiveTintColor: Colors.primary,
                 }}
             />
@@ -66,9 +59,7 @@ export default function TabLayout() {
                 name="settings-page"
                 options={{
                     title: t('tabs.options'),
-                    tabBarIcon: ({ color }) => (
-                        <AntDesign size={24} name="setting" color={color} />
-                    ),
+                    tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
                     tabBarActiveTintColor: Colors.primary,
                 }}
             />

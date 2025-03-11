@@ -5,8 +5,8 @@ import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { useTranslation } from 'react-i18next'
 import { Texts } from '@/styles/common'
-import UserNote from '@/src/features/scan/components/UserNote'
-
+import { BookmarkSlashIcon } from '@/src/shared/icons'
+import { Colors } from '@/styles/colors'
 export const ProductInList = ({ product }: { product: Product }) => {
     const { removeFav } = useFavoriteActions()
     const { t } = useTranslation()
@@ -32,14 +32,19 @@ export const ProductInList = ({ product }: { product: Product }) => {
                         {product.short_description}
                     </Text>
                 )}
-                {product.brand && (
-                    <Text style={Texts.lightTitle}>{product.brand}</Text>
+                {product.brands && (
+                    <Text style={Texts.lightTitle}>{product.brands}</Text>
                 )}
             </View>
             <View style={styles.productActions}>
                 {product.is_fav && (
                     <GenericButton
-                        icon="bookmark-slash"
+                        icon={
+                            <BookmarkSlashIcon
+                                size={16}
+                                color={Colors.primary}
+                            />
+                        }
                         action={() => handleRemove(product)}
                     ></GenericButton>
                 )}

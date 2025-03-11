@@ -1,11 +1,4 @@
-import {
-    Pressable,
-    StyleSheet,
-    View,
-    Text,
-    ActivityIndicator,
-} from 'react-native'
-import Octicons from '@expo/vector-icons/Octicons'
+import { Pressable, StyleSheet, Text, ActivityIndicator } from 'react-native'
 import { Colors, ButtonColors } from '@/styles/colors'
 import React from 'react'
 
@@ -14,7 +7,7 @@ interface genericButton {
     type?: 'normal' | 'danger' | 'success'
     action?: any
     fill?: boolean
-    icon?: any
+    icon?: React.ReactElement
     text?: string
     disabled?: boolean
 }
@@ -28,6 +21,8 @@ export const GenericButton = ({
     text,
     disabled,
 }: genericButton) => {
+    const iconColor = fill ? 'white' : Colors.primary
+
     return (
         <Pressable
             disabled={disabled}
@@ -50,20 +45,9 @@ export const GenericButton = ({
                 />
             ) : (
                 <>
-                    {icon && (
-                        <Octicons
-                            name={icon}
-                            size={18}
-                            color={fill ? 'white' : Colors.primary}
-                        />
-                    )}
+                    {icon && React.cloneElement(icon, { fill: iconColor })}
                     {text && (
-                        <Text
-                            style={[
-                                styles.text,
-                                { color: fill ? 'white' : Colors.primary },
-                            ]}
-                        >
+                        <Text style={[styles.text, { color: iconColor }]}>
                             {text}
                         </Text>
                     )}

@@ -8,7 +8,8 @@ import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
 import { updateProductUsecase } from '../usecases/updateProduct'
-
+import { CheckIcon } from '@/src/shared/icons'
+import { Colors } from '@/styles/colors'
 export function UpdateProductInfoModal({
     visible,
     product,
@@ -71,11 +72,11 @@ export function UpdateProductInfoModal({
                             style={styles.opinion}
                         />
                         <TextInput
-                            value={formProduct.brand}
+                            value={formProduct.brands}
                             editable
                             placeholder="Marca"
                             onChangeText={(text) =>
-                                setFormProduct({ ...formProduct, brand: text })
+                                setFormProduct({ ...formProduct, brands: text })
                             }
                             style={styles.opinion}
                         />
@@ -92,7 +93,12 @@ export function UpdateProductInfoModal({
                         <View style={styles.modalFooter}>
                             <GenericButton
                                 text="Publicar"
-                                icon="check"
+                                icon={
+                                    <CheckIcon
+                                        size={16}
+                                        color={Colors.primary}
+                                    />
+                                }
                                 type="success"
                                 action={() => onSaveProduct()}
                                 disabled={isLoading}

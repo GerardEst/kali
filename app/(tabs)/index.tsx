@@ -33,6 +33,8 @@ import {
     getProductInfoWithUserData,
 } from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
+import { PencilIcon, PlusIcon } from '@/src/shared/icons'
+import { Colors } from '@/styles/colors'
 export default function HomeScreen() {
     const { t } = useTranslation()
     const { user } = useAuthState()
@@ -185,7 +187,14 @@ export default function HomeScreen() {
                                     : t('scanner.review.buttonAdd')
                             }
                             icon={
-                                activeProduct?.user_review ? 'pencil' : 'plus'
+                                activeProduct?.user_review ? (
+                                    <PencilIcon />
+                                ) : (
+                                    <PlusIcon
+                                        size={16}
+                                        color={Colors.primary}
+                                    />
+                                )
                             }
                             action={() => {
                                 setReviewFormVisible(true)

@@ -3,6 +3,7 @@ import { Texts } from '@/styles/common'
 import { GenericButton } from './buttons/GenericButton'
 import { Colors } from '@/styles/colors'
 import { Note } from '../interfaces/Note'
+import { PencilIcon } from '../icons'
 
 interface UserNoteComponent {
     title?: string
@@ -29,7 +30,7 @@ export const UserNote = ({
                 <GenericButton
                     style={styles.modifyButton}
                     text="Modificar"
-                    icon="pencil"
+                    icon={<PencilIcon />}
                     action={() => {}}
                 ></GenericButton>
             )}

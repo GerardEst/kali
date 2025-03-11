@@ -1,10 +1,4 @@
-import {
-    View,
-    Text,
-    TouchableOpacity,
-    StyleSheet,
-    FlatList,
-} from 'react-native'
+import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native'
 import { useState, useEffect } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -42,7 +36,7 @@ export default function Reviews({ productScore = -1, barcode }: ReviewsProps) {
 
     return (
         <>
-            <TouchableOpacity onPress={openReviews} style={styles.container}>
+            <Pressable onPress={openReviews} style={styles.container}>
                 <View
                     style={[
                         styles.scoreContainer,
@@ -61,7 +55,7 @@ export default function Reviews({ productScore = -1, barcode }: ReviewsProps) {
                         {t('evaluateProduct.product')}
                     </Text>
                 </View>
-            </TouchableOpacity>
+            </Pressable>
 
             {showPopup && (
                 <FlatList

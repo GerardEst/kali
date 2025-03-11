@@ -5,7 +5,7 @@ describe('scannedProductsState', () => {
         barcode: '123456789',
         name: 'Test Product',
         short_description: 'Test Description',
-        brand: 'Test Brand',
+        brands: 'Test Brand',
         tags: 'test,product',
     }
 

@@ -9,6 +9,8 @@ import { Note } from '@/src/shared/interfaces/Note'
 import React, { useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import UserNote from '@/src/features/scan/components/UserNote'
+import { BookmarkSlashIcon, BookmarkIcon, PlusIcon } from '@/src/shared/icons'
+import { Colors } from '@/styles/colors'
 
 interface CarouselProductProps {
     onUpdateProductInfo: (barcode: string) => void
@@ -52,24 +54,36 @@ export const CarouselProduct = ({
                         <View style={styles.buttonContainer}>
                             {product.is_fav ? (
                                 <GenericButton
-                                    icon="bookmark-slash"
+                                    icon={<BookmarkSlashIcon size={16} />}
                                     fill={true}
                                     action={() => handleRemove(product)}
                                 ></GenericButton>
                             ) : (
                                 <GenericButton
-                                    icon="bookmark"
+                                    icon={
+                                        <BookmarkIcon
+                                            size={16}
+                                            color={Colors.primary}
+                                        />
+                                    }
                                     action={() => handleAdd(product)}
                                 ></GenericButton>
                             )}
                             <GenericButton
-                                icon="plus"
+                                icon={
+                                    <PlusIcon
+                                        size={16}
+                                        color={Colors.primary}
+                                    />
+                                }
                                 action={() => onAddNote(product.barcode)}
                             ></GenericButton>
                         </View>
                     )}
                 </View>
                 <View style={styles.cardContent}>
+                    {/* Aquet scrollView hauria de ser un flatlist perque scrollview no va bé 
+                    per coses dinamiques, ho renderitza tot tot el rato */}
                     <ScrollView style={styles.cardContentNotes}>
                         {product ? (
                             PRODUCT_HAS_NOTES ? (

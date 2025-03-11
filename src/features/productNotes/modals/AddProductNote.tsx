@@ -8,6 +8,8 @@ import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useSaveNote } from '../usecases/saveNote'
+import { CheckIcon } from '@/src/shared/icons'
+import { Colors } from '@/styles/colors'
 
 export function AddProductNoteModal({
     visible,
@@ -58,7 +60,12 @@ export function AddProductNoteModal({
                         <View style={styles.modalFooter}>
                             <GenericButton
                                 text="Guardar"
-                                icon="check"
+                                icon={
+                                    <CheckIcon
+                                        size={16}
+                                        color={Colors.primary}
+                                    />
+                                }
                                 type="success"
                                 action={() => onSaveNote()}
                                 disabled={isLoading}
