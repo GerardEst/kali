@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next'
 import UserNote from '@/src/features/scan/components/UserNote'
 import { BookmarkSlashIcon, BookmarkIcon, PlusIcon } from '@/src/shared/icons'
 import { Colors } from '@/styles/colors'
+import { Link } from 'expo-router'
 
 interface CarouselProductProps {
     onUpdateProductInfo: (barcode: string) => void
@@ -78,6 +79,7 @@ export const CarouselProduct = ({
                                 }
                                 action={() => onAddNote(product.barcode)}
                             ></GenericButton>
+                            <Link href={`/${product.barcode}`}>See</Link>
                         </View>
                     )}
                 </View>

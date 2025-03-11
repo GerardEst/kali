@@ -1,4 +1,11 @@
-import { StyleSheet, View, Text, FlatList, Image } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    Text,
+    FlatList,
+    Image,
+    Pressable,
+} from 'react-native'
 import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pages, Texts } from '@/styles/common'
@@ -8,6 +15,8 @@ import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { useListsState } from '@/src/store/listsState'
 import { ProductInList } from '@/src/features/saved-page/components/ProductInList'
 import { useTranslation } from 'react-i18next'
+import { Link } from 'expo-router'
+
 export default function Saved() {
     const { user } = useAuthState()
     const { favs, setUserFavs } = useListsState()
@@ -33,9 +42,15 @@ export default function Saved() {
                         data={favs}
                         keyExtractor={(product) => product.barcode.toString()}
                         renderItem={({ item }) => (
-                            <View style={styles.userProduct}>
-                                <ProductInList product={item}></ProductInList>
-                            </View>
+                            <Link asChild href={`/${item.barcode}`}>
+                                <Pressable>
+                                    <View style={styles.userProduct}>
+                                        <ProductInList
+                                            product={item}
+                                        ></ProductInList>
+                                    </View>
+                                </Pressable>
+                            </Link>
                         )}
                         ListEmptyComponent={
                             <Text>{t('saved.emptyState')}</Text>

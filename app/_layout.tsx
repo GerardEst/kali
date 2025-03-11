@@ -44,6 +44,13 @@ export default function RootLayout() {
         <ThemeProvider value={DefaultTheme}>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                    name="[productBarcode]"
+                    options={{
+                        title: 'Product',
+                        headerBackTitle: 'Saved',
+                    }}
+                />
                 <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="auto" />
