@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Pressable, TextInput } from 'react-native'
 import CustomModal from '@/src/shared/components/customModal'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/src/store/authState'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
@@ -24,6 +24,10 @@ export function UpdateProductInfoModal({
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [formProduct, setFormProduct] = useState<Product>(product)
     const { updateProduct } = updateProductUsecase()
+
+    useEffect(() => {
+        setFormProduct(product)
+    }, [product])
 
     const onSaveProduct = async () => {
         setIsLoading(true)
