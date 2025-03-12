@@ -6,7 +6,6 @@ import {
     StatusBar,
     AppState,
     Vibration,
-    PermissionsAndroid,
 } from 'react-native'
 import {
     useCameraDevice,
@@ -33,7 +32,7 @@ import {
     getProductInfoWithUserData,
 } from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
-
+import { CarouselItem } from '@/src/features/scan/interfaces/carousel'
 export default function HomeScreen() {
     const { t } = useTranslation()
     const { user } = useAuthState()
@@ -129,11 +128,6 @@ export default function HomeScreen() {
                 productInfo = newProduct
             }
 
-            // TODO - Corregir d'una vegada el problema amb el carousel, que a la primera apareix de 0
-            // a la segona també apareix de 0, i a partir de la tercera apareix bé.
-            // Un cop corregit això, es pot treure aquet setActiveProduct perquè el que farà la feina
-            // serà el onProductVisible del carousel
-            setActiveProduct(productInfo)
             addScannedProduct(productInfo)
         },
     })
@@ -202,16 +196,27 @@ export default function HomeScreen() {
                     </View>
                     <View style={styles.scannerContent}>
                         <Carousel
-                            onProductVisible={(product: Product) => {
-                                setActiveProduct(product)
+                            onProductVisible={(product: CarouselItem) => {
+                                if ('isLastItem' in product) {
+                                    setActiveProduct(undefined)
+                                } else {
+                                    setActiveProduct(product)
+                                }
                             }}
-                            onUpdateProductInfo={(barcode: string) => {
+                            onUpdateProductInfo={() => {
                                 setInfoModalVisible(true)
                             }}
-                            onAddNote={(barcode: string) => {
+                            onAddNote={() => {
                                 setNoteModalVisible(true)
                             }}
                             products={products}
+                            firstElement={
+                                <View style={styles.customFirstElement}>
+                                    <Text style={styles.customFirstElementText}>
+                                        {t('scanner_carousel_noMoreProducts')}
+                                    </Text>
+                                </View>
+                            }
                         ></Carousel>
                     </View>
                 </>
@@ -283,5 +288,17 @@ const styles = StyleSheet.create({
     },
     permissionButton: {
         width: '80%',
+    },
+    customFirstElement: {
+        display: 'flex',
+        justifyContent: 'center',
+        width: '95%',
+        height: 250,
+        backgroundColor: 'white',
+        padding: 10,
+        borderRadius: 10,
+    },
+    customFirstElementText: {
+        textAlign: 'center',
     },
 })

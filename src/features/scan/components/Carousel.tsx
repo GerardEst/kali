@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef } from 'react'
 import {
     Dimensions,
     View,
@@ -12,13 +12,21 @@ import {
 import { CarouselProduct } from './CarouselProduct'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
+import { CarouselItem } from '../interfaces/carousel'
 
 export const Carousel = ({
     onProductVisible,
     onUpdateProductInfo,
     onAddNote,
     products,
-}: any) => {
+    firstElement,
+}: {
+    onProductVisible: (product: Product) => void
+    onUpdateProductInfo: (barcode: string) => void
+    onAddNote: (barcode: string) => void
+    products: Product[]
+    firstElement?: React.ReactNode
+}) => {
     const { width } = Dimensions.get('window')
     const { scannedCount } = useScannedProductsState()
     const flatListRef = useRef<FlatList>(null)
@@ -26,11 +34,8 @@ export const Carousel = ({
     const slideInAnim = useAnimatedValue(50)
     const scrollXRef = useRef(0)
 
-    // Initialize scroll position
-
     useEffect(() => {
         if (scannedCount > 1) {
-            // When a new item is scanned, first scroll to position 1 instantly
             flatListRef.current?.scrollToIndex({
                 index: 1,
                 animated: false,
@@ -44,10 +49,6 @@ export const Carousel = ({
 
             fadeIn()
         } else {
-            flatListRef.current?.scrollToIndex({
-                index: 0,
-                animated: true,
-            })
             fadeIn()
         }
     }, [scannedCount])
@@ -85,35 +86,50 @@ export const Carousel = ({
     }
 
     const renderItem = ({
-        item: product,
+        item,
         index,
     }: {
-        item: Product
+        item: CarouselItem
         index: number
-    }) => (
-        <Animated.View
-            style={[
-                styles.slide,
-                { width },
-                {
-                    opacity: index === 0 ? fadeInAnim : 1,
-                    transform: index === 0 ? [{ translateY: slideInAnim }] : [],
-                },
-            ]}
-        >
-            <CarouselProduct
-                onUpdateProductInfo={onUpdateProductInfo}
-                onAddNote={onAddNote}
-                product={product}
-            />
-        </Animated.View>
-    )
+    }) => {
+        if ('isLastItem' in item) {
+            return (
+                <View style={[styles.customSlide, { width }]}>
+                    {item.element}
+                </View>
+            )
+        }
+
+        return (
+            <Animated.View
+                style={[
+                    styles.slide,
+                    { width },
+                    {
+                        opacity: index === 0 ? fadeInAnim : 1,
+                        transform:
+                            index === 0 ? [{ translateY: slideInAnim }] : [],
+                    },
+                ]}
+            >
+                <CarouselProduct
+                    onUpdateProductInfo={onUpdateProductInfo}
+                    onAddNote={onAddNote}
+                    product={item}
+                />
+            </Animated.View>
+        )
+    }
+
+    const carouselData: CarouselItem[] = firstElement
+        ? [...products, { isLastItem: true as const, element: firstElement }]
+        : products
 
     return (
         <View style={styles.container}>
             <FlatList
                 ref={flatListRef}
-                data={products}
+                data={carouselData}
                 renderItem={renderItem}
                 horizontal
                 pagingEnabled
@@ -140,5 +156,10 @@ const styles = StyleSheet.create({
     },
     slide: {
         alignItems: 'center',
+    },
+    customSlide: {
+        marginTop: 'auto',
+        alignItems: 'center',
+        height: 250,
     },
 })
