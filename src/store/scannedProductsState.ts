@@ -10,7 +10,7 @@ interface ScannedProductsState {
     updateScannedProduct: (product: Product) => void
     upsertUserReview: (barcode: string, user_review: Review) => void
     setUserNotes: (barcode: string, notes: Note[]) => void
-    addUserNote: (barcode: string, noteText: string) => void
+    addUserNoteToScannedProduct: (note: Note) => void
 }
 
 export const useScannedProductsState = create<ScannedProductsState>((set) => ({
@@ -76,32 +76,31 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
                 products: state.products.map((product: Product) =>
                     product.barcode == barcode
                         ? {
-                              ...product,
-                              user_notes: notes,
-                          }
+                            ...product,
+                            user_notes: notes,
+                        }
                         : product
                 ),
             }
         }),
 
-    addUserNote: (barcode: string, noteText: string) =>
+    addUserNoteToScannedProduct: (note: Note) =>
         //@ts-ignore
         set((state) => {
             return {
                 products: state.products.map((product: Product) =>
-                    product.barcode == barcode
+                    product.barcode == note.product
                         ? {
                               ...product,
                               // TODO - Estic casi segur de que això està malament
                               user_notes: [
+                                  {
+                                      created_at: note.created_at,
+                                      product: note.product,
+                                      note: note.note,
+                                    },
                                   //@ts-ignore
                                   ...product.user_notes,
-                                  {
-                                      created_at: '',
-                                      product: barcode,
-                                      note: noteText,
-                                      profile: '',
-                                  },
                               ],
                           }
                         : product

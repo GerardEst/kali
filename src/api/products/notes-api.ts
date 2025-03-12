@@ -13,6 +13,7 @@ export const getProductNotesForUser = async (
             .select('note, created_at')
             .eq('profile', profileId)
             .eq('product', productBarcode)
+            .order('created_at', { ascending: false })
 
         if (error) throw error
 
@@ -40,6 +41,7 @@ export const getNotesByUser = async (profileId: string) => {
             `
             )
             .eq('profile', profileId)
+            .order('created_at', { ascending: false })
 
         if (error) throw error
 

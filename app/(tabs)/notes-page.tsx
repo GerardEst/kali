@@ -21,7 +21,7 @@ export default function Notes() {
         getNotesByUser(userId).then((data) => {
             setUserNotes(data)
         })
-    }, [user])
+    }, [])
 
     return (
         <SafeAreaView style={Pages}>

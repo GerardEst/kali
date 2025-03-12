@@ -1,11 +1,13 @@
 import { Product } from '@/src/shared/interfaces/Product'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
+import { useUserNotesState } from '@/src/store/userNotesState'
 import { saveNoteToProduct as saveNoteToProductApi } from '@/src/api/products/notes-api'
 import { useAuthState } from '@/src/store/authState'
 
 export const useSaveNote = () => {
     const { user } = useAuthState()
-    const { addUserNote } = useScannedProductsState()
+    const { addUserNoteToScannedProduct } = useScannedProductsState()
+    const { addUserNote } = useUserNotesState()
 
     const saveNoteToProduct = async (product: Product, note: string) => {
         if (!user) {
@@ -13,15 +15,29 @@ export const useSaveNote = () => {
         }
 
         // Guardar la nota a la db
-        const savedProduct = await saveNoteToProductApi(
+        const savedNote = await saveNoteToProductApi(
             product.barcode,
             note,
             user.id
         )
 
-        // Afegir a l'estat de productes escanejats
-        if (savedProduct) {
-            addUserNote(product.barcode, note)
+        if (savedNote) {
+            // Afegir a l'estat de productes escanejats
+            addUserNoteToScannedProduct({
+                id: savedNote.id,
+                product: product.barcode,
+                note: note,
+                created_at: savedNote.created_at,
+            })
+
+            // Afegir a l'estat de les notes de l'usuari
+            addUserNote({
+                id: savedNote.id,
+                created_at: savedNote.created_at,
+                product: product.barcode,
+                note: note,
+            })
+
             return true
         }
 

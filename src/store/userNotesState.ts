@@ -4,6 +4,7 @@ import { Note } from '../shared/interfaces/Note'
 interface UserNotesState {
     notes: Note[]
     setUserNotes: (notes: Note[]) => void
+    addUserNote: (note: Note) => void
 }
 
 export const useUserNotesState = create<UserNotesState>((set) => ({
@@ -15,5 +16,11 @@ export const useUserNotesState = create<UserNotesState>((set) => ({
                 notes: notes,
             }
         })
+    },
+
+    addUserNote: (note: Note) => {
+        set((state) => ({
+            notes: [note, ...state.notes],
+        }))
     },
 }))
