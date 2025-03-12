@@ -27,7 +27,7 @@ export const useListsState = create<any>((set) => ({
         //@ts-ignore
         set((state) => {
             return {
-                favs: [...state.favs, product],
+                favs: [product, ...state.favs],
             }
         })
     },

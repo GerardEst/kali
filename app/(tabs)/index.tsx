@@ -58,6 +58,18 @@ export default function HomeScreen() {
     }
 
     useEffect(() => {
+        // If products from scannedProducts store change,
+        // we need to update the activeProduct in case it's the
+        // one that changed
+        if (activeProduct) {
+            const newActiveProduct = products.find(
+                (product) => product.barcode === activeProduct.barcode
+            )
+            setActiveProduct(newActiveProduct)
+        }
+    }, [products])
+
+    useEffect(() => {
         if (reviewFormVisible || noteModalVisible || infoModalVisible) {
             setIsModalOpen(true)
         } else {
@@ -188,7 +200,10 @@ export default function HomeScreen() {
                             }
                             icon={
                                 activeProduct?.user_review ? (
-                                    <PencilIcon />
+                                    <PencilIcon
+                                        size={16}
+                                        color={Colors.primary}
+                                    />
                                 ) : (
                                     <PlusIcon
                                         size={16}

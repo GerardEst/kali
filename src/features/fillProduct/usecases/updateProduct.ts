@@ -9,7 +9,6 @@ export const updateProductUsecase = () => {
         const updatedProduct = await updateProductApi(product)
 
         if (updatedProduct) {
-            // Actualitzem la store afegint el product + el cambi que acabem de fer
             updateScannedProduct({ ...product, ...updatedProduct })
             return true
         }

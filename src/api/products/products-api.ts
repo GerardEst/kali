@@ -112,9 +112,6 @@ export const getProductInfoWithUserData = async (
 
         if (error) throw error
         if (!data.barcode) return null
-        
-        
-        console.log('data', data)
 
         return data as Product
     } catch (error) {
