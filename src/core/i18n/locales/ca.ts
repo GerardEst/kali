@@ -1,4 +1,6 @@
 export default {
+    ownReview: 'La teva opinió',
+    otherReviews: 'La opinió general',
     common: {
         version: 'Versió',
         unknown: 'Desconegut',

@@ -33,8 +33,7 @@ import {
     getProductInfoWithUserData,
 } from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
-import { PencilIcon, PlusIcon } from '@/src/shared/icons'
-import { Colors } from '@/styles/colors'
+
 export default function HomeScreen() {
     const { t } = useTranslation()
     const { user } = useAuthState()
@@ -130,6 +129,11 @@ export default function HomeScreen() {
                 productInfo = newProduct
             }
 
+            // TODO - Corregir d'una vegada el problema amb el carousel, que a la primera apareix de 0
+            // a la segona també apareix de 0, i a partir de la tercera apareix bé.
+            // Un cop corregit això, es pot treure aquet setActiveProduct perquè el que farà la feina
+            // serà el onProductVisible del carousel
+            setActiveProduct(productInfo)
             addScannedProduct(productInfo)
         },
     })
@@ -189,32 +193,12 @@ export default function HomeScreen() {
                             <Reviews
                                 productScore={activeProduct.product_score_avg}
                                 barcode={activeProduct.barcode}
+                                userReview={activeProduct.user_review}
+                                onEditReview={() => {
+                                    setReviewFormVisible(true)
+                                }}
                             ></Reviews>
                         )}
-                        <GenericButton
-                            style={styles.reviewButton}
-                            text={
-                                activeProduct?.user_review
-                                    ? t('scanner.review.buttonEdit')
-                                    : t('scanner.review.buttonAdd')
-                            }
-                            icon={
-                                activeProduct?.user_review ? (
-                                    <PencilIcon
-                                        size={16}
-                                        color={Colors.primary}
-                                    />
-                                ) : (
-                                    <PlusIcon
-                                        size={16}
-                                        color={Colors.primary}
-                                    />
-                                )
-                            }
-                            action={() => {
-                                setReviewFormVisible(true)
-                            }}
-                        ></GenericButton>
                     </View>
                     <View style={styles.scannerContent}>
                         <Carousel
