@@ -60,8 +60,6 @@ export default {
     carousel: {
         addNote:
             'Añade notas al producto! Puedes apuntar lo que quieras y recordarlo siempre que escanees (o ir directamente a la lista de notas).',
-        addNoteDetail: '😊 Estos cereales son los que le gustan a mi pareja',
-        addNoteDetailNegative: '😡 No comprar nunca más esta marca!',
     },
     evaluateProduct: {
         product: 'Producto',

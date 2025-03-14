@@ -109,16 +109,6 @@ export const CarouselProduct = ({
                             ) : (
                                 <View>
                                     <Text>{t('carousel.addNote')}</Text>
-                                    <Text
-                                        style={[Texts.lightTitle, Texts.italic]}
-                                    >
-                                        {t('carousel.addNoteDetail')}
-                                    </Text>
-                                    <Text
-                                        style={[Texts.lightTitle, Texts.italic]}
-                                    >
-                                        {t('carousel.addNoteDetailNegative')}
-                                    </Text>
                                 </View>
                             )
                         ) : (
