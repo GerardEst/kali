@@ -1,4 +1,10 @@
-import { Pressable, StyleSheet, Text, ActivityIndicator } from 'react-native'
+import {
+    Pressable,
+    StyleSheet,
+    Text,
+    ActivityIndicator,
+    View,
+} from 'react-native'
 import { Colors, ButtonColors } from '@/styles/colors'
 import React from 'react'
 
@@ -10,6 +16,7 @@ interface genericButton {
     icon?: React.ReactElement
     text?: string
     disabled?: boolean
+    nonPressable?: Boolean
 }
 
 export const GenericButton = ({
@@ -20,8 +27,42 @@ export const GenericButton = ({
     icon,
     text,
     disabled,
+    nonPressable,
 }: genericButton) => {
     const iconColor = fill ? 'white' : Colors.primary
+
+    if (nonPressable) {
+        return (
+            <View
+                style={[
+                    styles.button,
+                    disabled && styles.buttonDisabled,
+                    {
+                        backgroundColor: fill
+                            ? ButtonColors[type || 'normal']
+                            : Colors.primaryLight,
+                    },
+                    style,
+                ]}
+            >
+                {disabled ? (
+                    <ActivityIndicator
+                        color={fill ? 'white' : Colors.primary}
+                        size="small"
+                    />
+                ) : (
+                    <>
+                        {icon && React.cloneElement(icon, { fill: iconColor })}
+                        {text && (
+                            <Text style={[styles.text, { color: iconColor }]}>
+                                {text}
+                            </Text>
+                        )}
+                    </>
+                )}
+            </View>
+        )
+    }
 
     return (
         <Pressable

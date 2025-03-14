@@ -2,6 +2,8 @@ export default {
     ownReview: 'La teva opinió',
     otherReviews: 'Opinió general',
     scanner_carousel_noMoreProducts: 'No tens més productes escanejats',
+    product_addNote: 'Crear una nota',
+    product_open: 'Obrir',
     common: {
         version: 'Versió',
         unknown: 'Desconegut',

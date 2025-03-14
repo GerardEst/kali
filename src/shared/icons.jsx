@@ -16,6 +16,10 @@ export const NotesIcon = (props) => {
     )
 }
 
+export const OpenIcon = (props) => {
+    return <AntDesign name="select1" size={24} color="white" {...props} />
+}
+
 export const SearchIcon = (props) => {
     return <AntDesign name="search1" size={24} color="white" {...props} />
 }

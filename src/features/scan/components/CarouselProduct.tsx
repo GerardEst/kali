@@ -1,14 +1,19 @@
-import { View, Text, StyleSheet, Button, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { useAuthState } from '@/src/store/authState'
 import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { Product } from '@/src/shared/interfaces/Product'
 import { Note } from '@/src/shared/interfaces/Note'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { useTranslation } from 'react-i18next'
 import UserNote from '@/src/features/scan/components/UserNote'
-import { BookmarkSlashIcon, BookmarkIcon, PlusIcon } from '@/src/shared/icons'
+import {
+    BookmarkSlashIcon,
+    BookmarkIcon,
+    NotesIcon,
+    OpenIcon,
+} from '@/src/shared/icons'
 import { Colors } from '@/styles/colors'
 import { Link } from 'expo-router'
 
@@ -69,16 +74,20 @@ export const CarouselProduct = ({
                                     action={() => handleAdd(product)}
                                 ></GenericButton>
                             )}
-                            <GenericButton
-                                icon={
-                                    <PlusIcon
-                                        size={16}
-                                        color={Colors.primary}
-                                    />
-                                }
-                                action={() => onAddNote(product.barcode)}
-                            ></GenericButton>
-                            <Link href={`/${product.barcode}`}>See</Link>
+                            <Link asChild href={`/${product.barcode}`}>
+                                <Pressable>
+                                    <GenericButton
+                                        nonPressable
+                                        icon={
+                                            <OpenIcon
+                                                size={16}
+                                                color={Colors.primary}
+                                            />
+                                        }
+                                        text={t('product_open')}
+                                    ></GenericButton>
+                                </Pressable>
+                            </Link>
                         </View>
                     )}
                 </View>
@@ -116,15 +125,30 @@ export const CarouselProduct = ({
                             <Text>{t('common.loading')}</Text>
                         )}
                     </ScrollView>
-                    <View style={styles.cardFooter}>
+                </View>
+                <View style={styles.cardFooter}>
+                    <View style={styles.optionButtons}>
                         {user?.isAdmin && (
-                            <Button
-                                onPress={() =>
+                            <GenericButton
+                                style={styles.updateButton}
+                                action={() =>
                                     onUpdateProductInfo(product.barcode)
                                 }
-                                title="Update"
-                            ></Button>
+                                text="Admin"
+                            ></GenericButton>
                         )}
+                        <View style={styles.productOptions}>
+                            <GenericButton
+                                icon={
+                                    <NotesIcon
+                                        size={16}
+                                        color={Colors.primary}
+                                    />
+                                }
+                                text={t('product_addNote')}
+                                action={() => onAddNote(product.barcode)}
+                            ></GenericButton>
+                        </View>
                     </View>
                 </View>
             </View>
@@ -149,6 +173,16 @@ const styles = StyleSheet.create({
         position: 'absolute',
         bottom: 0,
     },
+    optionButtons: {
+        flexDirection: 'row',
+        gap: 10,
+        justifyContent: 'space-between',
+        width: '100%',
+    },
+    productOptions: {
+        flexDirection: 'row',
+        gap: 10,
+    },
     card: {
         height: 250,
         borderRadius: 10,
@@ -165,6 +199,9 @@ const styles = StyleSheet.create({
     productTitle: {
         flex: 1,
     },
+    updateButton: {
+        flexDirection: 'row',
+    },
     buttonContainer: {
         marginLeft: 'auto',
         flexDirection: 'row',
@@ -173,7 +210,6 @@ const styles = StyleSheet.create({
     },
     cardContent: {
         flexDirection: 'column',
-        gap: 15,
         display: 'flex',
         flex: 1,
     },
@@ -190,5 +226,10 @@ const styles = StyleSheet.create({
     },
     cardContentNote: {
         marginBottom: 10,
+    },
+    seeButton: {
+        backgroundColor: Colors.primary,
+        padding: 10,
+        borderRadius: 10,
     },
 })
