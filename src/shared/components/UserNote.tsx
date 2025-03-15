@@ -3,7 +3,7 @@ import { Texts } from '@/styles/common'
 import { GenericButton } from './buttons/GenericButton'
 import { Colors } from '@/styles/colors'
 import { Note } from '../interfaces/Note'
-import { PencilIcon } from '../icons'
+import { PencilIcon } from '../icons/icons'
 
 interface UserNoteComponent {
     title?: string

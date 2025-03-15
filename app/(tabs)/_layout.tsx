@@ -7,7 +7,7 @@ import {
     NotesIcon,
     SearchIcon,
     SettingsIcon,
-} from '@/src/shared/icons'
+} from '@/src/shared/icons/icons'
 
 export default function TabLayout() {
     const { t } = useTranslation()

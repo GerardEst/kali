@@ -8,7 +8,7 @@ import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
 import { updateProductUsecase } from '../usecases/updateProduct'
-import { CheckIcon } from '@/src/shared/icons'
+import { CheckIcon } from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
 export function UpdateProductInfoModal({
     visible,

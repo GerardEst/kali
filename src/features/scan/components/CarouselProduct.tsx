@@ -13,7 +13,7 @@ import {
     BookmarkIcon,
     NotesIcon,
     OpenIcon,
-} from '@/src/shared/icons'
+} from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
 import { Link } from 'expo-router'
 

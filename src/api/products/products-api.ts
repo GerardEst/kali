@@ -9,11 +9,13 @@ export const createNewProduct = async (
     productName: string | null = null,
     imageUrl: string | null = null,
     tags: string | null = null,
-    brands: string | null = null
+    brands: string | null = null,
+    nutriscore_grade: string | null = null,
+    nutriscore_version: string | null = null
 ) => {
     try {
         console.warn('api-call - createNewProduct')
-        
+
         const { data: product, error } = await supabase
             .from('products')
             .insert([
@@ -24,6 +26,8 @@ export const createNewProduct = async (
                     image_url: imageUrl,
                     tags: tags,
                     brands: brands,
+                    nutriscore_grade: nutriscore_grade,
+                    nutriscore_version: nutriscore_version,
                 },
             ])
             .select()
@@ -39,7 +43,7 @@ export const createNewProduct = async (
 export const updateProduct = async (product: Product) => {
     try {
         console.warn('api-call - updateProduct')
-        
+
         const { data, error } = await supabase
             .from('products')
             .upsert([
@@ -62,31 +66,34 @@ export const updateProduct = async (product: Product) => {
     }
 }
 
-export const getProductInfoBasic = async (
-    barcode: string,
-) => {
+export const getProductInfoBasic = async (barcode: string) => {
     try {
         console.warn('api-call - getProductInfoBasic')
-        
-        const [{ data: product, error }, scannedProductAverageScores] = await Promise.all([
-            supabase
-            .from('products')
-            .select(`
-                name,
-                barcode,
-                brands,
-                short_description,
-                tags,
-                image_url`)
-            .eq('barcode', barcode)
-            .maybeSingle(),
-            getProductAverageScores(barcode),
-        ])
+
+        const [{ data: product, error }, scannedProductAverageScores] =
+            await Promise.all([
+                supabase
+                    .from('products')
+                    .select(
+                        `
+                        name,
+                        barcode,
+                        brands,
+                        short_description,
+                        tags,
+                        image_url,
+                        nutriscore_grade
+                    `
+                    )
+                    .eq('barcode', barcode)
+                    .maybeSingle(),
+                getProductAverageScores(barcode),
+            ])
 
         if (error) throw error
-        
+
         if (!product) return null
-        
+
         return {
             ...product,
             product_score_avg: scannedProductAverageScores.productScore,
@@ -103,11 +110,10 @@ export const getProductInfoWithUserData = async (
 ): Promise<Product | null> => {
     try {
         console.warn('api-call - getProductInfoWithUserData')
-        
-        const { data, error } = await supabase
-            .rpc('get_product_details', {
-                p_barcode: barcode,
-            p_user_id: userId
+
+        const { data, error } = await supabase.rpc('get_product_details', {
+            p_barcode: barcode,
+            p_user_id: userId,
         })
 
         if (error) throw error
@@ -126,12 +132,13 @@ export const getProductInfoWithUserData_slow = async (
 ): Promise<any | undefined> => {
     try {
         console.warn('api-call - getProductInfoWithUserData_slow')
-        
-        const [{ data, error }, scannedProductAverageScores] = await Promise.all([
-            supabase
-                .from('products')
-                .select(
-                `
+
+        const [{ data, error }, scannedProductAverageScores] =
+            await Promise.all([
+                supabase
+                    .from('products')
+                    .select(
+                        `
                     name,
                     barcode,
                     brands,
@@ -156,23 +163,22 @@ export const getProductInfoWithUserData_slow = async (
                         note
                     )
                 `
-                )
-                .eq('barcode', barcode)
-                .eq('reviews.profile', userId)
-                .eq('reviews.product', barcode)
-                .eq('lists_products.product_id', barcode)
-                .eq('lists_products.lists.profile_id', userId)
-                .eq('lists_products.lists.name', 'favs')
-                .eq('notes.profile', userId)
-                .eq('notes.product', barcode)
-                .single(),
-            getProductAverageScores(barcode)
-        ])
+                    )
+                    .eq('barcode', barcode)
+                    .eq('reviews.profile', userId)
+                    .eq('reviews.product', barcode)
+                    .eq('lists_products.product_id', barcode)
+                    .eq('lists_products.lists.profile_id', userId)
+                    .eq('lists_products.lists.name', 'favs')
+                    .eq('notes.profile', userId)
+                    .eq('notes.product', barcode)
+                    .single(),
+                getProductAverageScores(barcode),
+            ])
 
-        
         if (error) throw error
         if (!data) throw new Error('No data found')
-        
+
         const mappedProduct = {
             barcode: data.barcode,
             name: data.name,
@@ -185,7 +191,6 @@ export const getProductInfoWithUserData_slow = async (
             product_score_avg: scannedProductAverageScores.productScore,
             is_fav: data.lists_products.length > 0,
         } as Product
-        
 
         return mappedProduct
     } catch (error) {
@@ -200,7 +205,7 @@ export const createNewProductFromBarcode = async (
 ) => {
     try {
         console.warn('api-call - createNewProductFromBarcode')
-        
+
         const openFoodProduct = await getProductInfo(barcode)
         const createdProduct = await createNewProduct(
             barcode,
@@ -208,7 +213,9 @@ export const createNewProductFromBarcode = async (
             openFoodProduct?.productName,
             openFoodProduct?.imageUrl,
             openFoodProduct?.tags,
-            openFoodProduct?.brands
+            openFoodProduct?.brands,
+            openFoodProduct?.nutriscore_grade,
+            openFoodProduct?.nutriscore_version
         )
 
         if (!createdProduct) throw new Error('Error creating a new product')

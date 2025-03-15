@@ -19,14 +19,14 @@ const getUniqueIdentifier = () => {
 
 const getAppName = () => {
     if (IS_DEV) {
-        return 'Kali (Dev)'
+        return 'Lacompra (Dev)'
     }
 
     if (IS_PREVIEW) {
-        return 'Kali (Preview)'
+        return 'Lacompra (Preview)'
     }
 
-    return 'Kali'
+    return 'Lacompra'
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
@@ -35,7 +35,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     slug: 'kali',
     version: APP_VERSION,
     orientation: 'portrait',
-    icon: './assets/images/icon.png',
+    icon: './assets/images/logo_lacompra_xl.png',
     scheme: 'myapp',
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
@@ -43,13 +43,13 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
         supportsTablet: true,
         infoPlist: {
             NSCameraUsageDescription:
-                'Kali necesita acceso a la cámara para escanear los productos.',
+                'Es necesario acceder a la cámara para escanear los productos.',
         },
         bundleIdentifier: getUniqueIdentifier(),
     },
     android: {
         adaptiveIcon: {
-            foregroundImage: './assets/images/adaptive-icon.png',
+            foregroundImage: './assets/images/logo_lacompra_xl.png',
             backgroundColor: '#ffffff',
         },
         permissions: ['android.permission.CAMERA'],
@@ -58,14 +58,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
     web: {
         bundler: 'metro',
         output: 'static',
-        favicon: './assets/images/favicon.png',
+        favicon: './assets/images/logo_lacompra_xl.png',
     },
     plugins: [
         'expo-router',
         [
             'expo-splash-screen',
             {
-                image: './assets/images/splash-icon.png',
+                image: './assets/images/logo_lacompra_xl.png',
                 imageWidth: 200,
                 resizeMode: 'contain',
                 backgroundColor: '#ffffff',
@@ -75,7 +75,7 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
             'react-native-vision-camera',
             {
                 cameraPermissionText:
-                    'Kali necesita acceso a la cámara para escanear los productos.',
+                    'Es necesario acceder a la cámara para escanear los productos.',
                 enableCodeScanner: true,
             },
         ],

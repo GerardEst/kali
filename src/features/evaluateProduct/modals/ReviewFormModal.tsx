@@ -11,7 +11,7 @@ import { SentimentSelector } from '../components/sentiment-selector'
 import { useForm, Controller } from 'react-hook-form'
 import CustomModal from '@/src/shared/components/customModal'
 import { useTranslation } from 'react-i18next'
-import { CheckIcon } from '@/src/shared/icons'
+import { CheckIcon } from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
 
 interface ReviewFormData {

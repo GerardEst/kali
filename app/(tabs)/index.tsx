@@ -6,6 +6,7 @@ import {
     StatusBar,
     AppState,
     Vibration,
+    Image,
 } from 'react-native'
 import {
     useCameraDevice,
@@ -33,6 +34,8 @@ import {
 } from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
 import { CarouselItem } from '@/src/features/scan/interfaces/carousel'
+import { SvgUri } from 'react-native-svg'
+
 export default function HomeScreen() {
     const { t } = useTranslation()
     const { user } = useAuthState()
@@ -194,6 +197,17 @@ export default function HomeScreen() {
                             ></Reviews>
                         )}
                     </View>
+                    <View style={styles.nutriscoreContainer}>
+                        {activeProduct && (
+                            <SvgUri
+                                uri={
+                                    'https://static.openfoodfacts.org/images/attributes/dist/nutriscore-' +
+                                    activeProduct.nutriscore_grade +
+                                    '-new-en.svg'
+                                }
+                            />
+                        )}
+                    </View>
                     <View style={styles.scannerContent}>
                         <Carousel
                             onProductVisible={(product: CarouselItem) => {
@@ -240,6 +254,14 @@ const styles = StyleSheet.create({
         position: 'absolute',
         height: 500,
         bottom: 85,
+    },
+    nutriscoreContainer: {
+        position: 'absolute',
+        alignSelf: 'center',
+        alignItems: 'flex-end',
+        bottom: 350,
+        width: '95%',
+        // backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
     message: {
         width: '95%',
@@ -300,5 +322,10 @@ const styles = StyleSheet.create({
     },
     customFirstElementText: {
         textAlign: 'center',
+    },
+    logo: {
+        width: 100,
+        height: 50,
+        resizeMode: 'contain',
     },
 })

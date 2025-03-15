@@ -5,7 +5,7 @@ import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { useTranslation } from 'react-i18next'
 import { Texts } from '@/styles/common'
-import { BookmarkSlashIcon } from '@/src/shared/icons'
+import { BookmarkSlashIcon } from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
 export const ProductInList = ({ product }: { product: Product }) => {
     const { removeFav } = useFavoriteActions()
