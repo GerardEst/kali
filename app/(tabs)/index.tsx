@@ -34,7 +34,7 @@ import {
 } from '@/src/api/products/products-api'
 import { useAuthState } from '@/src/store/authState'
 import { CarouselItem } from '@/src/features/scan/interfaces/carousel'
-import { SvgUri } from 'react-native-svg'
+import { Nutriscore } from '@/src/features/scan/components/Nutriscore'
 
 export default function HomeScreen() {
     const { t } = useTranslation()
@@ -198,13 +198,9 @@ export default function HomeScreen() {
                         )}
                     </View>
                     <View style={styles.nutriscoreContainer}>
-                        {activeProduct && (
-                            <SvgUri
-                                uri={
-                                    'https://static.openfoodfacts.org/images/attributes/dist/nutriscore-' +
-                                    activeProduct.nutriscore_grade +
-                                    '-new-en.svg'
-                                }
+                        {activeProduct?.nutriscore_grade && (
+                            <Nutriscore
+                                grade={activeProduct.nutriscore_grade}
                             />
                         )}
                     </View>
