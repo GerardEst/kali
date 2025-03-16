@@ -44,7 +44,7 @@ export default {
         },
     },
     notes: {
-        title: 'Tus notas',
+        title: 'Tus notas privadas',
         description: 'Consulta todas las notas que has puesto a los productos',
         emptyState:
             'Aun no has añadido ninguna nota a ningún producto... ¿A qué esperas?',

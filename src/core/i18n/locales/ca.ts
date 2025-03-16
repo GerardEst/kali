@@ -45,7 +45,7 @@ export default {
         },
     },
     notes: {
-        title: 'Les teves notes',
+        title: 'Les teves notes privades',
         description: 'Consulta totes les notes que has posat als productes',
         emptyState:
             'Encara no has afegit cap nota a cap producte. A què esperes?',

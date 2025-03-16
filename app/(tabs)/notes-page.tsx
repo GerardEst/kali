@@ -21,13 +21,11 @@ export default function Notes() {
         getNotesByUser(userId).then((data) => {
             setUserNotes(data)
         })
-    }, [])
+    }, [user])
 
     return (
         <SafeAreaView style={Pages}>
             <Text style={Texts.title}>{t('notes.title')}</Text>
-            <Text style={Texts.lightTitle}>{t('notes.description')}</Text>
-
             {user ? (
                 <View style={styles.notesList}>
                     <FlatList
@@ -36,8 +34,7 @@ export default function Notes() {
                         renderItem={({ item }) => (
                             <View style={styles.userNote}>
                                 <UserNote
-                                    title={item.productData?.name}
-                                    productBarcode="null"
+                                    product={item.productData}
                                     note={item}
                                 ></UserNote>
                             </View>

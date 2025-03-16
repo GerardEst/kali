@@ -34,8 +34,6 @@ export default function Saved() {
     return (
         <SafeAreaView style={Pages}>
             <Text style={Texts.title}>{t('saved.title')}</Text>
-            <Text style={Texts.lightTitle}>{t('saved.description')}</Text>
-
             {user ? (
                 <View style={styles.savedList}>
                     <FlatList

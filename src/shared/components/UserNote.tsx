@@ -1,51 +1,59 @@
-import { View, Text, StyleSheet } from 'react-native'
+import { View, Text, StyleSheet, Image } from 'react-native'
 import { Texts } from '@/styles/common'
 import { GenericButton } from './buttons/GenericButton'
 import { Colors } from '@/styles/colors'
 import { Note } from '../interfaces/Note'
 import { PencilIcon } from '../icons/icons'
+import { Product } from '../interfaces/product'
+import React from 'react'
 
 interface UserNoteComponent {
-    title?: string
-    productBarcode: string
+    product?: Product
     note: Note
     onUpdateUserOpinion?: (barcode: string) => void
 }
 
 export const UserNote = ({
-    title,
-    productBarcode,
+    product,
     note,
     onUpdateUserOpinion,
 }: UserNoteComponent) => {
     return (
         <View style={styles.userOpinion}>
-            <View>
-                <View>
-                    {title && <Text style={Texts.smallTitle}>{title}</Text>}
-                    <Text>{note.note}</Text>
-                </View>
+            <View style={styles.productImage}>
+                {product && (
+                    <Image
+                        source={{ uri: product.image_url }}
+                        style={styles.productImage}
+                    ></Image>
+                )}
             </View>
-            {onUpdateUserOpinion && (
-                <GenericButton
-                    style={styles.modifyButton}
-                    text="Modificar"
-                    icon={<PencilIcon />}
-                    action={() => {}}
-                ></GenericButton>
-            )}
+            <View style={styles.productInfo}>
+                {product && product.name && (
+                    <Text style={Texts.smallTitle}>{product.name}</Text>
+                )}
+
+                <Text>{note.note}</Text>
+            </View>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     userOpinion: {
+        flexDirection: 'row',
         padding: 15,
         borderRadius: 10,
         backgroundColor: Colors.background,
         gap: 15,
     },
-    modifyButton: {
-        alignSelf: 'flex-end',
+    productImage: {
+        aspectRatio: 1,
+        height: 100,
+        borderRadius: 10,
+    },
+    productInfo: {
+        flex: 1,
+        height: '100%',
     },
 })
