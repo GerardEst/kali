@@ -53,6 +53,7 @@ export const updateProduct = async (product: Product) => {
                     name: product.name,
                     brands: product.brands,
                     tags: product.tags,
+                    image_url: product.image_url,
                 },
             ])
             .select()

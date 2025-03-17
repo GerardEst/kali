@@ -1,4 +1,11 @@
-import { StyleSheet, View, Text, Pressable, TextInput } from 'react-native'
+import {
+    StyleSheet,
+    View,
+    Text,
+    Pressable,
+    TextInput,
+    Image,
+} from 'react-native'
 import CustomModal from '@/src/shared/components/customModal'
 import { useEffect, useState } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
@@ -10,6 +17,9 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { updateProductUsecase } from '../usecases/updateProduct'
 import { CheckIcon } from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
+import * as ImagePicker from 'expo-image-picker'
+import { getProductImage, uploadProductImage } from '@/src/api/storage/products'
+
 export function UpdateProductInfoModal({
     visible,
     product,
@@ -24,10 +34,47 @@ export function UpdateProductInfoModal({
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [formProduct, setFormProduct] = useState<Product>(product)
     const { updateProduct } = updateProductUsecase()
+    const [localImageUri, setLocalImageUri] = useState<string | null>(null)
 
     useEffect(() => {
         setFormProduct(product)
     }, [product])
+
+    const pickImage = async () => {
+        const result = await ImagePicker.launchCameraAsync({
+            mediaTypes: ['images'],
+            allowsEditing: false,
+            aspect: [1, 1],
+            quality: 0.8,
+        })
+
+        if (!result.canceled) {
+            const image = result.assets[0].uri
+            setLocalImageUri(image)
+            await uploadImage(image)
+        }
+    }
+
+    const uploadImage = async (uri: string) => {
+        try {
+            if (!user) {
+                console.error('User not authenticated')
+                return
+            }
+
+            setIsLoading(true)
+
+            await uploadProductImage(product.barcode, uri)
+            const publicUrl = await getProductImage(product.barcode)
+
+            setFormProduct({ ...formProduct, image_url: publicUrl })
+        } catch (error) {
+            console.error('Error uploading image:', error)
+            setLocalImageUri(null)
+        } finally {
+            setIsLoading(false)
+        }
+    }
 
     const onSaveProduct = async () => {
         setIsLoading(true)
@@ -51,6 +98,30 @@ export function UpdateProductInfoModal({
                         </Pressable>
                     </View>
                     <View style={styles.modalContent}>
+                        <Pressable
+                            style={styles.imageContainer}
+                            onPress={pickImage}
+                        >
+                            {localImageUri ? (
+                                <Image
+                                    source={{ uri: localImageUri }}
+                                    style={styles.productImage}
+                                />
+                            ) : formProduct.image_url ? (
+                                <Image
+                                    source={{ uri: formProduct.image_url }}
+                                    style={styles.productImage}
+                                />
+                            ) : (
+                                <View style={styles.imagePlaceholder}>
+                                    <AntDesign
+                                        name="picture"
+                                        size={40}
+                                        color={Colors.gray}
+                                    />
+                                </View>
+                            )}
+                        </Pressable>
                         <TextInput
                             value={formProduct.name}
                             placeholder="Nom"
@@ -149,5 +220,24 @@ const styles = StyleSheet.create({
     },
     closeButton: {
         padding: 15,
+    },
+    imageContainer: {
+        width: 150,
+        height: 150,
+        borderRadius: 10,
+        overflow: 'hidden',
+        backgroundColor: Colors.background,
+        marginBottom: 10,
+    },
+    productImage: {
+        width: '100%',
+        height: '100%',
+    },
+    imagePlaceholder: {
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: Colors.background,
     },
 })

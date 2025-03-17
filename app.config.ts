@@ -19,14 +19,14 @@ const getUniqueIdentifier = () => {
 
 const getAppName = () => {
     if (IS_DEV) {
-        return 'Lacompra (Dev)'
+        return 'La compra (Dev)'
     }
 
     if (IS_PREVIEW) {
-        return 'Lacompra (Preview)'
+        return 'La compra (Preview)'
     }
 
-    return 'Lacompra'
+    return 'La compra'
 }
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
