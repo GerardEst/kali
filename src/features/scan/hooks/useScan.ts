@@ -6,9 +6,13 @@ import {
     createNewProductFromBarcode,
     getProductInfoBasic,
     getProductInfoWithUserData,
+    updateProduct,
 } from '@/src/api/products/products-api'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { useAuthState } from '@/src/store/authState'
+import { Product } from '@/src/shared/interfaces/Product'
+import { User } from '@/src/core/auth/models'
+import { getProductInfo } from '@/src/api/openFood-api'
 
 export const useScan = () => {
     const [lastScan, setLastScan] = useState('')
@@ -23,6 +27,40 @@ export const useScan = () => {
         } else {
             Vibration.vibrate()
         }
+    }
+
+    // TODO - Moure fora
+    async function tryTofillUnknownProductInfo(productInfo: Product) {
+        if (
+            !productInfo.name ||
+            !productInfo.image_url ||
+            !productInfo.nutriscore_grade ||
+            !productInfo.nutriscore_version
+        ) {
+            const productInfoOpenfood = await getProductInfo(
+                productInfo.barcode
+            )
+            if (
+                (productInfoOpenfood.name && !productInfo.name) ||
+                (productInfoOpenfood.image_url && !productInfo.image_url) ||
+                (productInfoOpenfood.nutriscore_grade &&
+                    !productInfo.nutriscore_grade) ||
+                (productInfoOpenfood.nutriscore_version &&
+                    !productInfo.nutriscore_version)
+            ) {
+                const newInfo = {
+                    ...productInfoOpenfood,
+                    ...productInfo,
+                }
+                try {
+                    const updated = await updateProduct(newInfo)
+                    return updated
+                } catch (error) {
+                    console.error(error)
+                }
+            }
+        }
+        return productInfo
     }
 
     async function scan(code: Code) {
@@ -40,7 +78,10 @@ export const useScan = () => {
         } else {
             productInfo = await getProductInfoBasic(scannedCode.value)
         }
-        if (!productInfo) {
+
+        if (productInfo) {
+            productInfo = await tryTofillUnknownProductInfo(productInfo)
+        } else {
             const newProduct = await createNewProductFromBarcode(
                 scannedCode.value,
                 scannedCode.type
