@@ -40,7 +40,7 @@ export default function ProductBarcodeScreen() {
         <View style={Pages}>
             <Stack.Screen
                 options={{
-                    title: product?.name || '...',
+                    title: product?.name || product?.barcode || '...',
                     headerBackTitle: 'Saved',
                 }}
             />
@@ -51,7 +51,7 @@ export default function ProductBarcodeScreen() {
                 resizeMode="contain"
             />
             <View>
-                <Text>{product?.barcode}</Text>
+                <Text>{product?.name}</Text>
                 <Text>{product?.short_description}</Text>
                 <Text>{product?.brands}</Text>
             </View>

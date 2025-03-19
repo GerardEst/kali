@@ -121,7 +121,6 @@ export default function HomeScreen() {
             )}
             {hasPermission ? (
                 <Camera
-                    testID="scanner-camera"
                     style={StyleSheet.absoluteFill}
                     device={device}
                     isActive={isCameraActive}
