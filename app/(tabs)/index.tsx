@@ -5,8 +5,6 @@ import {
     Platform,
     StatusBar,
     AppState,
-    Vibration,
-    Image,
 } from 'react-native'
 import {
     useCameraDevice,
@@ -27,20 +25,14 @@ import React from 'react'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useTranslation } from 'react-i18next'
-import {
-    createNewProductFromBarcode,
-    getProductInfoBasic,
-    getProductInfoWithUserData,
-} from '@/src/api/products/products-api'
-import { useAuthState } from '@/src/store/authState'
 import { CarouselItem } from '@/src/features/scan/interfaces/carousel'
 import { Nutriscore } from '@/src/features/scan/components/Nutriscore'
 
 export default function HomeScreen() {
     const { t } = useTranslation()
-    const { user } = useAuthState()
+
     const { hasPermission, requestPermission } = useCameraPermission()
-    const { products, addScannedProduct } = useScannedProductsState()
+    const { products } = useScannedProductsState()
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
@@ -49,14 +41,6 @@ export default function HomeScreen() {
     const [isCameraActive, setIsCameraActive] = useState(true)
     const { scan } = useScan()
     const appState = useRef(AppState.currentState)
-
-    const vibrate = () => {
-        if (Platform.OS === 'android') {
-            Vibration.vibrate([50, 50, 50, 50], false)
-        } else {
-            Vibration.vibrate()
-        }
-    }
 
     useEffect(() => {
         // If products from scannedProducts store change,
@@ -104,34 +88,8 @@ export default function HomeScreen() {
         codeTypes: supportedBarcodeTypes,
         onCodeScanned: async (codes) => {
             if (isModalOpen) return
-
-            const code = codes[0]
-            if (!code.value) return
-
-            const scannedCode = scan(code)
-            if (!scannedCode?.value) return
-
-            vibrate()
-
-            let productInfo
-            if (user?.id) {
-                productInfo = await getProductInfoWithUserData(
-                    scannedCode.value,
-                    user.id
-                )
-            } else {
-                productInfo = await getProductInfoBasic(scannedCode.value)
-            }
-            if (!productInfo) {
-                const newProduct = await createNewProductFromBarcode(
-                    scannedCode.value,
-                    scannedCode.type
-                )
-
-                productInfo = newProduct
-            }
-
-            addScannedProduct(productInfo)
+            if (!codes || codes.length === 0) return
+            scan(codes[0])
         },
     })
 
@@ -163,6 +121,7 @@ export default function HomeScreen() {
             )}
             {hasPermission ? (
                 <Camera
+                    testID="scanner-camera"
                     style={StyleSheet.absoluteFill}
                     device={device}
                     isActive={isCameraActive}
