@@ -11,9 +11,7 @@ export const BookmarkSlashIcon = (props: any) => {
 }
 
 export const NotesIcon = (props: any) => {
-    return (
-        <FontAwesome6 name="sticky-note" size={24} color="white" {...props} />
-    )
+    return <Octicons name="report" size={24} color="white" {...props} />
 }
 
 export const OpenIcon = (props: any) => {
@@ -21,11 +19,11 @@ export const OpenIcon = (props: any) => {
 }
 
 export const SearchIcon = (props: any) => {
-    return <AntDesign name="search1" size={24} color="white" {...props} />
+    return <Octicons name="search" size={24} color="white" {...props} />
 }
 
 export const SettingsIcon = (props: any) => {
-    return <AntDesign name="setting" size={24} color="white" {...props} />
+    return <Octicons name="gear" size={24} color="white" {...props} />
 }
 
 export const PencilIcon = (props: any) => {
