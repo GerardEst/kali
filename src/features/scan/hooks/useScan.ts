@@ -48,7 +48,8 @@ export const useScan = () => {
                 (productInfoOpenfood.nutriscore_version &&
                     !productInfo.nutriscore_version)
             ) {
-                // Hem de passar a updateProduct la nostra versió + el que ens arriba nou
+                // Hem de passar a updateProduct el que ens arriba nou
+                // i sobreescriure amb lo nostre, que és prioritari
                 const newInfo = {
                     ...productInfoOpenfood,
                     ...productInfo,

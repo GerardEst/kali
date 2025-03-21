@@ -44,7 +44,11 @@ export function AddProductNoteModal({
                         <Text style={[Texts.smallTitle, styles.modalTitle]}>
                             {product?.name || product.barcode}
                         </Text>
-                        <Pressable style={styles.closeButton} onPress={onClose}>
+                        <Pressable
+                            style={styles.closeButton}
+                            onPress={onClose}
+                            testID="close-button"
+                        >
                             <AntDesign name="close" size={24} color="black" />
                         </Pressable>
                     </View>
@@ -56,6 +60,7 @@ export function AddProductNoteModal({
                             maxLength={150}
                             onChangeText={(text) => setNote(text)}
                             style={styles.opinion}
+                            testID="note-input"
                         />
                         <View style={styles.modalFooter}>
                             <GenericButton

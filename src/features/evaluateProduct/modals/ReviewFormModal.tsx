@@ -65,6 +65,7 @@ export function ReviewFormModal({
                             <Pressable
                                 style={styles.closeButton}
                                 onPress={onClose}
+                                testID="close-button"
                             >
                                 <AntDesign
                                     name="close"
@@ -87,6 +88,7 @@ export function ReviewFormModal({
                                         <SentimentSelector
                                             sentiment={value}
                                             onSelectedSentiment={onChange}
+                                            testID="sentiment"
                                         />
                                     )}
                                 />
@@ -104,6 +106,7 @@ export function ReviewFormModal({
                                             maxLength={150}
                                             onChangeText={onChange}
                                             style={styles.opinion}
+                                            testID="product-comment"
                                         />
                                     )}
                                 />
