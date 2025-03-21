@@ -76,9 +76,9 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
                 products: state.products.map((product: Product) =>
                     product.barcode == barcode
                         ? {
-                            ...product,
-                            user_notes: notes,
-                        }
+                              ...product,
+                              user_notes: notes,
+                          }
                         : product
                 ),
             }
@@ -88,23 +88,27 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
         //@ts-ignore
         set((state) => {
             return {
-                products: state.products.map((product: Product) =>
-                    product.barcode == note.product
-                        ? {
-                              ...product,
-                              // TODO - Estic casi segur de que això està malament
-                              user_notes: [
-                                  {
-                                      created_at: note.created_at,
-                                      product: note.product,
-                                      note: note.note,
-                                    },
-                                  //@ts-ignore
-                                  ...product.user_notes,
-                              ],
-                          }
-                        : product
-                ),
+                products: state.products.map((product: Product) => {
+                    let newProduct
+                    if (product.barcode == note.product) {
+                        newProduct = {
+                            ...product,
+                            user_notes: [
+                                {
+                                    created_at: note.created_at,
+                                    product: note.product,
+                                    note: note.note,
+                                },
+                                //@ts-ignore
+                                ...product.user_notes,
+                            ],
+                        }
+                    } else {
+                        newProduct = product
+                    }
+
+                    return newProduct
+                }),
             }
         }),
 }))

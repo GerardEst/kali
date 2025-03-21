@@ -48,13 +48,17 @@ export const useScan = () => {
                 (productInfoOpenfood.nutriscore_version &&
                     !productInfo.nutriscore_version)
             ) {
+                // Hem de passar a updateProduct la nostra versió + el que ens arriba nou
                 const newInfo = {
                     ...productInfoOpenfood,
                     ...productInfo,
                 }
                 try {
                     const updated = await updateProduct(newInfo)
-                    return updated
+
+                    // Un cop fet l'update, necessitem mantenir també el que teniem abans però cambiant
+                    // les coses noves
+                    return { ...productInfo, ...updated }
                 } catch (error) {
                     console.error(error)
                 }
@@ -84,7 +88,8 @@ export const useScan = () => {
         } else {
             const newProduct = await createNewProductFromBarcode(
                 scannedCode.value,
-                scannedCode.type
+                scannedCode.type,
+                user?.id || 'anon'
             )
 
             productInfo = newProduct

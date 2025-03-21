@@ -11,7 +11,8 @@ export const createNewProduct = async (
     tags: string | null = null,
     brands: string | null = null,
     nutriscore_grade: string | null = null,
-    nutriscore_version: string | null = null
+    nutriscore_version: string | null = null,
+    userId: string
 ) => {
     try {
         console.warn('api-call - createNewProduct')
@@ -28,6 +29,7 @@ export const createNewProduct = async (
                     brands: brands,
                     nutriscore_grade: nutriscore_grade,
                     nutriscore_version: nutriscore_version,
+                    created_by: userId,
                 },
             ])
             .select()
@@ -202,7 +204,8 @@ export const getProductInfoWithUserData_slow = async (
 
 export const createNewProductFromBarcode = async (
     barcode: string,
-    barcodeType: string
+    barcodeType: string,
+    userId: string
 ) => {
     try {
         console.warn('api-call - createNewProductFromBarcode')
@@ -216,7 +219,8 @@ export const createNewProductFromBarcode = async (
             openFoodProduct?.tags,
             openFoodProduct?.brands,
             openFoodProduct?.nutriscore_grade,
-            openFoodProduct?.nutriscore_version
+            openFoodProduct?.nutriscore_version,
+            userId
         )
 
         if (!createdProduct) throw new Error('Error creating a new product')
