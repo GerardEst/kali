@@ -5,7 +5,6 @@ import { Texts } from '@/styles/common'
 import { useAuthState } from '@/src/store/authState'
 import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { Product } from '@/src/shared/interfaces/Product'
-import { Note } from '@/src/shared/interfaces/Note'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
 import {
@@ -13,6 +12,7 @@ import {
     BookmarkIcon,
     NotesIcon,
     OpenIcon,
+    PencilIcon,
 } from '@/src/shared/icons/icons'
 import { Palette } from '@/styles/colors'
 import { Link } from 'expo-router'
@@ -82,8 +82,12 @@ export const CarouselProduct = ({
                                 <View style={styles.userNote}>
                                     <Text>{product.user_note.note}</Text>
                                     <GenericButton
+                                        style={{
+                                            marginTop: 'auto',
+                                            alignSelf: 'flex-end',
+                                        }}
                                         icon={
-                                            <NotesIcon
+                                            <PencilIcon
                                                 size={20}
                                                 color={Palette.primary}
                                             />

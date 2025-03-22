@@ -4,6 +4,7 @@ export default {
     scanner_carousel_noMoreProducts: 'No tens més productes escanejats',
     product_addNote: 'Crear una nota',
     product_open: 'Obrir',
+    product_editNote: 'Editar nota',
     caroussel_addNote:
         'Afegeix una nota al producte i la veuràs sempre que l’escanegis, o a la llista de notes',
     tabs_saved: 'Guardats',

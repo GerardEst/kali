@@ -128,15 +128,15 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     'review--others': {
-        flex: 2,
+        flex: 1,
         borderTopEndRadius: 0,
         borderBottomEndRadius: 0,
     },
     'review--user': {
-        flex: 1,
         borderTopStartRadius: 0,
         borderBottomStartRadius: 0,
         backgroundColor: '#DDDDDD',
+        alignItems: 'flex-end',
     },
     review__header: {
         flexDirection: 'row',
