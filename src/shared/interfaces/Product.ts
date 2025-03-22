@@ -11,6 +11,8 @@ export interface Product {
     image_url?: string
     reviews?: Review[]
     product_score_avg?: number
+    reviews_amount?: number
+    comments_amount?: number
     user_note?: Note
     user_review?: Review
     is_fav?: Boolean

@@ -146,6 +146,8 @@ export default function HomeScreen() {
                     <View style={styles.reviewSection}>
                         {activeProduct && (
                             <Reviews
+                                commentsAmount={activeProduct.comments_amount}
+                                reviewsAmount={activeProduct.reviews_amount}
                                 productScore={activeProduct.product_score_avg}
                                 barcode={activeProduct.barcode}
                                 userReview={activeProduct.user_review}

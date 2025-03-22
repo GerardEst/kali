@@ -21,6 +21,8 @@ interface ReviewsProps {
     barcode: string
     userReview?: Review
     onEditReview: () => void
+    commentsAmount?: number
+    reviewsAmount?: number
 }
 
 export default function Reviews({
@@ -28,6 +30,8 @@ export default function Reviews({
     barcode,
     userReview,
     onEditReview,
+    commentsAmount = 0,
+    reviewsAmount = 0,
 }: ReviewsProps) {
     const [lastBarcode, setLastBarcode] = useState<string | null>(null)
     const [showPopup, setShowPopup] = useState(false)
@@ -69,8 +73,14 @@ export default function Reviews({
                     </View>
                     <View style={styles.review__info}>
                         <EmojiRank rank={productScore} />
-                        <IconInfo icon={<PeopleIcon size={18} />} info={15} />
-                        <IconInfo icon={<CommentIcon size={16} />} info={4} />
+                        <IconInfo
+                            icon={<PeopleIcon size={18} />}
+                            info={reviewsAmount}
+                        />
+                        <IconInfo
+                            icon={<CommentIcon size={16} />}
+                            info={commentsAmount}
+                        />
                     </View>
                 </Pressable>
                 <Pressable
