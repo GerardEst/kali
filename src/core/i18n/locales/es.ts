@@ -4,17 +4,17 @@ export default {
     scanner_carousel_noMoreProducts: 'No tienes más productos escaneados',
     product_addNote: 'Añadir nota',
     product_open: 'Abrir',
+    caroussel_addNote:
+        'Añade una nota al producto y la verás siempre que lo escanees, o en tu lista de notas',
+    tabs_saved: 'Guardados',
+    tabs_notes: 'Notas',
+    tabs_search: 'Escáner',
+    tabs_options: 'Opciones',
     common: {
         version: 'Versión',
         unknown: 'Desconocido',
         anonymous: 'Anónimo',
         loading: 'Cargando...',
-    },
-    tabs: {
-        saved: 'Guardados',
-        notes: 'Notas',
-        search: 'Buscador',
-        options: 'Opciones',
     },
     settings: {
         language: 'Idioma',
@@ -56,10 +56,6 @@ export default {
     },
     buttons: {
         remove: 'Quitar',
-    },
-    carousel: {
-        addNote:
-            'Añade notas al producto! Puedes apuntar lo que quieras y recordarlo siempre que escanees (o ir directamente a la lista de notas).',
     },
     evaluateProduct: {
         product: 'Producto',

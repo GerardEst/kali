@@ -4,17 +4,17 @@ export default {
     scanner_carousel_noMoreProducts: 'No tens més productes escanejats',
     product_addNote: 'Crear una nota',
     product_open: 'Obrir',
+    caroussel_addNote:
+        'Afegeix una nota al producte i la veuràs sempre que l’escanegis, o a la llista de notes',
+    tabs_saved: 'Guardats',
+    tabs_notes: 'Notes',
+    tabs_search: 'Escàner',
+    tabs_options: 'Opcions',
     common: {
         version: 'Versió',
         unknown: 'Desconegut',
         anonymous: 'Anònim',
         loading: 'Carregant...',
-    },
-    tabs: {
-        saved: 'Guardats',
-        notes: 'Notes',
-        search: 'Buscador',
-        options: 'Opcions',
     },
     settings: {
         language: 'Idioma',
@@ -57,10 +57,6 @@ export default {
     },
     buttons: {
         remove: 'Treure',
-    },
-    carousel: {
-        addNote:
-            "Afegeix notes al producte! Pots apuntar-te el que vulguis i recordar-ho sempre que l'escanegis (o anar directament a la llista de notes).",
     },
     evaluateProduct: {
         product: 'Producte',

@@ -1,4 +1,5 @@
-import { View, Text, StyleSheet, ScrollView, Pressable } from 'react-native'
+import { View, StyleSheet, ScrollView, Pressable } from 'react-native'
+import { Text } from '@/src/shared/components/Typography'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { useAuthState } from '@/src/store/authState'
@@ -7,14 +8,13 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { Note } from '@/src/shared/interfaces/Note'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import UserNote from '@/src/features/scan/components/UserNote'
 import {
     BookmarkSlashIcon,
     BookmarkIcon,
     NotesIcon,
     OpenIcon,
 } from '@/src/shared/icons/icons'
-import { Colors } from '@/styles/colors'
+import { Palette } from '@/styles/colors'
 import { Link } from 'expo-router'
 
 interface CarouselProductProps {
@@ -57,31 +57,16 @@ export const CarouselProduct = ({
                     </View>
                     {user && (
                         <View style={styles.buttonContainer}>
-                            {product.is_fav ? (
-                                <GenericButton
-                                    icon={<BookmarkSlashIcon size={16} />}
-                                    fill={true}
-                                    action={() => handleRemove(product)}
-                                ></GenericButton>
-                            ) : (
-                                <GenericButton
-                                    icon={
-                                        <BookmarkIcon
-                                            size={16}
-                                            color={Colors.primary}
-                                        />
-                                    }
-                                    action={() => handleAdd(product)}
-                                ></GenericButton>
-                            )}
                             <Link asChild href={`/${product.barcode}`}>
                                 <Pressable>
                                     <GenericButton
                                         nonPressable
+                                        type="accent"
+                                        fill={true}
                                         icon={
                                             <OpenIcon
                                                 size={16}
-                                                color={Colors.primary}
+                                                color={Palette.primary}
                                             />
                                         }
                                         text={t('product_open')}
@@ -94,27 +79,35 @@ export const CarouselProduct = ({
                 <View style={styles.cardContent}>
                     {/* Aquet scrollView hauria de ser un flatlist perque scrollview no va bé 
                     per coses dinamiques, ho renderitza tot tot el rato */}
-                    <ScrollView style={styles.cardContentNotes}>
+                    <View style={styles.cardContentNotes}>
                         {product ? (
                             PRODUCT_HAS_NOTES ? (
-                                product.user_notes?.map(
-                                    (note: Note, index: number) => (
-                                        <UserNote
-                                            key={index}
-                                            note={note}
-                                            style={styles.cardContentNote}
-                                        />
-                                    )
-                                )
+                                <View style={styles.userNote}>
+                                    <Text>{product.user_notes![0].note}</Text>
+                                </View>
                             ) : (
-                                <View>
-                                    <Text>{t('carousel.addNote')}</Text>
+                                <View style={styles.cardContentNoNote}>
+                                    <Text style={{ textAlign: 'center' }}>
+                                        {t('caroussel_addNote')}
+                                    </Text>
+                                    <GenericButton
+                                        icon={
+                                            <NotesIcon
+                                                size={20}
+                                                color={Palette.primary}
+                                            />
+                                        }
+                                        text={t('product_addNote')}
+                                        action={() =>
+                                            onAddNote(product.barcode)
+                                        }
+                                    ></GenericButton>
                                 </View>
                             )
                         ) : (
                             <Text>{t('common.loading')}</Text>
                         )}
-                    </ScrollView>
+                    </View>
                 </View>
                 <View style={styles.cardFooter}>
                     <View style={styles.optionButtons}>
@@ -131,13 +124,36 @@ export const CarouselProduct = ({
                             <GenericButton
                                 icon={
                                     <NotesIcon
-                                        size={16}
-                                        color={Colors.primary}
+                                        size={20}
+                                        color={Palette.primary}
                                     />
                                 }
-                                text={t('product_addNote')}
+                                noBorder
                                 action={() => onAddNote(product.barcode)}
                             ></GenericButton>
+                            {product.is_fav ? (
+                                <GenericButton
+                                    noBorder
+                                    icon={
+                                        <BookmarkSlashIcon
+                                            size={20}
+                                            color={Palette.primary}
+                                        />
+                                    }
+                                    action={() => handleRemove(product)}
+                                ></GenericButton>
+                            ) : (
+                                <GenericButton
+                                    noBorder
+                                    icon={
+                                        <BookmarkIcon
+                                            size={20}
+                                            color={Palette.primary}
+                                        />
+                                    }
+                                    action={() => handleAdd(product)}
+                                ></GenericButton>
+                            )}
                         </View>
                     </View>
                 </View>
@@ -174,12 +190,19 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     card: {
-        height: 250,
+        //height: 300,
         borderRadius: 10,
-        padding: 10,
+        padding: 15,
         backgroundColor: 'white',
         gap: 10,
         zIndex: 1,
+    },
+    userNote: {
+        padding: 10,
+        backgroundColor: Palette.accentLight,
+        borderRadius: 10,
+        display: 'flex',
+        height: '100%',
     },
     cardHeader: {
         flexDirection: 'row',
@@ -213,13 +236,20 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
+        height: 140,
     },
     cardContentNote: {
         marginBottom: 10,
     },
-    seeButton: {
-        backgroundColor: Colors.primary,
-        padding: 10,
+    cardContentNoNote: {
+        borderWidth: 2,
+        borderColor: Palette.primary,
         borderRadius: 10,
+        padding: 15,
+        borderStyle: 'dashed',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        gap: 15,
     },
 })

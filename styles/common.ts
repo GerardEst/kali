@@ -7,19 +7,25 @@ export const Pages = {
 }
 
 export const Texts = StyleSheet.create({
+    base: {
+        fontFamily: 'Sora-Medium',
+        fontSize: 14,
+        color: '#333333',
+    },
     title: {
         fontSize: 18,
-        fontWeight: 900,
+        fontFamily: 'Sora-ExtraBold',
     },
     smallTitle: {
         fontSize: 14,
-        fontWeight: 900,
+        fontFamily: 'Sora-ExtraBold',
     },
     lightTitle: {
         fontSize: 14,
-        fontWeight: 400,
+        fontFamily: 'Sora-Medium',
     },
-    italic: {
-        fontStyle: 'italic',
+    regular: {
+        fontSize: 14,
+        fontFamily: 'Sora-Medium',
     },
 })

@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router'
 import React from 'react'
-import { Colors } from '@/styles/colors'
+import { Palette } from '@/styles/colors'
 import { useTranslation } from 'react-i18next'
 import {
     BookmarkIcon,
@@ -30,38 +30,63 @@ export default function TabLayout() {
                     paddingVertical: 5,
                     borderRadius: 20,
                 },
+                tabBarLabelStyle: {
+                    fontSize: 9,
+                    fontFamily: 'Sora-Medium',
+                },
+                tabBarInactiveTintColor: Palette.primary,
             }}
         >
             <Tabs.Screen
                 name="saved-page"
                 options={{
-                    title: t('tabs.saved'),
-                    tabBarIcon: ({ color }) => <BookmarkIcon color={color} />,
-                    tabBarActiveTintColor: Colors.love,
+                    title: t('tabs_saved'),
+                    tabBarActiveTintColor: Palette.accent,
+                    tabBarIcon: ({ focused, color }) => (
+                        <BookmarkIcon
+                            size={22}
+                            color={focused ? color : Palette.primary}
+                        />
+                    ),
                 }}
             />
             <Tabs.Screen
                 name="notes-page"
                 options={{
-                    title: t('tabs.notes'),
-                    tabBarIcon: ({ color }) => <NotesIcon color={color} />,
-                    tabBarActiveTintColor: Colors.primary,
+                    title: t('tabs_notes'),
+                    tabBarActiveTintColor: Palette.accent,
+                    tabBarIcon: ({ focused, color }) => (
+                        <NotesIcon
+                            size={20}
+                            color={focused ? color : Palette.primary}
+                        />
+                    ),
                 }}
             />
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: t('tabs.search'),
-                    tabBarIcon: ({ color }) => <SearchIcon color={color} />,
-                    tabBarActiveTintColor: Colors.primary,
+                    title: t('tabs_search'),
+                    tabBarActiveTintColor: Palette.accent,
+                    tabBarIcon: ({ focused, color }) => (
+                        <SearchIcon
+                            size={22}
+                            color={focused ? color : Palette.primary}
+                        />
+                    ),
                 }}
             />
             <Tabs.Screen
                 name="settings-page"
                 options={{
-                    title: t('tabs.options'),
-                    tabBarIcon: ({ color }) => <SettingsIcon color={color} />,
-                    tabBarActiveTintColor: Colors.primary,
+                    title: t('tabs_options'),
+                    tabBarActiveTintColor: Palette.accent,
+                    tabBarIcon: ({ focused, color }) => (
+                        <SettingsIcon
+                            size={20}
+                            color={focused ? color : Palette.primary}
+                        />
+                    ),
                 }}
             />
         </Tabs>

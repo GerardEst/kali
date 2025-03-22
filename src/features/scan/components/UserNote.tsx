@@ -1,6 +1,7 @@
 import { View, StyleSheet, Text } from 'react-native'
 import { Note } from '@/src/shared/interfaces/Note'
 import { Colors } from '@/styles/colors'
+
 export default function UserNote({ note, style }: { note: Note; style: any }) {
     return (
         <View style={[styles.userNote, style]}>

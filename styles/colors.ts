@@ -8,8 +8,18 @@ export const Colors = {
     greenLight: '#a8eac4',
 }
 
+export const Palette = {
+    primary: '#333333',
+    primaryLight: '#4d4d4d',
+    gray: '#34495E',
+    background: '#ECF0F1',
+    accent: '#FFD364',
+    accentLight: '#fdf8e6',
+}
+
 export const ButtonColors = {
-    normal: Colors.primary,
+    normal: Palette.primary,
+    accent: Palette.accent,
     success: Colors.green,
     danger: Colors.love,
 }

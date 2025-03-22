@@ -66,21 +66,28 @@ export function SentimentSelector({
 const styles = StyleSheet.create({
     faceContainer: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
-        gap: 10,
-        marginVertical: 10,
+        justifyContent: 'space-around',
+        width: '100%',
+        marginBottom: 10,
+        //borderWidth: 1,
+        backgroundColor: Colors.background,
+        borderColor: Colors.gray,
+        borderRadius: 10,
+        overflow: 'hidden',
     },
     faceButton: {
-        borderWidth: 2,
-        borderRadius: 10,
-        padding: 10,
         flex: 1,
-        alignItems: 'center',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingVertical: 10,
+        height: '100%',
+        borderBottomWidth: 10,
     },
     selectedSentiment: {
-        backgroundColor: Colors.background,
+        backgroundColor: Colors.gray,
     },
     faceEmoji: {
         fontSize: 24,
+        textAlign: 'center',
     },
 })

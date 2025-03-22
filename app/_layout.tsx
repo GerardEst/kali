@@ -7,14 +7,16 @@ import { useEffect } from 'react'
 import { checkUserSession } from '@/src/core/auth/usecases/checkUserSession'
 import { useAuthState } from '@/src/store/authState'
 import '@/src/core/i18n/i18n'
+import { Text } from 'react-native'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
     const { setUser, cleanUser } = useAuthState()
-    const [loaded] = useFonts({
-        SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    const [loaded, error] = useFonts({
+        'Sora-Medium': require('../assets/fonts/Sora-Medium.ttf'),
+        'Sora-ExtraBold': require('../assets/fonts/Sora-ExtraBold.ttf'),
     })
 
     useEffect(() => {
@@ -34,10 +36,17 @@ export default function RootLayout() {
         if (loaded) {
             SplashScreen.hideAsync()
         }
-    }, [loaded])
+        if (error) {
+            console.error('Error loading fonts:', error)
+        }
+    }, [loaded, error])
 
     if (!loaded) {
         return null
+    }
+
+    if (error) {
+        return <Text>Error loading fonts</Text>
     }
 
     return (

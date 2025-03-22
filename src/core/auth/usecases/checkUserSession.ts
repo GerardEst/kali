@@ -32,13 +32,6 @@ export const checkUserSession = async () => {
                     authData.user.email === 'davidestevebusquets@gmail.com' ||
                     authData.user.email === 'rosamariabn@hotmail.com'
 
-                logger({
-                    type: 'success',
-                    title: 'Auto startup signin',
-                    message:
-                        response.data.user.email + ' successfully signed in',
-                })
-
                 const user = { ...authData.user, isAdmin }
 
                 return user
@@ -52,12 +45,6 @@ export const checkUserSession = async () => {
             )
         }
     } catch (error: any) {
-        logger({
-            type: 'error',
-            title: 'Auto startup signin failed',
-            message: error.message,
-        })
-
         // Clean up on error
         await GoogleSignin.signOut()
 
