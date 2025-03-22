@@ -69,7 +69,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         width: '100%',
         marginBottom: 10,
-        //borderWidth: 1,
         backgroundColor: Colors.background,
         borderColor: Colors.gray,
         borderRadius: 10,

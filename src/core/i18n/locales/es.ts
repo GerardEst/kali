@@ -1,6 +1,6 @@
 export default {
-    ownReview: 'Tu opinión',
-    otherReviews: 'Opinión general',
+    reviews_ownReview: 'Tu opinión',
+    reviews_otherReviews: 'Opinión general',
     scanner_carousel_noMoreProducts: 'No tienes más productos escaneados',
     product_addNote: 'Añadir nota',
     product_open: 'Abrir',

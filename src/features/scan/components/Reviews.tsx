@@ -1,12 +1,21 @@
-import { View, Text, StyleSheet, FlatList, Pressable } from 'react-native'
+import { View, StyleSheet, FlatList, Pressable } from 'react-native'
+import Text from '@/src/shared/components/Typography'
 import { useState, useEffect } from 'react'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { Sentiments } from '@/src/shared/constants/sentiments'
-import { SentimentColors } from '@/styles/colors'
+import { Palette } from '@/styles/colors'
 import { getProductReviews } from '@/src/api/products/reviews-api'
 import { Review } from '@/src/shared/interfaces/Review'
 import ProductReview from './ProductReview'
+import { EmojiRank } from '@/src/shared/components/emojiRank'
+import { Texts } from '@/styles/common'
+import { IconInfo } from '@/src/shared/components/iconInfo'
+import {
+    ChevronDownIcon,
+    CommentIcon,
+    PeopleIcon,
+} from '@/src/shared/icons/icons'
+
 interface ReviewsProps {
     productScore?: number
     barcode: string
@@ -47,47 +56,32 @@ export default function Reviews({
 
     return (
         <>
-            <View style={styles.reviewsContaiener}>
-                <Pressable onPress={openReviews} style={styles.container}>
-                    <View
-                        style={[
-                            styles.scoreContainer,
-                            {
-                                borderColor:
-                                    SentimentColors[
-                                        productScore === -1 ? 4 : productScore
-                                    ],
-                            },
-                        ]}
-                    >
-                        <Text style={styles.score}>
-                            {Sentiments[productScore === -1 ? 4 : productScore]}
+            <View style={styles.reviewsContainer}>
+                <Pressable
+                    onPress={openReviews}
+                    style={[styles.review, styles['review--others']]}
+                >
+                    <View style={styles.review__header}>
+                        <Text style={Texts.smallTitle}>
+                            {t('reviews_otherReviews')}
                         </Text>
-                        <Text style={styles.label}>{t('otherReviews')}</Text>
+                        <ChevronDownIcon size={16} />
+                    </View>
+                    <View style={styles.review__info}>
+                        <EmojiRank rank={productScore} />
+                        <IconInfo icon={<PeopleIcon size={18} />} info={15} />
+                        <IconInfo icon={<CommentIcon size={16} />} info={4} />
                     </View>
                 </Pressable>
-                <Pressable onPress={openUserReview} style={styles.container}>
-                    <View
-                        style={[
-                            styles.scoreContainer,
-                            {
-                                borderColor:
-                                    SentimentColors[
-                                        userReview
-                                            ? userReview.product_score
-                                            : 4
-                                    ],
-                            },
-                        ]}
-                    >
-                        <Text style={styles.score}>
-                            {
-                                Sentiments[
-                                    userReview ? userReview.product_score : 4
-                                ]
-                            }
-                        </Text>
-                        <Text style={styles.label}>{t('ownReview')}</Text>
+                <Pressable
+                    onPress={openUserReview}
+                    style={[styles.review, styles['review--user']]}
+                >
+                    <Text style={Texts.smallTitle}>
+                        {t('reviews_ownReview')}
+                    </Text>
+                    <View style={styles.review__info}>
+                        <EmojiRank rank={productScore} mode="light" />
                     </View>
                 </Pressable>
             </View>
@@ -109,59 +103,45 @@ export default function Reviews({
 }
 
 const styles = StyleSheet.create({
-    reviewsContaiener: {
+    reviewsContainer: {
+        width: '100%',
         flexDirection: 'row',
-        gap: 8,
+        gap: 3,
     },
-    container: {
-        flexDirection: 'row',
+    review: {
         backgroundColor: '#ffffff',
-        borderRadius: 7,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
-        overflow: 'hidden',
-        borderColor: 'white',
+        padding: 10,
+        borderRadius: 10,
+        borderWidth: 2,
+        borderColor: Palette.primary,
+        flexDirection: 'column',
+        gap: 10,
     },
-    scoreContainer: {
+    'review--others': {
+        flex: 2,
+        borderTopEndRadius: 0,
+        borderBottomEndRadius: 0,
+    },
+    'review--user': {
+        flex: 1,
+        borderTopStartRadius: 0,
+        borderBottomStartRadius: 0,
+        backgroundColor: '#DDDDDD',
+    },
+    review__header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center',
-        width: 70,
-        paddingHorizontal: 12,
-        paddingTop: 8,
-        paddingBottom: 10,
-        borderBottomWidth: 10,
     },
-    middleScore: {},
-    label: {
-        fontSize: 11,
-        color: '#666666',
-        marginTop: 2,
-        textAlign: 'center',
-    },
-    score: {
-        fontSize: 16,
-        fontWeight: '600',
-        color: '#000000',
-        marginTop: 2,
+    review__info: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
     },
     reviewsPopup: {
-        width: '80%',
-        marginTop: 8,
+        width: '100%',
+        marginTop: 4,
         padding: 16,
         backgroundColor: '#ffffff',
-        borderRadius: 12,
-        shadowColor: '#000',
-        shadowOffset: {
-            width: 0,
-            height: 2,
-        },
-        shadowOpacity: 0.1,
-        shadowRadius: 4,
-        elevation: 3,
+        borderRadius: 10,
     },
 })

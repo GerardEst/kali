@@ -65,3 +65,26 @@ export const CheckIcon = (props: any) => {
         <Octicons name="check" size={24} color={Palette.primary} {...props} />
     )
 }
+
+export const PeopleIcon = (props: any) => {
+    return (
+        <Octicons name="people" size={24} color={Palette.primary} {...props} />
+    )
+}
+
+export const CommentIcon = (props: any) => {
+    return (
+        <Octicons name="comment" size={24} color={Palette.primary} {...props} />
+    )
+}
+
+export const ChevronDownIcon = (props: any) => {
+    return (
+        <Octicons
+            name="chevron-down"
+            size={24}
+            color={Palette.primary}
+            {...props}
+        />
+    )
+}
