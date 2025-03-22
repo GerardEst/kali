@@ -10,7 +10,7 @@ interface ScannedProductsState {
     updateScannedProduct: (product: Product) => void
     upsertUserReview: (barcode: string, user_review: Review) => void
     setUserNotes: (barcode: string, notes: Note[]) => void
-    addUserNoteToScannedProduct: (note: Note) => void
+    updateUserNoteFromScannedProduct: (note: Note) => void
 }
 
 export const useScannedProductsState = create<ScannedProductsState>((set) => ({
@@ -77,14 +77,14 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
                     product.barcode == barcode
                         ? {
                               ...product,
-                              user_notes: notes,
+                              user_note: notes,
                           }
                         : product
                 ),
             }
         }),
 
-    addUserNoteToScannedProduct: (note: Note) =>
+    updateUserNoteFromScannedProduct: (note: Note) =>
         //@ts-ignore
         set((state) => {
             return {
@@ -93,15 +93,11 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
                     if (product.barcode == note.product) {
                         newProduct = {
                             ...product,
-                            user_notes: [
-                                {
-                                    created_at: note.created_at,
-                                    product: note.product,
-                                    note: note.note,
-                                },
-                                //@ts-ignore
-                                ...product.user_notes,
-                            ],
+                            user_note: {
+                                created_at: note.created_at,
+                                product: note.product,
+                                note: note.note,
+                            },
                         }
                     } else {
                         newProduct = product

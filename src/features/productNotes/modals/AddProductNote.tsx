@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Pressable, TextInput } from 'react-native'
 import CustomModal from '@/src/shared/components/customModal'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { useAuthState } from '@/src/store/authState'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
@@ -36,6 +36,10 @@ export function AddProductNoteModal({
         setIsLoading(false)
     }
 
+    useEffect(() => {
+        setNote(product.user_note?.note)
+    }, [product])
+
     return (
         <CustomModal visible={visible} onClose={onClose}>
             {user ? (
@@ -61,6 +65,7 @@ export function AddProductNoteModal({
                             onChangeText={(text) => setNote(text)}
                             style={styles.opinion}
                             testID="note-input"
+                            value={note}
                         />
                         <View style={styles.modalFooter}>
                             <GenericButton

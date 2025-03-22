@@ -32,9 +32,6 @@ export const CarouselProduct = ({
     const { removeFav, addFav } = useFavoriteActions()
     const { t } = useTranslation()
 
-    const PRODUCT_HAS_NOTES =
-        product.user_notes && product.user_notes?.length > 0
-
     const handleRemove = async (product: Product) => {
         await removeFav(product)
     }
@@ -81,9 +78,21 @@ export const CarouselProduct = ({
                     per coses dinamiques, ho renderitza tot tot el rato */}
                     <View style={styles.cardContentNotes}>
                         {product ? (
-                            PRODUCT_HAS_NOTES ? (
+                            product.user_note ? (
                                 <View style={styles.userNote}>
-                                    <Text>{product.user_notes![0].note}</Text>
+                                    <Text>{product.user_note.note}</Text>
+                                    <GenericButton
+                                        icon={
+                                            <NotesIcon
+                                                size={20}
+                                                color={Palette.primary}
+                                            />
+                                        }
+                                        text={t('product_editNote')}
+                                        action={() =>
+                                            onAddNote(product.barcode)
+                                        }
+                                    ></GenericButton>
                                 </View>
                             ) : (
                                 <View style={styles.cardContentNoNote}>
@@ -121,16 +130,6 @@ export const CarouselProduct = ({
                             ></GenericButton>
                         )}
                         <View style={styles.productOptions}>
-                            <GenericButton
-                                icon={
-                                    <NotesIcon
-                                        size={20}
-                                        color={Palette.primary}
-                                    />
-                                }
-                                noBorder
-                                action={() => onAddNote(product.barcode)}
-                            ></GenericButton>
                             {product.is_fav ? (
                                 <GenericButton
                                     noBorder

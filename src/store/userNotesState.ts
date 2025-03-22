@@ -4,7 +4,7 @@ import { Note } from '../shared/interfaces/Note'
 interface UserNotesState {
     notes: Note[]
     setUserNotes: (notes: Note[]) => void
-    addUserNote: (note: Note) => void
+    updateUserNoteFromNotesList: (note: Note) => void
 }
 
 export const useUserNotesState = create<UserNotesState>((set) => ({
@@ -18,9 +18,15 @@ export const useUserNotesState = create<UserNotesState>((set) => ({
         })
     },
 
-    addUserNote: (note: Note) => {
-        set((state) => ({
-            notes: [note, ...state.notes],
-        }))
+    updateUserNoteFromNotesList: (note: Note) => {
+        set((state) => {
+            const previousNoteRemoved = state.notes.filter(
+                (previousNote) => previousNote.product !== note.product
+            )
+
+            return {
+                notes: [note, ...previousNoteRemoved],
+            }
+        })
     },
 }))

@@ -11,7 +11,7 @@ export interface Product {
     image_url?: string
     reviews?: Review[]
     product_score_avg?: number
-    user_notes?: Note[]
+    user_note?: Note
     user_review?: Review
     is_fav?: Boolean
     nutriscore_grade?: 'a' | 'b' | 'c' | 'd' | 'e'

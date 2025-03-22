@@ -7,7 +7,7 @@ export const getProductNotesForUser = async (
 ) => {
     try {
         console.warn('api-call - getProductNotesForUser')
-        
+
         const { data, error } = await supabase
             .from('notes')
             .select('note, created_at')
@@ -64,13 +64,18 @@ export const saveNoteToProduct = async (
 
         const { data, error } = await supabase
             .from('notes')
-            .upsert([
+            .upsert(
+                [
+                    {
+                        product: productBarcode,
+                        profile: profileId,
+                        note: note,
+                    },
+                ],
                 {
-                    product: productBarcode,
-                    profile: profileId,
-                    note: note,
-                },
-            ])
+                    onConflict: 'product,profile',
+                }
+            )
             .select()
 
         if (error) throw error

@@ -6,8 +6,8 @@ import { useAuthState } from '@/src/store/authState'
 
 export const useSaveNote = () => {
     const { user } = useAuthState()
-    const { addUserNoteToScannedProduct } = useScannedProductsState()
-    const { addUserNote } = useUserNotesState()
+    const { updateUserNoteFromScannedProduct } = useScannedProductsState()
+    const { updateUserNoteFromNotesList } = useUserNotesState()
 
     const saveNoteToProduct = async (product: Product, note: string) => {
         if (!user) {
@@ -23,7 +23,7 @@ export const useSaveNote = () => {
 
         if (savedNote) {
             // Afegir a l'estat de productes escanejats
-            addUserNoteToScannedProduct({
+            updateUserNoteFromScannedProduct({
                 id: savedNote.id,
                 product: product.barcode,
                 note: note,
@@ -31,7 +31,7 @@ export const useSaveNote = () => {
             })
 
             // Afegir a l'estat de les notes de l'usuari
-            addUserNote({
+            updateUserNoteFromNotesList({
                 id: savedNote.id,
                 created_at: savedNote.created_at,
                 product: product.barcode,
