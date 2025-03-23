@@ -88,3 +88,9 @@ export const ChevronDownIcon = (props: any) => {
         />
     )
 }
+
+export const TrashIcon = (props: any) => {
+    return (
+        <Octicons name="trash" size={24} color={Palette.primary} {...props} />
+    )
+}

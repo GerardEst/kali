@@ -2,7 +2,7 @@ import React from 'react'
 import { render, fireEvent, waitFor } from '@testing-library/react-native'
 import { AddProductNoteModal } from '../modals/AddProductNote'
 import { useAuthState } from '@/src/store/authState'
-import { useSaveNote } from '../usecases/saveNote'
+import { useManageNote } from '../usecases/manageNote'
 import { Product } from '@/src/shared/interfaces/Product'
 
 // Mock AsyncStorage
@@ -57,7 +57,7 @@ describe('AddProductNoteModal', () => {
     }
 
     const mockSaveNoteToProduct = jest.fn()
-
+    const mockDeleteNoteFromProduct = jest.fn()
     beforeEach(() => {
         // Reset all mocks before each test
         jest.clearAllMocks()
@@ -68,8 +68,9 @@ describe('AddProductNoteModal', () => {
         })
 
         // Setup save note mock
-        ;(useSaveNote as jest.Mock).mockReturnValue({
+        ;(useManageNote as jest.Mock).mockReturnValue({
             saveNoteToProduct: mockSaveNoteToProduct,
+            deleteNoteFromProduct: mockDeleteNoteFromProduct,
         })
     })
 

@@ -86,3 +86,25 @@ export const saveNoteToProduct = async (
         throw new Error('Error creating a new note on product')
     }
 }
+
+export const deleteNoteFromProduct = async (
+    productBarcode: string,
+    profileId: string
+) => {
+    try {
+        console.warn('api-call - deleteNoteFromProduct')
+
+        const { error } = await supabase
+            .from('notes')
+            .delete()
+            .eq('product', productBarcode)
+            .eq('profile', profileId)
+
+        if (error) throw error
+
+        return true
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error deleting note from product')
+    }
+}

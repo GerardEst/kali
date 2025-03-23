@@ -4,6 +4,7 @@ export default {
     scanner_carousel_noMoreProducts: 'No tienes más productos escaneados',
     product_addNote: 'Añadir nota',
     product_editNote: 'Editar nota',
+    product_deleteNote: 'Eliminar',
     product_open: 'Abrir',
     caroussel_addNote:
         'Añade una nota al producto y la verás siempre que lo escanees, o en tu lista de notas',

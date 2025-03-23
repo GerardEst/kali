@@ -5,6 +5,7 @@ interface UserNotesState {
     notes: Note[]
     setUserNotes: (notes: Note[]) => void
     updateUserNoteFromNotesList: (note: Note) => void
+    deleteUserNoteFromNotesList: (productBarcode: string) => void
 }
 
 export const useUserNotesState = create<UserNotesState>((set) => ({
@@ -26,6 +27,16 @@ export const useUserNotesState = create<UserNotesState>((set) => ({
 
             return {
                 notes: [note, ...previousNoteRemoved],
+            }
+        })
+    },
+
+    deleteUserNoteFromNotesList: (productBarcode: string) => {
+        set((state) => {
+            return {
+                notes: state.notes.filter(
+                    (note) => note.product !== productBarcode
+                ),
             }
         })
     },

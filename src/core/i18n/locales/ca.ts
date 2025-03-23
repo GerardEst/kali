@@ -5,6 +5,7 @@ export default {
     product_addNote: 'Crear una nota',
     product_open: 'Obrir',
     product_editNote: 'Editar nota',
+    product_deleteNote: 'Esborrar',
     caroussel_addNote:
         'Afegeix una nota al producte i la veuràs sempre que l’escanegis, o a la llista de notes',
     tabs_saved: 'Guardats',

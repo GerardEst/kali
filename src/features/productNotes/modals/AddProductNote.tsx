@@ -7,10 +7,10 @@ import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { Product } from '@/src/shared/interfaces/Product'
-import { useSaveNote } from '../usecases/saveNote'
-import { CheckIcon } from '@/src/shared/icons/icons'
+import { useManageNote } from '../usecases/manageNote'
+import { CheckIcon, TrashIcon } from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
-
+import { useTranslation } from 'react-i18next'
 export function AddProductNoteModal({
     visible,
     product,
@@ -20,20 +20,31 @@ export function AddProductNoteModal({
     product: Product
     onClose: () => void
 }) {
+    const { t } = useTranslation()
     const { user } = useAuthState()
-    const { saveNoteToProduct } = useSaveNote()
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const { saveNoteToProduct, deleteNoteFromProduct } = useManageNote()
+    const [isLoadingSave, setIsLoadingSave] = useState<boolean>(false)
+    const [isLoadingDelete, setIsLoadingDelete] = useState<boolean>(false)
     const [note, setNote] = useState<any>({})
 
     const onSaveNote = async () => {
-        setIsLoading(true)
+        setIsLoadingSave(true)
         if (product) {
             const savedProduct = await saveNoteToProduct(product, note)
             if (savedProduct) {
                 onClose()
             }
         }
-        setIsLoading(false)
+        setIsLoadingSave(false)
+    }
+
+    const onDeleteNote = async () => {
+        setIsLoadingDelete(true)
+        const deletedProduct = await deleteNoteFromProduct(product)
+        if (deletedProduct) {
+            onClose()
+        }
+        setIsLoadingDelete(false)
     }
 
     useEffect(() => {
@@ -69,6 +80,18 @@ export function AddProductNoteModal({
                         />
                         <View style={styles.modalFooter}>
                             <GenericButton
+                                text={t('product_deleteNote')}
+                                icon={
+                                    <TrashIcon
+                                        size={16}
+                                        color={Colors.primary}
+                                    />
+                                }
+                                type="danger"
+                                action={() => onDeleteNote()}
+                                disabled={isLoadingDelete}
+                            ></GenericButton>
+                            <GenericButton
                                 text="Guardar"
                                 icon={
                                     <CheckIcon
@@ -78,7 +101,7 @@ export function AddProductNoteModal({
                                 }
                                 type="success"
                                 action={() => onSaveNote()}
-                                disabled={isLoading}
+                                disabled={isLoadingSave}
                             ></GenericButton>
                         </View>
                     </View>

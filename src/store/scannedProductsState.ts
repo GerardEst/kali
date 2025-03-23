@@ -11,6 +11,7 @@ interface ScannedProductsState {
     upsertUserReview: (barcode: string, user_review: Review) => void
     setUserNotes: (barcode: string, notes: Note[]) => void
     updateUserNoteFromScannedProduct: (note: Note) => void
+    deleteUserNoteFromScannedProduct: (noteProduct: string) => void
 }
 
 export const useScannedProductsState = create<ScannedProductsState>((set) => ({
@@ -98,6 +99,26 @@ export const useScannedProductsState = create<ScannedProductsState>((set) => ({
                                 product: note.product,
                                 note: note.note,
                             },
+                        }
+                    } else {
+                        newProduct = product
+                    }
+
+                    return newProduct
+                }),
+            }
+        }),
+
+    deleteUserNoteFromScannedProduct: (noteProduct: string) =>
+        //@ts-ignore
+        set((state) => {
+            return {
+                products: state.products.map((product: Product) => {
+                    let newProduct
+                    if (product.barcode == noteProduct) {
+                        newProduct = {
+                            ...product,
+                            user_note: null,
                         }
                     } else {
                         newProduct = product
