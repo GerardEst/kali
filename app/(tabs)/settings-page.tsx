@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { Colors } from '@/styles/colors'
 import { Texts } from '@/styles/common'
 import AntDesign from '@expo/vector-icons/AntDesign'
-
+import React from 'react'
 export default function TabTwoScreen() {
     const { user } = useAuthState()
     const { t } = useTranslation()
@@ -22,19 +22,23 @@ export default function TabTwoScreen() {
                     <Text style={[Texts.title, styles.headerTitle]}>
                         {t('settings.title')}
                     </Text>
-                    {user && (
-                        <View style={styles.userInfo}>
-                            <AntDesign
-                                name="user"
-                                size={16}
-                                color={Colors.gray}
-                            />
-                            <Text style={styles.userEmail}>{user.email}</Text>
-                            <View style={styles.authContainer}>
-                                {user ? <LogoutButton /> : <GoogleSign />}
-                            </View>
+                    <View style={styles.userInfo}>
+                        {user && (
+                            <>
+                                <AntDesign
+                                    name="user"
+                                    size={16}
+                                    color={Colors.gray}
+                                />
+                                <Text style={styles.userEmail}>
+                                    {user?.email || 'No user'}
+                                </Text>
+                            </>
+                        )}
+                        <View style={styles.authContainer}>
+                            {user ? <LogoutButton /> : <GoogleSign />}
                         </View>
-                    )}
+                    </View>
                 </View>
 
                 {/* Language Section */}

@@ -52,26 +52,25 @@ export const CarouselProduct = ({
                             {product.brands?.split(',').at(-1)}
                         </Text>
                     </View>
-                    {user && (
-                        <View style={styles.buttonContainer}>
-                            <Link asChild href={`/${product.barcode}`}>
-                                <Pressable>
-                                    <GenericButton
-                                        nonPressable
-                                        type="accent"
-                                        fill={true}
-                                        icon={
-                                            <OpenIcon
-                                                size={16}
-                                                color={Palette.primary}
-                                            />
-                                        }
-                                        text={t('product_open')}
-                                    ></GenericButton>
-                                </Pressable>
-                            </Link>
-                        </View>
-                    )}
+
+                    <View style={styles.buttonContainer}>
+                        <Link asChild href={`/${product.barcode}`}>
+                            <Pressable>
+                                <GenericButton
+                                    nonPressable
+                                    type="accent"
+                                    fill={true}
+                                    icon={
+                                        <OpenIcon
+                                            size={16}
+                                            color={Palette.primary}
+                                        />
+                                    }
+                                    text={t('product_open')}
+                                ></GenericButton>
+                            </Pressable>
+                        </Link>
+                    </View>
                 </View>
                 <View style={styles.cardContent}>
                     {/* Aquet scrollView hauria de ser un flatlist perque scrollview no va bé 
@@ -125,39 +124,41 @@ export const CarouselProduct = ({
                 <View style={styles.cardFooter}>
                     <View style={styles.optionButtons}>
                         {user?.isAdmin && (
-                            <GenericButton
-                                style={styles.updateButton}
-                                action={() =>
-                                    onUpdateProductInfo(product.barcode)
-                                }
-                                text="Admin"
-                            ></GenericButton>
+                            <>
+                                <GenericButton
+                                    style={styles.updateButton}
+                                    action={() =>
+                                        onUpdateProductInfo(product.barcode)
+                                    }
+                                    text="Admin"
+                                ></GenericButton>
+                                <View style={styles.productOptions}>
+                                    {product.is_fav ? (
+                                        <GenericButton
+                                            noBorder
+                                            icon={
+                                                <BookmarkSlashIcon
+                                                    size={20}
+                                                    color={Palette.primary}
+                                                />
+                                            }
+                                            action={() => handleRemove(product)}
+                                        ></GenericButton>
+                                    ) : (
+                                        <GenericButton
+                                            noBorder
+                                            icon={
+                                                <BookmarkIcon
+                                                    size={20}
+                                                    color={Palette.primary}
+                                                />
+                                            }
+                                            action={() => handleAdd(product)}
+                                        ></GenericButton>
+                                    )}
+                                </View>
+                            </>
                         )}
-                        <View style={styles.productOptions}>
-                            {product.is_fav ? (
-                                <GenericButton
-                                    noBorder
-                                    icon={
-                                        <BookmarkSlashIcon
-                                            size={20}
-                                            color={Palette.primary}
-                                        />
-                                    }
-                                    action={() => handleRemove(product)}
-                                ></GenericButton>
-                            ) : (
-                                <GenericButton
-                                    noBorder
-                                    icon={
-                                        <BookmarkIcon
-                                            size={20}
-                                            color={Palette.primary}
-                                        />
-                                    }
-                                    action={() => handleAdd(product)}
-                                ></GenericButton>
-                            )}
-                        </View>
                     </View>
                 </View>
             </View>
@@ -191,6 +192,7 @@ const styles = StyleSheet.create({
     productOptions: {
         flexDirection: 'row',
         gap: 10,
+        marginLeft: 'auto',
     },
     card: {
         //height: 300,
