@@ -91,7 +91,10 @@ export default function Reviews({
                         {t('reviews_ownReview')}
                     </Text>
                     <View style={styles.review__info}>
-                        <EmojiRank rank={productScore} mode="light" />
+                        <EmojiRank
+                            rank={userReview?.product_score}
+                            mode="light"
+                        />
                     </View>
                 </Pressable>
             </View>

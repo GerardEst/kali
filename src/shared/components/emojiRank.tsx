@@ -3,7 +3,7 @@ import Text from './Typography'
 import { Sentiments } from '@/src/shared/constants/sentiments'
 
 interface EmojiRankProps {
-    rank: number
+    rank: number | undefined
     mode?: 'light' | 'dark'
 }
 

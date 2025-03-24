@@ -215,7 +215,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center',
         alignItems: 'flex-end',
-        bottom: 350,
+        bottom: 385,
         width: '95%',
         // backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
