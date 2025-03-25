@@ -8,10 +8,12 @@ const saveFavListIdLocally = (favListId: string) => (lists_ids.favs = favListId)
 export const getSavedProductsForUser = async (userId: string) => {
     try {
         console.warn('api-call - getSavedProductsForUser')
-        
+
         const { data, error } = await supabase
             .from('user_listed_products')
-            .select('list_id, barcode, list_name, name, image_url')
+            .select(
+                'list_id, barcode, list_name, name, image_url, brands, short_description'
+            )
             .eq('profile_id', userId)
             .eq('list_name', 'favs')
 
@@ -68,21 +70,21 @@ export const unsaveProductForUser = async (
 ) => {
     try {
         console.warn('api-call - unsaveProductForUser')
-        
+
         // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
         let favListId = lists_ids.favs || (await getUserFavListId(userId))
 
-    // Guardem l'id de la llista en local per no fer calls cada vegada
-    saveFavListIdLocally(favListId)
+        // Guardem l'id de la llista en local per no fer calls cada vegada
+        saveFavListIdLocally(favListId)
 
-    // Treiem el producte de la llista de favs
-    const { data, error } = await supabase
-        .from('lists_products')
-        .delete()
-        .eq('list_id', favListId)
-        .eq('product_id', productBarcode)
+        // Treiem el producte de la llista de favs
+        const { data, error } = await supabase
+            .from('lists_products')
+            .delete()
+            .eq('list_id', favListId)
+            .eq('product_id', productBarcode)
 
-    if (error) throw error
+        if (error) throw error
 
         return { unsavedProduct: productBarcode }
     } catch (error) {
@@ -90,8 +92,6 @@ export const unsaveProductForUser = async (
         throw new Error('Error unsaving product from favorites')
     }
 }
-
-
 
 const getUserFavListId = async (userId: string) => {
     try {
