@@ -39,7 +39,7 @@ export default function HomeScreen() {
     const { scan } = useScan()
     const appState = useRef(AppState.currentState)
     const [showInstructions_1, setShowInstructions_1] = useState(true)
-    const [showInstructions_2, setShowInstructions_2] = useState(true)
+    const [showInstructions_2, setShowInstructions_2] = useState(false)
 
     useEffect(() => {
         // If products from scannedProducts store change,
