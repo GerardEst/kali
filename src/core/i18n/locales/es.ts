@@ -29,4 +29,7 @@ export default {
         'Aun no has añadido ninguna nota a ningún producto... ¿A qué esperas?',
     saved_title: 'Productos guardados',
     saved_emptyState: 'Aun no has guardado ningún producto... ¿A qué esperas?',
+    welcome_title: 'Bienvenido/a a La Compra',
+    welcome_description:
+        'Regístrate para empezar a escanear productos y compartir tus opiniones con la comunidad.',
 }

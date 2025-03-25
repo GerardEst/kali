@@ -6,7 +6,7 @@ export default {
     product_deleteNote: 'Esborrar',
     product_open: 'Obrir',
     caroussel_addNote:
-        'Afegeix una nota al producte i la veuràs sempre que l’escanegis, o a la llista de notes',
+        "Afegeix una nota al producte i la veuràs sempre que l'escanegis, o a la llista de notes",
     tabs_saved: 'Guardats',
     tabs_notes: 'Notes',
     tabs_search: 'Escàner',
@@ -29,4 +29,8 @@ export default {
         'Encara no has afegit cap nota a cap producte. A què esperes?',
     saved_title: 'Productes guardats',
     saved_emptyState: 'Encara no has guardat cap producte. A què esperes?',
+    subscribe_call: 'Subscriu-te!',
+    welcome_title: 'Benvingut/da a La Compra',
+    welcome_description:
+        "Registra't per començar a escanejar productes i compartir les teves opinions amb la comunitat.",
 }

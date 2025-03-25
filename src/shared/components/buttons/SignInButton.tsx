@@ -3,10 +3,14 @@ import {
     statusCodes,
 } from '@react-native-google-signin/google-signin'
 import { loginUser } from '@/src/core/auth/usecases/login'
-import { Alert } from 'react-native'
+import { Alert, StyleProp, ViewStyle } from 'react-native'
 import { useAuthState } from '@/src/store/authState'
 
-export default function SigninButton() {
+export default function SigninButton({
+    style,
+}: {
+    style?: StyleProp<ViewStyle>
+}) {
     const { setUser, user } = useAuthState()
 
     const handleSignin = async () => {
@@ -43,6 +47,7 @@ export default function SigninButton() {
 
     return (
         <GoogleSigninButton
+            style={style}
             size={GoogleSigninButton.Size.Standard}
             color={GoogleSigninButton.Color.Light}
             onPress={handleSignin}

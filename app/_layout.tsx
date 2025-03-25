@@ -1,6 +1,6 @@
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native'
 import { useFonts } from 'expo-font'
-import { Stack } from 'expo-router'
+import { Stack, useRouter, useSegments } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
 import { useEffect } from 'react'
@@ -13,7 +13,9 @@ import { Text } from 'react-native'
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
-    const { setUser, cleanUser } = useAuthState()
+    const { setUser, cleanUser, user } = useAuthState()
+    const segments = useSegments()
+    const router = useRouter()
     const [loaded, error] = useFonts({
         'Sora-Medium': require('../assets/fonts/Sora-Medium.ttf'),
         'Sora-ExtraBold': require('../assets/fonts/Sora-ExtraBold.ttf'),
@@ -22,6 +24,14 @@ export default function RootLayout() {
     useEffect(() => {
         autoLogin()
     }, [])
+
+    useEffect(() => {
+        if (!loaded) return
+
+        if (!user && segments[0] !== 'register') {
+            router.replace('/register')
+        }
+    }, [user, loaded, segments])
 
     async function autoLogin() {
         const userSession: any = await checkUserSession()
@@ -53,7 +63,10 @@ export default function RootLayout() {
         <ThemeProvider value={DefaultTheme}>
             <Stack>
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-
+                <Stack.Screen
+                    name="register"
+                    options={{ headerShown: false }}
+                />
                 <Stack.Screen name="+not-found" />
             </Stack>
             <StatusBar style="auto" />
