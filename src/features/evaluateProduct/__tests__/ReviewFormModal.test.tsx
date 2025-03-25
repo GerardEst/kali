@@ -90,7 +90,7 @@ describe('ReviewFormModal', () => {
         )
 
         expect(getByText(mockProduct.name || mockProduct.barcode)).toBeTruthy()
-        expect(getByText('evaluateProduct.productDescription')).toBeTruthy()
+        expect(getByText('evaluateProduct_productDescription')).toBeTruthy()
         expect(getByText('Publicar')).toBeTruthy()
     })
 

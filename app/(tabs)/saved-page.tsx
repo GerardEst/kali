@@ -33,7 +33,7 @@ export default function Saved() {
 
     return (
         <SafeAreaView style={Pages}>
-            <Text style={Texts.title}>{t('saved.title')}</Text>
+            <Text style={Texts.title}>{t('saved_title')}</Text>
             {user ? (
                 <View style={styles.savedList}>
                     <FlatList
@@ -51,7 +51,7 @@ export default function Saved() {
                             </Link>
                         )}
                         ListEmptyComponent={
-                            <Text>{t('saved.emptyState')}</Text>
+                            <Text>{t('saved_emptyState')}</Text>
                         }
                     />
                 </View>

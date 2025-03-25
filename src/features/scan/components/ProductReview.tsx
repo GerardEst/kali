@@ -28,7 +28,7 @@ export default function ProductReview({
                 <Text>{review.product_comment}</Text>
             </View>
             <Text style={[styles.author, Texts.smallTitle]}>
-                {profile?.display_name || t('common.anonymous')}
+                {profile?.display_name || t('common_anonymous')}
             </Text>
         </View>
     )

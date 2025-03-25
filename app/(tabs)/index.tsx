@@ -129,14 +129,14 @@ export default function HomeScreen() {
             ) : (
                 <View style={styles.permissionMessage}>
                     <Text style={styles.permissionTitle}>
-                        {t('scanner.cameraPermission.title')}
+                        {t('scanner_cameraPermission_title')}
                     </Text>
                     <Text style={styles.permissionText}>
-                        {t('scanner.cameraPermission.message')}
+                        {t('scanner_cameraPermission_message')}
                     </Text>
                     <GenericButton
                         style={styles.permissionButton}
-                        text={t('scanner.cameraPermission.button')}
+                        text={t('scanner_cameraPermission_button')}
                         action={requestPermission}
                     />
                 </View>
@@ -191,13 +191,7 @@ export default function HomeScreen() {
                     </View>
                 </>
             ) : (
-                <View style={styles.message}>
-                    <Text>{t('scanner.emptyState.title')}</Text>
-                    <Text>{t('scanner.emptyState.options.reviews')}</Text>
-                    <Text>{t('scanner.emptyState.options.notes')}</Text>
-                    <Text>{t('scanner.emptyState.options.info')}</Text>
-                    <Text>{t('scanner.emptyState.options.compare')}</Text>
-                </View>
+                <View style={styles.message}></View>
             )}
         </View>
     )

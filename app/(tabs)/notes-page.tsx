@@ -25,7 +25,7 @@ export default function Notes() {
 
     return (
         <SafeAreaView style={Pages}>
-            <Text style={Texts.title}>{t('notes.title')}</Text>
+            <Text style={Texts.title}>{t('notes_title')}</Text>
             {user ? (
                 <View style={styles.notesList}>
                     <FlatList
@@ -40,7 +40,7 @@ export default function Notes() {
                             </View>
                         )}
                         ListEmptyComponent={
-                            <Text>{t('notes.emptyState')}</Text>
+                            <Text>{t('notes_emptyState')}</Text>
                         }
                     />
                 </View>

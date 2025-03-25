@@ -20,7 +20,7 @@ export default function TabTwoScreen() {
                 {/* Header Section */}
                 <View style={styles.header}>
                     <Text style={[Texts.title, styles.headerTitle]}>
-                        {t('settings.title')}
+                        {t('settings_title')}
                     </Text>
                     <View style={styles.userInfo}>
                         {user && (
@@ -44,7 +44,7 @@ export default function TabTwoScreen() {
                 {/* Language Section */}
                 <View style={styles.section}>
                     <Text style={[Texts.smallTitle, styles.sectionTitle]}>
-                        {t('settings.language')}
+                        {t('settings_language')}
                     </Text>
                     <LanguageSelector />
                 </View>
@@ -52,7 +52,7 @@ export default function TabTwoScreen() {
                 {/* App Info Section */}
                 <View style={styles.section}>
                     <Text style={[Texts.smallTitle, styles.sectionTitle]}>
-                        {t('common.version')}
+                        {t('common_version')}
                     </Text>
                     <VersionDisplay />
                 </View>

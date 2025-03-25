@@ -117,7 +117,7 @@ export const CarouselProduct = ({
                                 </View>
                             )
                         ) : (
-                            <Text>{t('common.loading')}</Text>
+                            <Text>{t('common_loading')}</Text>
                         )}
                     </View>
                 </View>

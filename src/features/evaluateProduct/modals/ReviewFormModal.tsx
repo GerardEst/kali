@@ -77,7 +77,7 @@ export function ReviewFormModal({
                         <View style={styles.modalContent}>
                             <View>
                                 <Text>
-                                    {t('evaluateProduct.productDescription')}
+                                    {t('evaluateProduct_productDescription')}
                                 </Text>
                                 <Controller
                                     control={control}

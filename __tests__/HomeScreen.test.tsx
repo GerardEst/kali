@@ -69,8 +69,8 @@ describe.skip('User permissions', () => {
     it('should ask for permissions when permissions are not granted', () => {
         const { getByText } = render(<HomeScreen />)
 
-        getByText('scanner.cameraPermission.title')
-        getByText('scanner.cameraPermission.message')
-        getByText('scanner.cameraPermission.button')
+        getByText('scanner_cameraPermission_title')
+        getByText('scanner_cameraPermission_message')
+        getByText('scanner_cameraPermission_button')
     })
 })
