@@ -1,6 +1,7 @@
 import { Button } from 'react-native'
 import { logoutUser } from '@/src/core/auth/usecases/logout'
 import { useAuthState } from '@/src/store/authState'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function LogoutButton() {
     const { cleanUser } = useAuthState()
@@ -11,6 +12,7 @@ export default function LogoutButton() {
         if (loggedOutUser.error) {
             console.error('Error signing out:', loggedOutUser.error)
         } else {
+            await AsyncStorage.removeItem('user')
             cleanUser()
         }
     }

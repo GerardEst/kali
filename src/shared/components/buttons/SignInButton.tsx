@@ -5,13 +5,14 @@ import {
 import { loginUser } from '@/src/core/auth/usecases/login'
 import { Alert, StyleProp, ViewStyle } from 'react-native'
 import { useAuthState } from '@/src/store/authState'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default function SigninButton({
     style,
 }: {
     style?: StyleProp<ViewStyle>
 }) {
-    const { setUser, user } = useAuthState()
+    const { setUser } = useAuthState()
 
     const handleSignin = async () => {
         const userLogged = await loginUser()
@@ -41,6 +42,8 @@ export default function SigninButton({
                 )
             }
         } else {
+            // Store user in AsyncStorage before setting in state
+            await AsyncStorage.setItem('user', JSON.stringify(userLogged))
             setUser(userLogged)
         }
     }

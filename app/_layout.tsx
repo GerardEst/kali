@@ -9,22 +9,49 @@ import { useAuthState } from '@/src/store/authState'
 import '@/src/core/i18n/i18n'
 import { Text } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { User } from '@/src/core/auth/models'
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Keep the splash screen visible while we fetch resources
 SplashScreen.preventAutoHideAsync()
 
 export default function RootLayout() {
     const { setUser, cleanUser, user } = useAuthState()
     const segments = useSegments()
     const router = useRouter()
+    const [isAuthChecking, setIsAuthChecking] = useState(true)
     const [loaded, error] = useFonts({
         'Sora-Medium': require('../assets/fonts/Sora-Medium.ttf'),
         'Sora-ExtraBold': require('../assets/fonts/Sora-ExtraBold.ttf'),
     })
 
     useEffect(() => {
-        autoLogin()
-        setFirstTimeFlags()
+        setIsAuthChecking(true)
+        async function prepare() {
+            try {
+                const storedUser = await AsyncStorage.getItem('user')
+
+                if (!storedUser) {
+                    cleanUser()
+                } else {
+                    setUser(JSON.parse(storedUser))
+
+                    const userSession = await checkUserSession()
+                    if (!userSession || 'error' in userSession) {
+                        cleanUser()
+                        await AsyncStorage.removeItem('user')
+                    }
+                }
+
+                // Set first time flags in parallel
+                setFirstTimeFlags()
+            } catch (e) {
+                console.warn('Error during app initialization:', e)
+                cleanUser()
+                await AsyncStorage.removeItem('user')
+            }
+        }
+
+        prepare()
     }, [])
 
     useEffect(() => {
@@ -33,7 +60,10 @@ export default function RootLayout() {
         if (!user && segments[0] !== 'register') {
             router.replace('/register')
         }
-    }, [user, loaded, segments])
+        setIsAuthChecking(false)
+
+        SplashScreen.hideAsync()
+    }, [user, loaded, segments, isAuthChecking])
 
     async function setFirstTimeFlags() {
         try {
@@ -47,24 +77,6 @@ export default function RootLayout() {
             console.error('Error checking first time:', error)
         }
     }
-
-    async function autoLogin() {
-        const userSession: any = await checkUserSession()
-        if (userSession?.error) {
-            cleanUser()
-        } else {
-            setUser(userSession)
-        }
-    }
-
-    useEffect(() => {
-        if (loaded) {
-            SplashScreen.hideAsync()
-        }
-        if (error) {
-            console.error('Error loading fonts:', error)
-        }
-    }, [loaded, error])
 
     if (!loaded) {
         return null
