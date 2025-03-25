@@ -1,17 +1,11 @@
-import {
-    StyleSheet,
-    View,
-    Text,
-    Platform,
-    StatusBar,
-    AppState,
-} from 'react-native'
+import { StyleSheet, View, Platform, StatusBar, AppState } from 'react-native'
 import {
     useCameraDevice,
     useCameraPermission,
     useCodeScanner,
     Camera,
 } from 'react-native-vision-camera'
+import Text from '@/src/shared/components/Typography'
 import { useState, useEffect, useRef, act } from 'react'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { UpdateProductInfoModal } from '@/src/features/fillProduct/modals/UpdateProductInfo'
@@ -22,16 +16,19 @@ import { Carousel } from '@/src/features/scan/components/Carousel'
 import { AddProductNoteModal } from '@/src/features/productNotes/modals/AddProductNote'
 import Reviews from '@/src/features/scan/components/Reviews'
 import React from 'react'
-import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useTranslation } from 'react-i18next'
 import { CarouselItem } from '@/src/features/scan/interfaces/carousel'
 import { Nutriscore } from '@/src/features/scan/components/Nutriscore'
+import { AskPermission } from '@/src/features/scan/components/AskPermission'
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { Texts } from '@/styles/common'
+import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 
 export default function HomeScreen() {
     const { t } = useTranslation()
 
-    const { hasPermission, requestPermission } = useCameraPermission()
+    const { hasPermission } = useCameraPermission()
     const { products } = useScannedProductsState()
     const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
@@ -41,6 +38,8 @@ export default function HomeScreen() {
     const [isCameraActive, setIsCameraActive] = useState(true)
     const { scan } = useScan()
     const appState = useRef(AppState.currentState)
+    const [showInstructions_1, setShowInstructions_1] = useState(true)
+    const [showInstructions_2, setShowInstructions_2] = useState(true)
 
     useEffect(() => {
         // If products from scannedProducts store change,
@@ -83,6 +82,42 @@ export default function HomeScreen() {
         }
     }, [])
 
+    useEffect(() => {
+        checkShowInstructions()
+    }, [])
+
+    async function checkShowInstructions() {
+        try {
+            const value = await AsyncStorage.getItem(
+                'show_scanner_instructions_1'
+            )
+            const value2 = await AsyncStorage.getItem(
+                'show_scanner_instructions_2'
+            )
+            setShowInstructions_1(value === 'true')
+            setShowInstructions_2(value2 === 'true')
+        } catch (error) {
+            console.error('Error checking first time using scanner:', error)
+        }
+    }
+
+    function set_showInstructions_1(value: boolean) {
+        AsyncStorage.setItem(
+            'show_scanner_instructions_1',
+            value ? 'true' : 'false'
+        )
+        setShowInstructions_1(value)
+    }
+
+    function set_showInstructions_2(value: boolean) {
+        console.log('setting showInstructions_2', value)
+        AsyncStorage.setItem(
+            'show_scanner_instructions_2',
+            value ? 'true' : 'false'
+        )
+        setShowInstructions_2(value)
+    }
+
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
         codeTypes: supportedBarcodeTypes,
@@ -90,6 +125,8 @@ export default function HomeScreen() {
             if (isModalOpen) return
             if (!codes || codes.length === 0) return
             scan(codes[0])
+            set_showInstructions_1(false)
+            set_showInstructions_2(true)
         },
     })
 
@@ -120,25 +157,54 @@ export default function HomeScreen() {
                 </>
             )}
             {hasPermission ? (
-                <Camera
-                    style={StyleSheet.absoluteFill}
-                    device={device}
-                    isActive={isCameraActive}
-                    codeScanner={codeScanner}
-                />
-            ) : (
-                <View style={styles.permissionMessage}>
-                    <Text style={styles.permissionTitle}>
-                        {t('scanner_cameraPermission_title')}
-                    </Text>
-                    <Text style={styles.permissionText}>
-                        {t('scanner_cameraPermission_message')}
-                    </Text>
-                    <GenericButton
-                        style={styles.permissionButton}
-                        text={t('scanner_cameraPermission_button')}
-                        action={requestPermission}
+                <>
+                    <Camera
+                        style={StyleSheet.absoluteFill}
+                        device={device}
+                        isActive={isCameraActive}
+                        codeScanner={codeScanner}
                     />
+                    {showInstructions_1 && (
+                        <View style={styles.instructionsContainer}>
+                            <Text
+                                style={[Texts.title, { textAlign: 'center' }]}
+                            >
+                                Escàner de La compra
+                            </Text>
+                            <View style={styles.instructionsBar}></View>
+                            <Text style={{ textAlign: 'center' }}>
+                                {t('scanner_firstTimeInstructions_1')}
+                            </Text>
+                        </View>
+                    )}
+                    {showInstructions_2 && (
+                        <View
+                            style={[
+                                styles.instructionsContainer,
+                                styles.instructionsContainer_secondStep,
+                            ]}
+                        >
+                            <Text
+                                style={[Texts.title, { textAlign: 'center' }]}
+                            >
+                                Escàner de La compra
+                            </Text>
+                            <View style={styles.instructionsBar}></View>
+                            <Text style={{ textAlign: 'center' }}>
+                                {t('scanner_firstTimeInstructions_2')}
+                            </Text>
+                            <GenericButton
+                                text={t('common_close')}
+                                action={() => {
+                                    set_showInstructions_2(false)
+                                }}
+                            />
+                        </View>
+                    )}
+                </>
+            ) : (
+                <View style={styles.permissionContainer}>
+                    <AskPermission />
                 </View>
             )}
             {products && products.length > 0 ? (
@@ -211,7 +277,6 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         bottom: 385,
         width: '95%',
-        // backgroundColor: 'rgba(255, 255, 255, 0.5)',
     },
     message: {
         width: '95%',
@@ -239,28 +304,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: '600',
     },
-    permissionMessage: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        padding: 20,
-        backgroundColor: '#ffffff',
-    },
-    permissionTitle: {
-        fontSize: 20,
-        fontWeight: 'bold',
-        marginBottom: 10,
-        textAlign: 'center',
-    },
-    permissionText: {
-        fontSize: 16,
-        textAlign: 'center',
-        marginBottom: 20,
-        color: '#666666',
-    },
-    permissionButton: {
-        width: '80%',
-    },
+
     customFirstElement: {
         display: 'flex',
         justifyContent: 'center',
@@ -277,5 +321,34 @@ const styles = StyleSheet.create({
         width: 100,
         height: 50,
         resizeMode: 'contain',
+    },
+    permissionContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'black',
+    },
+
+    instructionsContainer: {
+        position: 'absolute',
+        bottom: 100,
+        width: '95%',
+        marginHorizontal: '2.5%',
+        backgroundColor: 'white',
+        padding: 30,
+        borderRadius: 10,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 20,
+        zIndex: 1,
+    },
+    instructionsContainer_secondStep: {
+        bottom: 385,
+    },
+    instructionsBar: {
+        width: 100,
+        height: 2,
+        backgroundColor: 'black',
     },
 })

@@ -15,6 +15,7 @@ export default {
     common_unknown: 'Desconegut',
     common_anonymous: 'Anònim',
     common_loading: 'Carregant...',
+    common_close: 'Tancar',
     settings_title: 'Configuració',
     settings_language: 'Idioma',
     settings_catalan: 'Català',
@@ -33,4 +34,8 @@ export default {
     welcome_title: 'Benvingut/da a La Compra',
     welcome_description:
         "Registra't per començar a escanejar productes i compartir les teves opinions amb la comunitat.",
+    scanner_firstTimeInstructions_1:
+        'Apunta amb la càmara a qualsevol codi de barres per veure informació, comentaris i les teves notes privades',
+    scanner_firstTimeInstructions_2:
+        'Molt bé! Els productes que escanegis s\’aniran guardant aquí sota, mentre a dalt pots veure la teva opinió i la opinió general sobre el producte.',
 }

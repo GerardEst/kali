@@ -3,11 +3,12 @@ import { useFonts } from 'expo-font'
 import { Stack, useRouter, useSegments } from 'expo-router'
 import * as SplashScreen from 'expo-splash-screen'
 import { StatusBar } from 'expo-status-bar'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { checkUserSession } from '@/src/core/auth/usecases/checkUserSession'
 import { useAuthState } from '@/src/store/authState'
 import '@/src/core/i18n/i18n'
 import { Text } from 'react-native'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync()
@@ -23,6 +24,7 @@ export default function RootLayout() {
 
     useEffect(() => {
         autoLogin()
+        setFirstTimeFlags()
     }, [])
 
     useEffect(() => {
@@ -32,6 +34,27 @@ export default function RootLayout() {
             router.replace('/register')
         }
     }, [user, loaded, segments])
+
+    async function setFirstTimeFlags() {
+        try {
+            const value = await AsyncStorage.getItem(
+                'app_opened_for_first_time'
+            )
+            if (value === null || value === 'false') {
+                await AsyncStorage.setItem('app_opened_for_first_time', 'true')
+                await AsyncStorage.setItem(
+                    'show_scanner_instructions_1',
+                    'true'
+                )
+                await AsyncStorage.setItem(
+                    'show_scanner_instructions_2',
+                    'false'
+                )
+            }
+        } catch (error) {
+            console.error('Error checking first time:', error)
+        }
+    }
 
     async function autoLogin() {
         const userSession: any = await checkUserSession()
