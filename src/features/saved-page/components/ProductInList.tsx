@@ -5,8 +5,9 @@ import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { useTranslation } from 'react-i18next'
 import { Texts } from '@/styles/common'
-import { BookmarkSlashIcon } from '@/src/shared/icons/icons'
-import { Colors } from '@/styles/colors'
+import { BookmarkSlashIcon, CloseIcon } from '@/src/shared/icons/icons'
+import { Palette } from '@/styles/colors'
+
 export const ProductInList = ({ product }: { product: Product }) => {
     const { removeFav } = useFavoriteActions()
     const { t } = useTranslation()
@@ -27,24 +28,21 @@ export const ProductInList = ({ product }: { product: Product }) => {
                 <Text style={Texts.title}>
                     {product.name || product.barcode}
                 </Text>
+                {product.brands && (
+                    <Text style={Texts.smallTitle}>{product.brands}</Text>
+                )}
                 {product.short_description && (
                     <Text style={Texts.lightTitle}>
                         {product.short_description}
                     </Text>
                 )}
-                {product.brands && (
-                    <Text style={Texts.lightTitle}>{product.brands}</Text>
-                )}
             </View>
             <View style={styles.productActions}>
                 {product.is_fav && (
                     <GenericButton
-                        icon={
-                            <BookmarkSlashIcon
-                                size={16}
-                                color={Colors.primary}
-                            />
-                        }
+                        icon={<BookmarkSlashIcon size={20} />}
+                        noBorder
+                        fill={false}
                         action={() => handleRemove(product)}
                     ></GenericButton>
                 )}
@@ -55,25 +53,27 @@ export const ProductInList = ({ product }: { product: Product }) => {
 
 const styles = StyleSheet.create({
     productContainer: {
-        borderWidth: 1,
+        marginBottom: 25,
+        backgroundColor: Palette.background,
         flexDirection: 'row',
         alignItems: 'center',
-        height: 100,
+        minHeight: 100,
         justifyContent: 'space-between',
         borderRadius: 10,
         overflow: 'hidden',
     },
     productImage: {
-        aspectRatio: 1,
         height: '100%',
+        width: 150,
     },
     productInfo: {
         flex: 1,
         padding: 10,
+        paddingLeft: 15,
+        paddingBottom: 30,
         height: '100%',
     },
     productActions: {
-        padding: 10,
         height: '100%',
     },
 })

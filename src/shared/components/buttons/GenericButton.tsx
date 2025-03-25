@@ -49,7 +49,7 @@ export const GenericButton = ({
                     {
                         backgroundColor: fill
                             ? ButtonColors[type || 'accent']
-                            : 'white',
+                            : 'transparent',
                     },
                     style,
                 ]}
@@ -75,7 +75,7 @@ export const GenericButton = ({
                 {
                     backgroundColor: fill
                         ? ButtonColors[type || 'accent']
-                        : 'white',
+                        : 'transparent',
                 },
                 style,
             ]}

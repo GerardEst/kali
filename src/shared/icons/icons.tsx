@@ -94,3 +94,7 @@ export const TrashIcon = (props: any) => {
         <Octicons name="trash" size={24} color={Palette.primary} {...props} />
     )
 }
+
+export const CloseIcon = (props: any) => {
+    return <Octicons name="x" size={24} color={Palette.primary} {...props} />
+}

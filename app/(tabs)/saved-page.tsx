@@ -39,11 +39,9 @@ export default function Saved() {
                             renderItem={({ item }) => (
                                 <Link asChild href={`/${item.barcode}`}>
                                     <Pressable>
-                                        <View style={styles.userProduct}>
-                                            <ProductInList
-                                                product={item}
-                                            ></ProductInList>
-                                        </View>
+                                        <ProductInList
+                                            product={item}
+                                        ></ProductInList>
                                     </Pressable>
                                 </Link>
                             )}
@@ -62,10 +60,7 @@ export default function Saved() {
 
 const styles = StyleSheet.create({
     savedList: {
-        marginTop: 20,
+        marginTop: 30,
         paddingBottom: 85,
-    },
-    userProduct: {
-        marginTop: 15,
     },
 })
