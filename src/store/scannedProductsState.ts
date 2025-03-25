@@ -10,6 +10,7 @@ interface ScannedProductsState {
     products: Product[]
     scannedCount: number
     addScannedProduct: (product: Product) => void
+    clearScannedProducts: () => void
     updateScannedProduct: (product: Product) => void
     upsertUserReview: (barcode: string, user_review: Review) => void
     setUserNotes: (barcode: string, notes: Note[]) => void
@@ -36,6 +37,12 @@ export const useScannedProductsState = create<ScannedProductsState>()(
                         scannedCount: state.scannedCount + 1,
                     }
                 }),
+
+            clearScannedProducts: () =>
+                set(() => ({
+                    products: [],
+                    scannedCount: 0,
+                })),
 
             updateScannedProduct: (product: Product) =>
                 set((state) => {

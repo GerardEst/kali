@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, FlatList } from 'react-native'
+import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native'
 import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pages, Texts } from '@/styles/common'
@@ -9,7 +9,7 @@ import { UserNote } from '@/src/shared/components/UserNote'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 import { CallToSubscribe } from '@/src/shared/components/callToSubscribe'
-
+import { Link } from 'expo-router'
 export default function Notes() {
     const { t } = useTranslation()
     const { user } = useAuthState()
@@ -34,12 +34,19 @@ export default function Notes() {
                             data={notes}
                             keyExtractor={(note) => note.id.toString()}
                             renderItem={({ item }) => (
-                                <View style={styles.userNote}>
-                                    <UserNote
-                                        product={item.productData}
-                                        note={item}
-                                    ></UserNote>
-                                </View>
+                                <Link
+                                    asChild
+                                    href={`/${item.productData?.barcode}`}
+                                >
+                                    <Pressable>
+                                        <View style={styles.userNote}>
+                                            <UserNote
+                                                product={item.productData}
+                                                note={item}
+                                            ></UserNote>
+                                        </View>
+                                    </Pressable>
+                                </Link>
                             )}
                             ListEmptyComponent={
                                 <Text>{t('notes_emptyState')}</Text>

@@ -12,9 +12,12 @@ import AntDesign from '@expo/vector-icons/AntDesign'
 import React from 'react'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useScannedProductsState } from '@/src/store/scannedProductsState'
+
 export default function TabTwoScreen() {
     const { user } = useAuthState()
     const { t } = useTranslation()
+    const { clearScannedProducts } = useScannedProductsState()
 
     return (
         <SafeAreaView style={styles.container}>
@@ -60,18 +63,26 @@ export default function TabTwoScreen() {
                 </View>
 
                 {user?.isAdmin && (
-                    <GenericButton
-                        text={'Delete first time flags'}
-                        action={() => {
-                            AsyncStorage.removeItem('app_opened_for_first_time')
-                            AsyncStorage.removeItem(
-                                'show_scanner_instructions_1'
-                            )
-                            AsyncStorage.removeItem(
-                                'show_scanner_instructions_2'
-                            )
-                        }}
-                    />
+                    <>
+                        <GenericButton
+                            text={'Delete first time flags'}
+                            action={() => {
+                                AsyncStorage.removeItem(
+                                    'app_opened_for_first_time'
+                                )
+                                AsyncStorage.removeItem(
+                                    'show_scanner_instructions_1'
+                                )
+                                AsyncStorage.removeItem(
+                                    'show_scanner_instructions_2'
+                                )
+                            }}
+                        />
+                        <GenericButton
+                            text={'Reset scanned historic'}
+                            action={() => clearScannedProducts()}
+                        />
+                    </>
                 )}
             </ScrollView>
         </SafeAreaView>
