@@ -20,12 +20,14 @@ import { Link } from 'expo-router'
 interface CarouselProductProps {
     onUpdateProductInfo: (barcode: string) => void
     onAddNote: (barcode: string) => void
+    onOpenReview: (barcode: string) => void
     product: Product
 }
 
 export const CarouselProduct = ({
     onUpdateProductInfo,
     onAddNote,
+    onOpenReview,
     product,
 }: CarouselProductProps) => {
     const { user } = useAuthState()
@@ -76,7 +78,7 @@ export const CarouselProduct = ({
                     {/* Aquet scrollView hauria de ser un flatlist perque scrollview no va bé 
                     per coses dinamiques, ho renderitza tot tot el rato */}
                     <View style={styles.cardContentNotes}>
-                        {product ? (
+                        {product && user?.isSubscriber ? (
                             product.user_note ? (
                                 <View style={styles.userNote}>
                                     <Text>{product.user_note.note}</Text>
@@ -116,8 +118,42 @@ export const CarouselProduct = ({
                                     ></GenericButton>
                                 </View>
                             )
+                        ) : product.user_review ? (
+                            <View style={styles.userNote}>
+                                <Text>
+                                    {product.user_review.product_comment}
+                                </Text>
+                                <GenericButton
+                                    style={{
+                                        marginTop: 'auto',
+                                        alignSelf: 'flex-end',
+                                    }}
+                                    icon={
+                                        <PencilIcon
+                                            size={20}
+                                            color={Palette.primary}
+                                        />
+                                    }
+                                    text={t('product_editReview')}
+                                    action={() => onOpenReview(product.barcode)}
+                                ></GenericButton>
+                            </View>
                         ) : (
-                            <Text>{t('common_loading')}</Text>
+                            <View style={styles.cardContentNoNote}>
+                                <Text style={{ textAlign: 'center' }}>
+                                    {t('caroussel_addReview')}
+                                </Text>
+                                <GenericButton
+                                    icon={
+                                        <NotesIcon
+                                            size={20}
+                                            color={Palette.primary}
+                                        />
+                                    }
+                                    text={t('product_addReview')}
+                                    action={() => onOpenReview(product.barcode)}
+                                ></GenericButton>
+                            </View>
                         )}
                     </View>
                 </View>

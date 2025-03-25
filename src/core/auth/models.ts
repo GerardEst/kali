@@ -9,4 +9,5 @@ export type User = {
     user_metadata: any
     identities?: any
     isAdmin?: boolean
+    isSubscriber?: boolean
 } | null

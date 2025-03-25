@@ -212,6 +212,9 @@ export default function HomeScreen() {
                             onAddNote={() => {
                                 setNoteModalVisible(true)
                             }}
+                            onOpenReview={() => {
+                                setReviewFormVisible(true)
+                            }}
                             products={products}
                             firstElement={
                                 <View style={styles.customFirstElement}>

@@ -18,12 +18,14 @@ export const Carousel = ({
     onProductVisible,
     onUpdateProductInfo,
     onAddNote,
+    onOpenReview,
     products,
     firstElement,
 }: {
     onProductVisible: (product: Product) => void
     onUpdateProductInfo: (barcode: string) => void
     onAddNote: (barcode: string) => void
+    onOpenReview: (barcode: string) => void
     products: Product[]
     firstElement?: React.ReactNode
 }) => {
@@ -115,6 +117,7 @@ export const Carousel = ({
                 <CarouselProduct
                     onUpdateProductInfo={onUpdateProductInfo}
                     onAddNote={onAddNote}
+                    onOpenReview={onOpenReview}
                     product={item}
                 />
             </Animated.View>

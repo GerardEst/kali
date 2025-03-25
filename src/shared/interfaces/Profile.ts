@@ -4,4 +4,5 @@ export interface Profile {
     display_name?: string
     profile_picture?: string
     admin?: boolean
+    isSubscriber?: boolean
 }
