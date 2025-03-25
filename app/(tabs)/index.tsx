@@ -38,8 +38,7 @@ export default function HomeScreen() {
     const [isCameraActive, setIsCameraActive] = useState(true)
     const { scan } = useScan()
     const appState = useRef(AppState.currentState)
-    const [showInstructions_1, setShowInstructions_1] = useState(true)
-    const [showInstructions_2, setShowInstructions_2] = useState(false)
+    const [showInstructions_1, setShowInstructions_1] = useState(false)
 
     useEffect(() => {
         // If products from scannedProducts store change,
@@ -83,19 +82,21 @@ export default function HomeScreen() {
     }, [])
 
     useEffect(() => {
-        checkShowInstructions()
+        initShowInstructions()
     }, [])
 
-    async function checkShowInstructions() {
+    async function initShowInstructions() {
         try {
-            const value = await AsyncStorage.getItem(
+            const showInstructions_1 = await AsyncStorage.getItem(
                 'show_scanner_instructions_1'
             )
-            const value2 = await AsyncStorage.getItem(
-                'show_scanner_instructions_2'
-            )
-            setShowInstructions_1(value === 'true')
-            setShowInstructions_2(value2 === 'true')
+            if (showInstructions_1 === 'null' || showInstructions_1 === null) {
+                set_showInstructions_1(true)
+            } else if (showInstructions_1 === 'false') {
+                set_showInstructions_1(false)
+            } else {
+                set_showInstructions_1(true)
+            }
         } catch (error) {
             console.error('Error checking first time using scanner:', error)
         }
@@ -109,15 +110,6 @@ export default function HomeScreen() {
         setShowInstructions_1(value)
     }
 
-    function set_showInstructions_2(value: boolean) {
-        console.log('setting showInstructions_2', value)
-        AsyncStorage.setItem(
-            'show_scanner_instructions_2',
-            value ? 'true' : 'false'
-        )
-        setShowInstructions_2(value)
-    }
-
     const device = useCameraDevice('back')
     const codeScanner = useCodeScanner({
         codeTypes: supportedBarcodeTypes,
@@ -126,7 +118,6 @@ export default function HomeScreen() {
             if (!codes || codes.length === 0) return
             scan(codes[0])
             set_showInstructions_1(false)
-            set_showInstructions_2(true)
         },
     })
 
@@ -177,37 +168,13 @@ export default function HomeScreen() {
                             </Text>
                         </View>
                     )}
-                    {showInstructions_2 && (
-                        <View
-                            style={[
-                                styles.instructionsContainer,
-                                styles.instructionsContainer_secondStep,
-                            ]}
-                        >
-                            <Text
-                                style={[Texts.title, { textAlign: 'center' }]}
-                            >
-                                Escàner de La compra
-                            </Text>
-                            <View style={styles.instructionsBar}></View>
-                            <Text style={{ textAlign: 'center' }}>
-                                {t('scanner_firstTimeInstructions_2')}
-                            </Text>
-                            <GenericButton
-                                text={t('common_close')}
-                                action={() => {
-                                    set_showInstructions_2(false)
-                                }}
-                            />
-                        </View>
-                    )}
                 </>
             ) : (
                 <View style={styles.permissionContainer}>
                     <AskPermission />
                 </View>
             )}
-            {products && products.length > 0 ? (
+            {products && products.length > 0 && (
                 <>
                     <View style={styles.reviewSection}>
                         {activeProduct && (
@@ -256,8 +223,6 @@ export default function HomeScreen() {
                         ></Carousel>
                     </View>
                 </>
-            ) : (
-                <View style={styles.message}></View>
             )}
         </View>
     )

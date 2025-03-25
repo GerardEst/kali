@@ -73,9 +73,6 @@ export default function TabTwoScreen() {
                                 AsyncStorage.removeItem(
                                     'show_scanner_instructions_1'
                                 )
-                                AsyncStorage.removeItem(
-                                    'show_scanner_instructions_2'
-                                )
                             }}
                         />
                         <GenericButton

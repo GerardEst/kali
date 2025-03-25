@@ -42,14 +42,6 @@ export default function RootLayout() {
             )
             if (value === null || value === 'false') {
                 await AsyncStorage.setItem('app_opened_for_first_time', 'true')
-                await AsyncStorage.setItem(
-                    'show_scanner_instructions_1',
-                    'true'
-                )
-                await AsyncStorage.setItem(
-                    'show_scanner_instructions_2',
-                    'false'
-                )
             }
         } catch (error) {
             console.error('Error checking first time:', error)
