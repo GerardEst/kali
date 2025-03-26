@@ -183,7 +183,6 @@ export default function HomeScreen() {
                                 reviewsAmount={activeProduct.reviews_amount}
                                 productScore={activeProduct.product_score_avg}
                                 barcode={activeProduct.barcode}
-                                userReview={activeProduct.user_review}
                                 onEditReview={() => {
                                     setReviewFormVisible(true)
                                 }}

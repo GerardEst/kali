@@ -19,7 +19,6 @@ import {
 interface ReviewsProps {
     productScore?: number
     barcode: string
-    userReview?: Review
     onEditReview: () => void
     commentsAmount?: number
     reviewsAmount?: number
@@ -28,7 +27,6 @@ interface ReviewsProps {
 export default function Reviews({
     productScore = -1,
     barcode,
-    userReview,
     onEditReview,
     commentsAmount = 0,
     reviewsAmount = 0,
@@ -83,19 +81,10 @@ export default function Reviews({
                         />
                     </View>
                 </Pressable>
-                <Pressable
-                    onPress={openUserReview}
-                    style={[styles.review, styles['review--user']]}
-                >
+                <Pressable style={[styles.review, styles['review--nutrition']]}>
                     <Text style={Texts.smallTitle}>
-                        {t('reviews_ownReview')}
+                        {t('reviews_nutritionReview')}
                     </Text>
-                    <View style={styles.review__info}>
-                        <EmojiRank
-                            rank={userReview?.product_score}
-                            mode="light"
-                        />
-                    </View>
                 </Pressable>
             </View>
             {showPopup && (
@@ -131,11 +120,12 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     'review--others': {
-        flex: 1,
+        width: 240,
         borderTopEndRadius: 0,
         borderBottomEndRadius: 0,
     },
-    'review--user': {
+    'review--nutrition': {
+        flex: 1,
         borderTopStartRadius: 0,
         borderBottomStartRadius: 0,
         backgroundColor: '#DDDDDD',

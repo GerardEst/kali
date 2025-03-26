@@ -13,9 +13,11 @@ import {
     NotesIcon,
     OpenIcon,
     PencilIcon,
+    PlusIcon,
 } from '@/src/shared/icons/icons'
 import { Palette } from '@/styles/colors'
 import { Link } from 'expo-router'
+import { EmojiRank } from '@/src/shared/components/emojiRank'
 
 interface CarouselProductProps {
     onUpdateProductInfo: (barcode: string) => void
@@ -75,87 +77,74 @@ export const CarouselProduct = ({
                     </View>
                 </View>
                 <View style={styles.cardContent}>
-                    {/* Aquet scrollView hauria de ser un flatlist perque scrollview no va bé 
-                    per coses dinamiques, ho renderitza tot tot el rato */}
-                    <View style={styles.cardContentNotes}>
-                        {product && user?.isSubscriber ? (
-                            product.user_note ? (
-                                <View style={styles.userNote}>
-                                    <Text>{product.user_note.note}</Text>
-                                    <GenericButton
-                                        style={{
-                                            marginTop: 'auto',
-                                            alignSelf: 'flex-end',
-                                        }}
-                                        icon={
-                                            <PencilIcon
-                                                size={20}
-                                                color={Palette.primary}
-                                            />
-                                        }
-                                        text={t('product_editNote')}
-                                        action={() =>
-                                            onAddNote(product.barcode)
-                                        }
-                                    ></GenericButton>
-                                </View>
-                            ) : (
-                                <View style={styles.cardContentNoNote}>
-                                    <Text style={{ textAlign: 'center' }}>
-                                        {t('caroussel_addNote')}
-                                    </Text>
-                                    <GenericButton
-                                        icon={
-                                            <NotesIcon
-                                                size={20}
-                                                color={Palette.primary}
-                                            />
-                                        }
-                                        text={t('product_addNote')}
-                                        action={() =>
-                                            onAddNote(product.barcode)
-                                        }
-                                    ></GenericButton>
-                                </View>
-                            )
-                        ) : product.user_review ? (
-                            <View style={styles.userNote}>
-                                <Text>
-                                    {product.user_review.product_comment}
-                                </Text>
-                                <GenericButton
-                                    style={{
-                                        marginTop: 'auto',
-                                        alignSelf: 'flex-end',
-                                    }}
-                                    icon={
-                                        <PencilIcon
-                                            size={20}
-                                            color={Palette.primary}
-                                        />
-                                    }
-                                    text={t('product_editReview')}
-                                    action={() => onOpenReview(product.barcode)}
-                                ></GenericButton>
-                            </View>
-                        ) : (
-                            <View style={styles.cardContentNoNote}>
-                                <Text style={{ textAlign: 'center' }}>
-                                    {t('caroussel_addReview')}
-                                </Text>
-                                <GenericButton
-                                    icon={
-                                        <NotesIcon
-                                            size={20}
-                                            color={Palette.primary}
-                                        />
-                                    }
-                                    text={t('product_addReview')}
-                                    action={() => onOpenReview(product.barcode)}
-                                ></GenericButton>
-                            </View>
-                        )}
-                    </View>
+                    {product && product.user_review ? (
+                        <Pressable
+                            style={styles.userNote}
+                            onPress={() => onOpenReview(product.barcode)}
+                        >
+                            <EmojiRank
+                                style={{
+                                    position: 'absolute',
+                                    bottom: 10,
+                                    right: 10,
+                                }}
+                                small
+                                rank={product.user_review.product_score}
+                                mode="light"
+                            />
+                            <Text style={{ padding: 10 }}>
+                                {product.user_review.product_comment}
+                            </Text>
+                        </Pressable>
+                    ) : (
+                        <Pressable
+                            style={styles.cardContentNoNote}
+                            onPress={() => onOpenReview(product.barcode)}
+                        >
+                            <Text style={{ textAlign: 'center' }}>
+                                {t('caroussel_addReview')}
+                            </Text>
+                            <GenericButton
+                                icon={
+                                    <NotesIcon
+                                        size={20}
+                                        color={Palette.primary}
+                                    />
+                                }
+                                noBorder
+                                action={() => onOpenReview(product.barcode)}
+                            ></GenericButton>
+                        </Pressable>
+                    )}
+                    {product && product.user_note ? (
+                        <Pressable
+                            style={styles.userNote}
+                            onPress={() => onAddNote(product.barcode)}
+                        >
+                            <Text style={{ padding: 10 }}>
+                                {product.user_note.note}
+                            </Text>
+                        </Pressable>
+                    ) : (
+                        <Pressable
+                            style={styles.cardContentNoNote}
+                            onPress={() => onAddNote(product.barcode)}
+                        >
+                            <Text style={{ textAlign: 'center' }}>
+                                {t('caroussel_addNote')}
+                            </Text>
+                            <GenericButton
+                                icon={
+                                    <PlusIcon
+                                        size={20}
+                                        color={Palette.primary}
+                                    />
+                                }
+                                noBorder
+                                action={() => onAddNote(product.barcode)}
+                            ></GenericButton>
+                        </Pressable>
+                    )}
                 </View>
                 <View style={styles.cardFooter}>
                     <View style={styles.optionButtons}>
@@ -238,13 +227,6 @@ const styles = StyleSheet.create({
         gap: 10,
         zIndex: 1,
     },
-    userNote: {
-        padding: 10,
-        backgroundColor: Palette.accentLight,
-        borderRadius: 10,
-        display: 'flex',
-        height: '100%',
-    },
     cardHeader: {
         flexDirection: 'row',
         gap: 15,
@@ -263,26 +245,24 @@ const styles = StyleSheet.create({
         alignSelf: 'flex-start',
     },
     cardContent: {
-        flexDirection: 'column',
+        flexDirection: 'row',
         display: 'flex',
         flex: 1,
-    },
-    cardFooter: {
-        flexDirection: 'row',
-        gap: 15,
-        marginTop: 'auto',
-    },
-
-    cardContentNotes: {
-        display: 'flex',
-        flexDirection: 'column',
-        gap: 10,
         height: 140,
+        gap: 5,
+        width: '100%',
     },
-    cardContentNote: {
-        marginBottom: 10,
+    userNote: {
+        flex: 1,
+        maxWidth: '50%',
+        backgroundColor: Palette.accentLight,
+        borderRadius: 10,
+        display: 'flex',
+        height: '100%',
     },
     cardContentNoNote: {
+        flex: 1,
+        maxWidth: '50%',
         borderWidth: 2,
         borderColor: Palette.primary,
         borderRadius: 10,
@@ -291,6 +271,14 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        gap: 5,
+    },
+    cardFooter: {
+        flexDirection: 'row',
         gap: 15,
+        marginTop: 'auto',
+    },
+    cardContentNote: {
+        marginBottom: 10,
     },
 })
