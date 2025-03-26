@@ -23,7 +23,7 @@ export const BookmarkSlashIcon = (props: any) => {
         />
     )
 }
-export const NotesIcon = (props: any) => {
+export const ReviewIcon = (props: any) => {
     return (
         <Octicons name="report" size={24} color={Palette.primary} {...props} />
     )
@@ -78,6 +78,17 @@ export const CommentIcon = (props: any) => {
     )
 }
 
+export const CommentDiscussionIcon = (props: any) => {
+    return (
+        <Octicons
+            name="comment-discussion"
+            size={24}
+            color={Palette.primary}
+            {...props}
+        />
+    )
+}
+
 export const ChevronDownIcon = (props: any) => {
     return (
         <Octicons
@@ -97,4 +108,8 @@ export const TrashIcon = (props: any) => {
 
 export const CloseIcon = (props: any) => {
     return <Octicons name="x" size={24} color={Palette.primary} {...props} />
+}
+
+export const LockIcon = (props: any) => {
+    return <Octicons name="lock" size={24} color={Palette.primary} {...props} />
 }

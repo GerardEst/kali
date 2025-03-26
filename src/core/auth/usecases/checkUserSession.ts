@@ -4,8 +4,8 @@ import {
     isNoSavedCredentialFoundResponse,
 } from '@react-native-google-signin/google-signin'
 import { supabase } from '@/src/core/supabase'
-import { logger } from '@/src/shared/utils/logger'
 import { webClientId } from '../config'
+import { getProfile } from '@/src/api/profiles/profile-api'
 
 export const checkUserSession = async () => {
     GoogleSignin.configure({
@@ -26,15 +26,14 @@ export const checkUserSession = async () => {
 
                 if (authError) throw authError
 
-                // xapusa jeje
-                const isAdmin =
-                    authData.user.email === 'gesteve.12@gmail.com' ||
-                    authData.user.email === 'davidestevebusquets@gmail.com' ||
-                    authData.user.email === 'rosamariabn@hotmail.com'
+                // Get the profile data from user
+                const { userData, userError } = await getProfile(
+                    authData.user.id
+                )
 
-                const user = { ...authData.user, isAdmin }
+                if (userError) throw userError
 
-                return user
+                return { ...authData.user, ...userData }
             } else if (isNoSavedCredentialFoundResponse(response)) {
                 throw new Error('No saved credentials found response')
             }

@@ -12,7 +12,7 @@ import { Texts } from '@/styles/common'
 import { IconInfo } from '@/src/shared/components/iconInfo'
 import {
     ChevronDownIcon,
-    CommentIcon,
+    ReviewIcon,
     PeopleIcon,
 } from '@/src/shared/icons/icons'
 
@@ -76,7 +76,7 @@ export default function Reviews({
                             info={reviewsAmount}
                         />
                         <IconInfo
-                            icon={<CommentIcon size={16} />}
+                            icon={<ReviewIcon size={16} />}
                             info={commentsAmount}
                         />
                     </View>

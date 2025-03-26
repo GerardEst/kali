@@ -4,7 +4,8 @@ import { Palette } from '@/styles/colors'
 import { useTranslation } from 'react-i18next'
 import {
     BookmarkIcon,
-    NotesIcon,
+    CommentIcon,
+    ReviewIcon,
     SearchIcon,
     SettingsIcon,
 } from '@/src/shared/icons/icons'
@@ -56,7 +57,7 @@ export default function TabLayout() {
                     title: t('tabs_notes'),
                     tabBarActiveTintColor: Palette.accent,
                     tabBarIcon: ({ focused, color }) => (
-                        <NotesIcon
+                        <CommentIcon
                             size={20}
                             color={focused ? color : Palette.primary}
                         />

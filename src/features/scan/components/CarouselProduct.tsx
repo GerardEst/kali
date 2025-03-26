@@ -10,10 +10,9 @@ import { useTranslation } from 'react-i18next'
 import {
     BookmarkSlashIcon,
     BookmarkIcon,
-    NotesIcon,
+    ReviewIcon,
     OpenIcon,
-    PencilIcon,
-    PlusIcon,
+    CommentIcon,
 } from '@/src/shared/icons/icons'
 import { Palette } from '@/styles/colors'
 import { Link } from 'expo-router'
@@ -79,7 +78,7 @@ export const CarouselProduct = ({
                 <View style={styles.cardContent}>
                     {product && product.user_review ? (
                         <Pressable
-                            style={styles.userNote}
+                            style={styles.cardContentSection}
                             onPress={() => onOpenReview(product.barcode)}
                         >
                             <EmojiRank
@@ -98,7 +97,7 @@ export const CarouselProduct = ({
                         </Pressable>
                     ) : (
                         <Pressable
-                            style={styles.cardContentNoNote}
+                            style={styles.cardContentSection_empty}
                             onPress={() => onOpenReview(product.barcode)}
                         >
                             <Text style={{ textAlign: 'center' }}>
@@ -106,7 +105,7 @@ export const CarouselProduct = ({
                             </Text>
                             <GenericButton
                                 icon={
-                                    <NotesIcon
+                                    <ReviewIcon
                                         size={20}
                                         color={Palette.primary}
                                     />
@@ -116,33 +115,17 @@ export const CarouselProduct = ({
                             ></GenericButton>
                         </Pressable>
                     )}
-                    {product && product.user_note ? (
+                    {product && product.user_note && (
                         <Pressable
-                            style={styles.userNote}
+                            style={[
+                                styles.cardContentSection,
+                                styles.cardContentSection_private,
+                            ]}
                             onPress={() => onAddNote(product.barcode)}
                         >
                             <Text style={{ padding: 10 }}>
                                 {product.user_note.note}
                             </Text>
-                        </Pressable>
-                    ) : (
-                        <Pressable
-                            style={styles.cardContentNoNote}
-                            onPress={() => onAddNote(product.barcode)}
-                        >
-                            <Text style={{ textAlign: 'center' }}>
-                                {t('caroussel_addNote')}
-                            </Text>
-                            <GenericButton
-                                icon={
-                                    <PlusIcon
-                                        size={20}
-                                        color={Palette.primary}
-                                    />
-                                }
-                                noBorder
-                                action={() => onAddNote(product.barcode)}
-                            ></GenericButton>
                         </Pressable>
                     )}
                 </View>
@@ -157,33 +140,44 @@ export const CarouselProduct = ({
                                     }
                                     text="Admin"
                                 ></GenericButton>
-                                <View style={styles.productOptions}>
-                                    {product.is_fav ? (
-                                        <GenericButton
-                                            noBorder
-                                            icon={
-                                                <BookmarkSlashIcon
-                                                    size={20}
-                                                    color={Palette.primary}
-                                                />
-                                            }
-                                            action={() => handleRemove(product)}
-                                        ></GenericButton>
-                                    ) : (
-                                        <GenericButton
-                                            noBorder
-                                            icon={
-                                                <BookmarkIcon
-                                                    size={20}
-                                                    color={Palette.primary}
-                                                />
-                                            }
-                                            action={() => handleAdd(product)}
-                                        ></GenericButton>
-                                    )}
-                                </View>
                             </>
                         )}
+
+                        <View style={styles.productOptions}>
+                            <GenericButton
+                                noBorder
+                                icon={
+                                    <CommentIcon
+                                        size={20}
+                                        color={Palette.primary}
+                                    />
+                                }
+                                action={() => onAddNote(product.barcode)}
+                            ></GenericButton>
+                            {product.is_fav ? (
+                                <GenericButton
+                                    noBorder
+                                    icon={
+                                        <BookmarkSlashIcon
+                                            size={20}
+                                            color={Palette.primary}
+                                        />
+                                    }
+                                    action={() => handleRemove(product)}
+                                ></GenericButton>
+                            ) : (
+                                <GenericButton
+                                    noBorder
+                                    icon={
+                                        <BookmarkIcon
+                                            size={20}
+                                            color={Palette.primary}
+                                        />
+                                    }
+                                    action={() => handleAdd(product)}
+                                ></GenericButton>
+                            )}
+                        </View>
                     </View>
                 </View>
             </View>
@@ -213,6 +207,7 @@ const styles = StyleSheet.create({
         gap: 10,
         justifyContent: 'space-between',
         width: '100%',
+        alignItems: 'center',
     },
     productOptions: {
         flexDirection: 'row',
@@ -252,17 +247,17 @@ const styles = StyleSheet.create({
         gap: 5,
         width: '100%',
     },
-    userNote: {
+    cardContentSection: {
         flex: 1,
-        maxWidth: '50%',
+        width: '50%',
         backgroundColor: Palette.accentLight,
         borderRadius: 10,
         display: 'flex',
         height: '100%',
     },
-    cardContentNoNote: {
+    cardContentSection_empty: {
         flex: 1,
-        maxWidth: '50%',
+        width: '50%',
         borderWidth: 2,
         borderColor: Palette.primary,
         borderRadius: 10,
@@ -272,6 +267,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         gap: 5,
+    },
+    cardContentSection_private: {
+        backgroundColor: Palette.background,
+        width: '50%',
+        flex: 0,
     },
     cardFooter: {
         flexDirection: 'row',

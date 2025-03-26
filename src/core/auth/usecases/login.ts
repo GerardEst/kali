@@ -2,6 +2,7 @@ import { GoogleSignin } from '@react-native-google-signin/google-signin'
 import { supabase } from '../../supabase'
 import { logger } from '@/src/shared/utils/logger'
 import { webClientId } from '../config'
+import { getProfile } from '@/src/api/profiles/profile-api'
 
 type GoogleSignProps = {
     onError?: (error: Error) => void
@@ -36,18 +37,11 @@ export const loginUser = async () => {
             )
         }
 
-        const isAdmin = authData.user.email === 'gesteve.12@gmail.com'
+        const { userData, userError } = await getProfile(authData.user.id)
 
-        // Log the success
-        logger({
-            type: 'success',
-            title: 'Auth Success',
-            message: authData.user.email,
-        })
+        if (userError) throw userError
 
-        const user = { ...authData.user, isAdmin }
-
-        return user
+        return { ...authData.user, ...userData }
     } catch (error: any) {
         // Log the error to Supabase
         logger({
