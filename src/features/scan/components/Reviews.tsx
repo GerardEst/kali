@@ -181,27 +181,31 @@ export default function Reviews({
             )}
             {showNutritionPopup && (
                 <View style={styles.nutritionPopup}>
-                    <Text>Nutrition</Text>
                     {nutrition ? (
                         <View style={styles.nutrition_container}>
                             <View style={styles.nutriscore_container}>
                                 {nutrition.nutriscore ? (
                                     <Nutriscore grade={nutrition.nutriscore} />
                                 ) : (
-                                    <Text>No nutriscore data available</Text>
+                                    <Text>
+                                        {t('nutrition_nutriscore_missing')}
+                                    </Text>
                                 )}
                             </View>
                             <View style={styles.novascore_container}>
                                 {nutrition.novascore ? (
                                     <Novascore grade={nutrition.novascore} />
                                 ) : (
-                                    <Text>No novascore data available</Text>
+                                    <Text>
+                                        {t('nutrition_novascore_missing')}
+                                    </Text>
                                 )}
                             </View>
                         </View>
                     ) : (
-                        <Text>No nutrition data available</Text>
+                        <Text>{t('nutrition_missing')}</Text>
                     )}
+                    <Text>{t('nutrition_popup_description')}</Text>
                 </View>
             )}
         </>

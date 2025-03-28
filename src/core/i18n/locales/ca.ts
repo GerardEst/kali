@@ -8,6 +8,11 @@ export default {
     product_deleteNote: 'Esborrar',
     product_open: 'Obrir',
     reviews_nutritionReview: 'Info. Nutricional',
+    nutrition_missing: 'No hi ha informació nutricional disponible',
+    nutrition_popup_description:
+        "Informació d'Open Food Facts, una base de dades oberta i lliure",
+    nutrition_novascore_missing: 'No hi ha informació de Novascore',
+    nutrition_nutriscore_missing: 'No hi ha informació de Nutriscore',
     caroussel_addNote: 'Afegeix una nota privada al producte',
     caroussel_addReview: 'Valora el producte i ajuda als altres',
     tabs_saved: 'Guardats',
