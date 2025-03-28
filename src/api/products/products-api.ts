@@ -83,7 +83,8 @@ export const getProductInfoBasic = async (barcode: string) => {
                         short_description,
                         tags,
                         image_url,
-                        nutriscore_grade
+                        nutriscore_grade,
+                        novascore_grade
                     `
                     )
                     .eq('barcode', barcode)
@@ -120,6 +121,7 @@ export const getProductInfoWithUserData = async (
         if (error) throw error
         if (!data.barcode) return null
 
+        console.log(data)
         return data as Product
     } catch (error) {
         console.error(error)
