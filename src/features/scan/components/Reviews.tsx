@@ -183,18 +183,22 @@ export default function Reviews({
                 <View style={styles.nutritionPopup}>
                     <Text>Nutrition</Text>
                     {nutrition ? (
-                        <>
-                            {nutrition.nutriscore ? (
-                                <Nutriscore grade={nutrition.nutriscore} />
-                            ) : (
-                                <Text>No nutriscore data available</Text>
-                            )}
-                            {nutrition.novascore ? (
-                                <Novascore grade={nutrition.novascore} />
-                            ) : (
-                                <Text>No novascore data available</Text>
-                            )}
-                        </>
+                        <View style={styles.nutrition_container}>
+                            <View style={styles.nutriscore_container}>
+                                {nutrition.nutriscore ? (
+                                    <Nutriscore grade={nutrition.nutriscore} />
+                                ) : (
+                                    <Text>No nutriscore data available</Text>
+                                )}
+                            </View>
+                            <View style={styles.novascore_container}>
+                                {nutrition.novascore ? (
+                                    <Novascore grade={nutrition.novascore} />
+                                ) : (
+                                    <Text>No novascore data available</Text>
+                                )}
+                            </View>
+                        </View>
                     ) : (
                         <Text>No nutrition data available</Text>
                     )}
@@ -253,5 +257,22 @@ const styles = StyleSheet.create({
         padding: 16,
         backgroundColor: '#ffffff',
         borderRadius: 10,
+    },
+    nutrition_container: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    nutriscore_container: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
+    },
+    novascore_container: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10,
     },
 })
