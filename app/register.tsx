@@ -5,7 +5,7 @@ import { useAuthState } from '@/src/store/authState'
 import SignInButton from '@/src/shared/components/buttons/SignInButton'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useTranslation } from 'react-i18next'
-import { Colors } from '@/styles/colors'
+import { Colors, Palette } from '@/styles/colors'
 import { Texts } from '@/styles/common'
 
 export default function RegisterScreen() {
@@ -47,7 +47,7 @@ export default function RegisterScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.background,
+        backgroundColor: Palette.background,
     },
     content: {
         flex: 1,

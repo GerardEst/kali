@@ -17,6 +17,7 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { updateProductUsecase } from '../usecases/updateProduct'
 import { CheckIcon } from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
+import { Palette } from '@/styles/colors'
 import * as ImagePicker from 'expo-image-picker'
 import { getProductImage, uploadProductImage } from '@/src/api/storage/products'
 
@@ -226,7 +227,7 @@ const styles = StyleSheet.create({
         height: 150,
         borderRadius: 10,
         overflow: 'hidden',
-        backgroundColor: Colors.background,
+        backgroundColor: Palette.background,
         marginBottom: 10,
     },
     productImage: {
@@ -238,6 +239,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: Colors.background,
+        backgroundColor: Palette.background,
     },
 })

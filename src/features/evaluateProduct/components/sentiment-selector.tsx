@@ -1,6 +1,6 @@
 import { StyleSheet, View, Text, Pressable } from 'react-native'
 import { Sentiments } from '@/src/shared/constants/sentiments'
-import { Colors, SentimentColors } from '@/styles/colors'
+import { Colors, SentimentColors, Palette } from '@/styles/colors'
 
 interface SentimentSelectorProps {
     sentiment: number
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         width: '100%',
         marginBottom: 10,
-        backgroundColor: Colors.background,
+        backgroundColor: Palette.background,
         borderColor: Colors.gray,
         borderRadius: 10,
         overflow: 'hidden',

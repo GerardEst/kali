@@ -6,7 +6,7 @@ import VersionDisplay from '@/src/shared/components/app-version'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { LanguageSelector } from '@/src/shared/components/language-selector'
 import { useTranslation } from 'react-i18next'
-import { Colors } from '@/styles/colors'
+import { Colors, Palette } from '@/styles/colors'
 import { Texts } from '@/styles/common'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import React from 'react'
@@ -89,7 +89,7 @@ export default function TabTwoScreen() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: Colors.background,
+        backgroundColor: Palette.background,
     },
     scrollView: {
         flex: 1,
@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
         padding: 20,
         backgroundColor: '#fff',
         borderBottomWidth: 1,
-        borderBottomColor: Colors.background,
+        borderBottomColor: Palette.background,
     },
     headerTitle: {
         color: Colors.gray,

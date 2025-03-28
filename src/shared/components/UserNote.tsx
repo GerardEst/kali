@@ -1,10 +1,8 @@
 import { View, Text, StyleSheet, Image } from 'react-native'
 import { Texts } from '@/styles/common'
-import { GenericButton } from './buttons/GenericButton'
-import { Colors } from '@/styles/colors'
 import { Note } from '../interfaces/Note'
-import { PencilIcon } from '../icons/icons'
-import { Product } from '../interfaces/product'
+import { Palette } from '@/styles/colors'
+import { Product } from '../interfaces/Product'
 import React from 'react'
 
 interface UserNoteComponent {
@@ -44,7 +42,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 15,
         borderRadius: 10,
-        backgroundColor: Colors.background,
+        backgroundColor: Palette.background,
         gap: 15,
     },
     productImage: {

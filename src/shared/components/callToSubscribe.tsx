@@ -2,7 +2,7 @@ import { View, StyleSheet } from 'react-native'
 import Text from './Typography'
 import GoogleSign from '@/src/shared/components/buttons/SignInButton'
 import { useTranslation } from 'react-i18next'
-import { Colors } from '@/styles/colors'
+import { Palette } from '@/styles/colors'
 
 export const CallToSubscribe = () => {
     const { t } = useTranslation()
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderStyle: 'dashed',
         borderRadius: 10,
-        backgroundColor: Colors.background,
+        backgroundColor: Palette.background,
     },
     text: {
         fontSize: 20,
