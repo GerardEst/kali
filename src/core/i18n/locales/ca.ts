@@ -7,7 +7,7 @@ export default {
     product_editReview: 'Modificar',
     product_deleteNote: 'Esborrar',
     product_open: 'Obrir',
-    reviews_nutritionReview: 'Nutrició',
+    reviews_nutritionReview: 'Info. Nutricional',
     caroussel_addNote: 'Afegeix una nota privada al producte',
     caroussel_addReview: 'Valora el producte i ajuda als altres',
     tabs_saved: 'Guardats',

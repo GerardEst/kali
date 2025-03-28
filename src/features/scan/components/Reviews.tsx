@@ -16,6 +16,7 @@ import {
     PeopleIcon,
 } from '@/src/shared/icons/icons'
 import { Nutriscore } from './Nutriscore'
+import { Pill } from '@/src/shared/components/pill'
 
 interface ReviewsProps {
     productScore?: number
@@ -41,12 +42,14 @@ export default function Reviews({
     const [showPopup, setShowPopup] = useState(false)
     const [showNutritionPopup, setShowNutritionPopup] = useState(false)
     const [reviews, setReviews] = useState<Review[]>([])
+    const [warning, setWarning] = useState<number | null>(null)
     const { t } = useTranslation()
 
     useEffect(() => {
         if (lastBarcode !== barcode) {
             setShowPopup(false)
         }
+        setWarning(calculateWarning())
     }, [barcode])
 
     const openReviews = async () => {
@@ -63,6 +66,36 @@ export default function Reviews({
     const openNutritionPopup = () => {
         setShowPopup(false)
         setShowNutritionPopup(!showNutritionPopup)
+    }
+
+    const calculateWarning = () => {
+        // Primer, si no hi ha res de res, ràpidament tornem desconegut
+        if (!nutrition) {
+            return null
+        }
+        // Si clarament hi ha algo molt malament, senyal de perill
+        if (nutrition.nutriscore === 'e' || nutrition.novascore === 4) {
+            return 2
+        }
+        // Si hi ha algo en caution, pos eso
+        if (
+            nutrition.nutriscore === 'd' ||
+            nutrition.nutriscore === 'c' ||
+            nutrition.novascore === 3 ||
+            nutrition.novascore === 2
+        ) {
+            return 1
+        }
+
+        // Aqui hi ha el tema de que a partir d'ara podriem dir que està bé, però si hi ha alguna de les coses desconegudes
+        // no ens la podem jugar a dir que està tot bé, per tant desconegut altre cop
+        // Perquè ara i no més amunt? Perquè encara que no hi hagi alguna de les dues, si hi ha algo malament podem posar la senyal
+        // perquè sabem segur que ALGO està malament
+        if (!nutrition.nutriscore || !nutrition.novascore) {
+            return null
+        }
+
+        return 0
     }
 
     return (
@@ -97,6 +130,26 @@ export default function Reviews({
                     <Text style={Texts.smallTitle}>
                         {t('reviews_nutritionReview')}
                     </Text>
+                    <Pill
+                        emoji={
+                            warning === 0
+                                ? '✅'
+                                : warning === 1
+                                  ? '⚠️'
+                                  : warning === 2
+                                    ? '🚫'
+                                    : '❓'
+                        }
+                        text={
+                            warning === 0
+                                ? 'Correcte'
+                                : warning === 1
+                                  ? 'Atenció'
+                                  : warning === 2
+                                    ? 'Perill'
+                                    : 'Desconegut'
+                        }
+                    />
                 </Pressable>
             </View>
             {showPopup && (
