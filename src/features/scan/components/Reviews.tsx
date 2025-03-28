@@ -15,8 +15,9 @@ import {
     ReviewIcon,
     PeopleIcon,
 } from '@/src/shared/icons/icons'
-import { Nutriscore } from './Nutriscore'
+import { Nutriscore } from '@/src/shared/components/Nutriscore'
 import { Pill } from '@/src/shared/components/pill'
+import { Novascore } from '@/src/shared/components/Novascore'
 
 interface ReviewsProps {
     productScore?: number
@@ -125,7 +126,20 @@ export default function Reviews({
                 </Pressable>
                 <Pressable
                     onPress={openNutritionPopup}
-                    style={[styles.review, styles['review--nutrition']]}
+                    style={[
+                        styles.review,
+                        styles['review--nutrition'],
+                        {
+                            backgroundColor:
+                                warning === 0
+                                    ? Palette.lacompra_green
+                                    : warning === 1
+                                      ? Palette.lacompra_yellow
+                                      : warning === 2
+                                        ? Palette.lacompra_red
+                                        : Palette.lacompra_gray,
+                        },
+                    ]}
                 >
                     <Text style={Texts.smallTitle}>
                         {t('reviews_nutritionReview')}
@@ -176,7 +190,7 @@ export default function Reviews({
                                 <Text>No nutriscore data available</Text>
                             )}
                             {nutrition.novascore ? (
-                                <Text>Novascore: {nutrition.novascore}</Text>
+                                <Novascore grade={nutrition.novascore} />
                             ) : (
                                 <Text>No novascore data available</Text>
                             )}

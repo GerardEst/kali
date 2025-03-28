@@ -15,6 +15,11 @@ export const Palette = {
     background: '#ECF0F1',
     accent: '#FFD364',
     accentLight: '#fdf8e6',
+
+    lacompra_gray: '#D7D7D7',
+    lacompra_red: '#FFCDCD',
+    lacompra_green: '#EDFFCD',
+    lacompra_yellow: '#FFFCA9',
 }
 
 export const ButtonColors = {
