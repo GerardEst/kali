@@ -8,7 +8,7 @@ export const supportedBarcodeTypes: CodeType[] = [
     'ean-8',
     'upc-e',
     //'aztec',
-    'qr',
+    // 'qr',
     //'codabar',
     'code-128',
     'code-39',

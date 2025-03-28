@@ -8,10 +8,9 @@ export const createNewProduct = async (
     barcodeType: string,
     productName: string | null = null,
     imageUrl: string | null = null,
-    tags: string | null = null,
     brands: string | null = null,
     nutriscore_grade: string | null = null,
-    nutriscore_version: string | null = null,
+    novascore_grade: string | null = null,
     userId: string
 ) => {
     try {
@@ -25,10 +24,9 @@ export const createNewProduct = async (
                     name: productName,
                     barcode_type: barcodeType,
                     image_url: imageUrl,
-                    tags: tags,
                     brands: brands,
                     nutriscore_grade: nutriscore_grade,
-                    nutriscore_version: nutriscore_version,
+                    novascore_grade: novascore_grade,
                     created_by: userId,
                 },
             ])
@@ -138,15 +136,15 @@ export const createNewProductFromBarcode = async (
         console.warn('api-call - createNewProductFromBarcode')
 
         const openFoodProduct = await getProductInfo(barcode)
+
         const createdProduct = await createNewProduct(
             barcode,
             barcodeType,
             openFoodProduct?.productName,
             openFoodProduct?.imageUrl,
-            openFoodProduct?.tags,
             openFoodProduct?.brands,
             openFoodProduct?.nutriscore_grade,
-            openFoodProduct?.nutriscore_version,
+            openFoodProduct?.novascore_grade,
             userId
         )
 
