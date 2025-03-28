@@ -19,11 +19,9 @@ import React from 'react'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useTranslation } from 'react-i18next'
 import { CarouselItem } from '@/src/features/scan/interfaces/carousel'
-import { Nutriscore } from '@/src/features/scan/components/Nutriscore'
 import { AskPermission } from '@/src/features/scan/components/AskPermission'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { Texts } from '@/styles/common'
-import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 
 export default function HomeScreen() {
     const { t } = useTranslation()
@@ -181,19 +179,16 @@ export default function HomeScreen() {
                             <Reviews
                                 commentsAmount={activeProduct.comments_amount}
                                 reviewsAmount={activeProduct.reviews_amount}
+                                nutrition={{
+                                    nutriscore: activeProduct.nutriscore_grade,
+                                    novascore: activeProduct.novascore_grade,
+                                }}
                                 productScore={activeProduct.product_score_avg}
                                 barcode={activeProduct.barcode}
                                 onEditReview={() => {
                                     setReviewFormVisible(true)
                                 }}
                             ></Reviews>
-                        )}
-                    </View>
-                    <View style={styles.nutriscoreContainer}>
-                        {activeProduct?.nutriscore_grade && (
-                            <Nutriscore
-                                grade={activeProduct.nutriscore_grade}
-                            />
                         )}
                     </View>
                     <View style={styles.scannerContent}>
@@ -237,13 +232,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         height: 500,
         bottom: 85,
-    },
-    nutriscoreContainer: {
-        position: 'absolute',
-        alignSelf: 'center',
-        alignItems: 'flex-end',
-        bottom: 385,
-        width: '95%',
     },
     message: {
         width: '95%',

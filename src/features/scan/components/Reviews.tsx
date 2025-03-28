@@ -15,6 +15,7 @@ import {
     ReviewIcon,
     PeopleIcon,
 } from '@/src/shared/icons/icons'
+import { Nutriscore } from './Nutriscore'
 
 interface ReviewsProps {
     productScore?: number
@@ -22,6 +23,10 @@ interface ReviewsProps {
     onEditReview: () => void
     commentsAmount?: number
     reviewsAmount?: number
+    nutrition: {
+        nutriscore?: 'a' | 'b' | 'c' | 'd' | 'e'
+        novascore?: 1 | 2 | 3 | 4
+    }
 }
 
 export default function Reviews({
@@ -30,9 +35,11 @@ export default function Reviews({
     onEditReview,
     commentsAmount = 0,
     reviewsAmount = 0,
+    nutrition,
 }: ReviewsProps) {
     const [lastBarcode, setLastBarcode] = useState<string | null>(null)
     const [showPopup, setShowPopup] = useState(false)
+    const [showNutritionPopup, setShowNutritionPopup] = useState(false)
     const [reviews, setReviews] = useState<Review[]>([])
     const { t } = useTranslation()
 
@@ -44,6 +51,7 @@ export default function Reviews({
 
     const openReviews = async () => {
         setReviews([])
+        setShowNutritionPopup(false)
         setShowPopup(!showPopup)
         if (!showPopup) {
             const reviews = await getProductReviews(barcode)
@@ -52,8 +60,9 @@ export default function Reviews({
         }
     }
 
-    const openUserReview = async () => {
-        onEditReview()
+    const openNutritionPopup = () => {
+        setShowPopup(false)
+        setShowNutritionPopup(!showNutritionPopup)
     }
 
     return (
@@ -81,7 +90,10 @@ export default function Reviews({
                         />
                     </View>
                 </Pressable>
-                <Pressable style={[styles.review, styles['review--nutrition']]}>
+                <Pressable
+                    onPress={openNutritionPopup}
+                    style={[styles.review, styles['review--nutrition']]}
+                >
                     <Text style={Texts.smallTitle}>
                         {t('reviews_nutritionReview')}
                     </Text>
@@ -99,6 +111,27 @@ export default function Reviews({
                         />
                     )}
                 />
+            )}
+            {showNutritionPopup && (
+                <View style={styles.nutritionPopup}>
+                    <Text>Nutrition</Text>
+                    {nutrition ? (
+                        <>
+                            {nutrition.nutriscore ? (
+                                <Nutriscore grade={nutrition.nutriscore} />
+                            ) : (
+                                <Text>No nutriscore data available</Text>
+                            )}
+                            {nutrition.novascore ? (
+                                <Text>Novascore: {nutrition.novascore}</Text>
+                            ) : (
+                                <Text>No novascore data available</Text>
+                            )}
+                        </>
+                    ) : (
+                        <Text>No nutrition data available</Text>
+                    )}
+                </View>
             )}
         </>
     )
@@ -141,6 +174,13 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     reviewsPopup: {
+        width: '100%',
+        marginTop: 4,
+        padding: 16,
+        backgroundColor: '#ffffff',
+        borderRadius: 10,
+    },
+    nutritionPopup: {
         width: '100%',
         marginTop: 4,
         padding: 16,

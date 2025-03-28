@@ -17,5 +17,5 @@ export interface Product {
     user_review?: Review
     is_fav?: Boolean
     nutriscore_grade?: 'a' | 'b' | 'c' | 'd' | 'e'
-    nutriscore_version?: string
+    novascore_grade?: 1 | 2 | 3 | 4
 }

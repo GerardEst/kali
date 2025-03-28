@@ -11,7 +11,6 @@ import {
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
 import { useAuthState } from '@/src/store/authState'
 import { Product } from '@/src/shared/interfaces/Product'
-import { User } from '@/src/core/auth/models'
 import { getProductInfo } from '@/src/api/openFood-api'
 
 export const useScan = () => {
@@ -32,21 +31,22 @@ export const useScan = () => {
     // TODO - Moure fora
     async function tryTofillUnknownProductInfo(productInfo: Product) {
         if (
-            !productInfo.name ||
-            !productInfo.image_url ||
-            !productInfo.nutriscore_grade ||
-            !productInfo.nutriscore_version
+            productInfo.name ||
+            productInfo.image_url ||
+            productInfo.nutriscore_grade ||
+            productInfo.novascore_grade
         ) {
             const productInfoOpenfood = await getProductInfo(
                 productInfo.barcode
             )
+            if (!productInfoOpenfood) return productInfo
             if (
-                (productInfoOpenfood.name && !productInfo.name) ||
-                (productInfoOpenfood.image_url && !productInfo.image_url) ||
+                (productInfoOpenfood.productName && !productInfo.name) ||
+                (productInfoOpenfood.imageUrl && !productInfo.image_url) ||
                 (productInfoOpenfood.nutriscore_grade &&
                     !productInfo.nutriscore_grade) ||
-                (productInfoOpenfood.nutriscore_version &&
-                    !productInfo.nutriscore_version)
+                (productInfoOpenfood.novascore_grade &&
+                    !productInfo.novascore_grade)
             ) {
                 // Hem de passar a updateProduct el que ens arriba nou
                 // i sobreescriure amb lo nostre, que és prioritari
@@ -55,7 +55,7 @@ export const useScan = () => {
                     ...productInfo,
                 }
                 try {
-                    const updated = await updateProduct(newInfo)
+                    const updated = await updateProduct(newInfo as Product)
 
                     // Un cop fet l'update, necessitem mantenir també el que teniem abans però cambiant
                     // les coses noves
