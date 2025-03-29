@@ -1,4 +1,4 @@
-import { Review } from '@/src/shared/interfaces/Review'
+import { Review, ProductReview } from '@/src/shared/interfaces/Review'
 import { supabase } from '@/src/core/supabase'
 
 export const getProductAverageScores = async (productBarcode: string) => {
@@ -9,7 +9,7 @@ export const getProductAverageScores = async (productBarcode: string) => {
             .select('product_score_avg')
             .eq('product', productBarcode)
             .maybeSingle()
-        
+
         if (error) throw error
         if (!data)
             return {
@@ -33,9 +33,7 @@ export const getProductReviewByUser = async (
         console.warn('api-call - getProductReviewByUser')
         const { data, error } = await supabase
             .from('reviews')
-            .select(
-                'product_comment, product_score'
-            )
+            .select('product_comment, product_score')
             .eq('profile', userId)
             .eq('product', barcode)
             .maybeSingle()
@@ -66,9 +64,7 @@ export const updateReviewForProduct = async (
             ])
             .eq('product', barcode)
             .eq('profile', userId)
-            .select(
-                'product_comment, product_score'
-            )
+            .select('product_comment, product_score')
             .single()
 
         if (error) throw error
@@ -94,7 +90,7 @@ export const createNewReviewForProduct = async (
                     product: barcode,
                     profile: userId,
                     product_comment: review.product_comment,
-                    product_score: review.product_score
+                    product_score: review.product_score,
                 },
             ])
             .select()
@@ -113,7 +109,9 @@ export const getProductReviews = async (barcode: string) => {
         console.warn('api-call - getProductReviews')
         const { data, error } = await supabase
             .from('reviews')
-            .select('created_at, product_comment, product_score, profile(display_name)')
+            .select(
+                'created_at, product_comment, product_score, profile(display_name)'
+            )
             .eq('product', barcode)
             .order('created_at', { ascending: false })
 
@@ -123,5 +121,29 @@ export const getProductReviews = async (barcode: string) => {
     } catch (error) {
         console.error(error)
         throw new Error('Error getting product reviews')
+    }
+}
+
+export const getReviewsByUser = async (userId: string) => {
+    try {
+        console.warn('api-call - getReviewsByUser')
+
+        const { data, error } = await supabase
+            .from('reviews')
+            .select(
+                'created_at, product_comment, product_score, product(barcode, name, image_url)'
+            )
+            .eq('profile', userId)
+            .order('created_at', { ascending: false })
+
+        if (error) throw error
+
+        console.log(data)
+
+        // @ts-ignore
+        return data as ProductReview[]
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting reviews by user')
     }
 }

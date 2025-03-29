@@ -16,7 +16,7 @@ export default {
     caroussel_addNote: 'Añadir una nota privada al producto',
     caroussel_addReview: 'Valorar el producto y ayudar a otros',
     tabs_saved: 'Guardados',
-    tabs_notes: 'Notas',
+    tabs_reviews: 'Opiniones',
     tabs_search: 'Escáner',
     tabs_options: 'Opciones',
     common_version: 'Versión',
@@ -33,7 +33,7 @@ export default {
     scanner_cameraPermission_message:
         'Para poder escanear códigos de barras, necesitas dar permiso para usar la cámara.',
     scanner_cameraPermission_button: 'Dar permiso de cámara',
-    notes_title: 'Tus notas privadas',
+    reviews_title: 'Tus opiniones',
     notes_emptyState:
         'Aún no has añadido ninguna nota a ningún producto. ¿A qué esperas?',
     saved_title: 'Productos guardados',

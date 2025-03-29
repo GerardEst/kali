@@ -3,24 +3,25 @@ import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pages, Texts } from '@/styles/common'
 import { useEffect } from 'react'
-import { getNotesByUser } from '@/src/api/products/notes-api'
-import { useUserNotesState } from '@/src/store/userNotesState'
-import { UserNote } from '@/src/shared/components/UserNote'
+import { getReviewsByUser } from '@/src/api/products/reviews-api'
+import { useUserReviewsState } from '@/src/store/userReviewsState'
+import { ProductReview } from '@/src/shared/components/productReview'
 import { useTranslation } from 'react-i18next'
 import React from 'react'
 import { CallToSubscribe } from '@/src/shared/components/callToSubscribe'
 import { Link } from 'expo-router'
+
 export default function Notes() {
     const { t } = useTranslation()
     const { user } = useAuthState()
-    const { notes, setUserNotes } = useUserNotesState()
+    const { reviews, setUserReviews } = useUserReviewsState()
 
     useEffect(() => {
         const userId = user?.id
         if (!userId) return
 
-        getNotesByUser(userId).then((data) => {
-            setUserNotes(data)
+        getReviewsByUser(userId).then((data) => {
+            setUserReviews(data)
         })
     }, [user])
 
@@ -28,22 +29,19 @@ export default function Notes() {
         <SafeAreaView style={Pages}>
             {user ? (
                 <>
-                    <Text style={Texts.title}>{t('notes_title')}</Text>
+                    <Text style={Texts.title}>{t('reviews_title')}</Text>
                     <View style={styles.notesList}>
                         <FlatList
-                            data={notes}
-                            keyExtractor={(note) => note.id.toString()}
+                            data={reviews}
+                            keyExtractor={(review) => review.product.barcode}
                             renderItem={({ item }) => (
                                 <Link
                                     asChild
-                                    href={`/${item.productData?.barcode}`}
+                                    href={`/${item.product?.barcode}`}
                                 >
                                     <Pressable>
                                         <View style={styles.userNote}>
-                                            <UserNote
-                                                product={item.productData}
-                                                note={item}
-                                            ></UserNote>
+                                            <ProductReview review={item} />
                                         </View>
                                     </Pressable>
                                 </Link>

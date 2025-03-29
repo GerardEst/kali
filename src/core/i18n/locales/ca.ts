@@ -16,7 +16,7 @@ export default {
     caroussel_addNote: 'Afegeix una nota privada al producte',
     caroussel_addReview: 'Valora el producte i ajuda als altres',
     tabs_saved: 'Guardats',
-    tabs_notes: 'Notes',
+    tabs_reviews: 'Opinions',
     tabs_search: 'Escàner',
     tabs_options: 'Opcions',
     common_version: 'Versió',
@@ -33,7 +33,7 @@ export default {
     scanner_cameraPermission_message:
         'Per poder escamejar còdis de barres, has de donar permís a la càmera.',
     scanner_cameraPermission_button: 'Donar permisos a la càmera',
-    notes_title: 'Les teves notes privades',
+    reviews_title: 'Les teves opinions',
     notes_emptyState:
         'Encara no has afegit cap nota a cap producte. A què esperes?',
     saved_title: 'Productes guardats',

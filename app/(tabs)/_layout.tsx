@@ -52,9 +52,9 @@ export default function TabLayout() {
                 }}
             />
             <Tabs.Screen
-                name="notes-page"
+                name="reviews-page"
                 options={{
-                    title: t('tabs_notes'),
+                    title: t('tabs_reviews'),
                     tabBarActiveTintColor: Palette.accent,
                     tabBarIcon: ({ focused, color }) => (
                         <CommentIcon
