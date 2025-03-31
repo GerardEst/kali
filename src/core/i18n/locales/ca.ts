@@ -4,6 +4,7 @@ export default {
     product_addNote: 'Crear una nota',
     product_editNote: 'Editar nota',
     product_addReview: 'Valorar',
+    product_callToReview: 'Opina lliurement!',
     product_editReview: 'Modificar',
     product_deleteNote: 'Esborrar',
     product_open: 'Obrir',
@@ -14,7 +15,8 @@ export default {
     nutrition_novascore_missing: 'No hi ha informació de Novascore',
     nutrition_nutriscore_missing: 'No hi ha informació de Nutriscore',
     caroussel_addNote: 'Afegeix una nota privada al producte',
-    caroussel_addReview: 'Valora el producte i ajuda als altres',
+    caroussel_addReview:
+        'Dona la teva opinió sincera i ajuda als altres a decidir-se i fer una millor compra',
     tabs_saved: 'Guardats',
     tabs_reviews: 'Opinions',
     tabs_search: 'Escàner',

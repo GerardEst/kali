@@ -45,6 +45,7 @@ export const GenericButton = ({
             <View
                 style={[
                     styles.button,
+                    noBorder && styles.hideBorder,
                     disabled && styles.buttonDisabled,
                     {
                         backgroundColor: fill

@@ -113,3 +113,7 @@ export const CloseIcon = (props: any) => {
 export const LockIcon = (props: any) => {
     return <Octicons name="lock" size={24} color={Palette.primary} {...props} />
 }
+
+export const InfoIcon = (props: any) => {
+    return <Octicons name="info" size={24} color={Palette.primary} {...props} />
+}

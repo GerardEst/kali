@@ -13,6 +13,8 @@ import {
     ReviewIcon,
     OpenIcon,
     CommentIcon,
+    PencilIcon,
+    InfoIcon,
 } from '@/src/shared/icons/icons'
 import { Palette } from '@/styles/colors'
 import { Link } from 'expo-router'
@@ -47,29 +49,43 @@ export const CarouselProduct = ({
         <View style={styles.slideContent}>
             <View style={styles.card}>
                 <View style={styles.cardHeader}>
-                    <View style={styles.productTitle}>
-                        <Text style={Texts.title}>
-                            {product.name || product.barcode}
-                        </Text>
-                        <Text style={Texts.lightTitle}>
-                            {product.brands?.split(',').at(-1)}
-                        </Text>
-                    </View>
+                    <Link asChild href={`/${product.barcode}`}>
+                        <Pressable style={styles.productTitle}>
+                            <Text numberOfLines={2} style={Texts.title}>
+                                {product.name || product.barcode}
+                            </Text>
+                            <Text style={Texts.lightTitle}>
+                                {product.brands?.split(',').at(-1)}
+                            </Text>
+                        </Pressable>
+                    </Link>
 
                     <View style={styles.buttonContainer}>
+                        {user?.isAdmin && (
+                            <GenericButton
+                                icon={
+                                    <PencilIcon
+                                        size={20}
+                                        color={Palette.primary}
+                                    />
+                                }
+                                noBorder
+                                action={() =>
+                                    onUpdateProductInfo(product.barcode)
+                                }
+                            ></GenericButton>
+                        )}
                         <Link asChild href={`/${product.barcode}`}>
                             <Pressable>
                                 <GenericButton
                                     nonPressable
-                                    type="accent"
-                                    fill={true}
+                                    noBorder
                                     icon={
-                                        <OpenIcon
-                                            size={16}
+                                        <InfoIcon
+                                            size={25}
                                             color={Palette.primary}
                                         />
                                     }
-                                    text={t('product_open')}
                                 ></GenericButton>
                             </Pressable>
                         </Link>
@@ -110,7 +126,7 @@ export const CarouselProduct = ({
                                         color={Palette.primary}
                                     />
                                 }
-                                noBorder
+                                text={t('product_callToReview')}
                                 action={() => onOpenReview(product.barcode)}
                             ></GenericButton>
                         </Pressable>
@@ -131,18 +147,6 @@ export const CarouselProduct = ({
                 </View>
                 <View style={styles.cardFooter}>
                     <View style={styles.optionButtons}>
-                        {user?.isAdmin && (
-                            <>
-                                <GenericButton
-                                    style={styles.updateButton}
-                                    action={() =>
-                                        onUpdateProductInfo(product.barcode)
-                                    }
-                                    text="Admin"
-                                ></GenericButton>
-                            </>
-                        )}
-
                         <View style={styles.productOptions}>
                             <GenericButton
                                 noBorder
@@ -258,15 +262,15 @@ const styles = StyleSheet.create({
     cardContentSection_empty: {
         flex: 1,
         width: '50%',
-        borderWidth: 2,
+        //borderWidth: 2,
         borderColor: Palette.primary,
         borderRadius: 10,
         padding: 15,
-        borderStyle: 'dashed',
+        //borderStyle: 'dashed',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        gap: 5,
+        gap: 20,
     },
     cardContentSection_private: {
         backgroundColor: Palette.background,
