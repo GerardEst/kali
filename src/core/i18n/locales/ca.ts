@@ -49,4 +49,31 @@ export default {
     scanner_firstTimeInstructions_2:
         "Molt bé! Els productes que escanegis s'aniran guardant aquí sota, mentre a dalt pots veure la teva opinió i la opinió general sobre el producte.",
     filter_by_sentiment: 'Filtra per sentiment',
+    nutriscore_a_title: 'Saludable i equilibrat',
+    nutriscore_a_description:
+        'Alt contingut en nutrients essencials, baix en grasses i sucres',
+    nutriscore_b_title: 'Bona elecció',
+    nutriscore_b_description:
+        'Bona qüalitat nutricional, moderat nivell de grasses i sucres, consum generalment recomanat',
+    nutriscore_c_title: 'Nivell mig',
+    nutriscore_c_description:
+        'Grasses i sucres moderats, consumir equilibradament per evitar excessos diaris',
+    nutriscore_d_title: 'Alerta nutricional',
+    nutriscore_d_description:
+        'Elevat contingut de grasses, sucres o sal, consumir ocasionalment per evitar riscs de salut',
+    nutriscore_e_title: 'Alt risc',
+    nutriscore_e_description:
+        'Alt en grasses saturades, sucres i sal, no és aconsellable consumir-ne sovint',
+    novascore_1_title: 'Aliments no processats o mínimament processats',
+    novascore_1_description:
+        'Aliments naturals consumits tal qual o sotmesos a processos simples de conservació o preparació',
+    novascore_2_title: 'Ingredients culinaris processats',
+    novascore_2_description:
+        "Substàncies extretes d'aliments naturals, com olis, sucre i sal, utilitzades per cuinar i condimentar",
+    novascore_3_title: 'Aliments processats',
+    novascore_3_description:
+        'Aliments naturals modificats amb ingredients del grup 2 per millorar la conservació, el gust',
+    novascore_4_title: 'Aliments ultraprocessats',
+    novascore_4_description:
+        "Productes industrials fets majoritàriament de substàncies derivades d'aliments i aditius, dissenyats per ser altament atractius i rentables",
 }

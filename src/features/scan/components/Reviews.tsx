@@ -80,12 +80,7 @@ export default function Reviews({
             return 2
         }
         // Si hi ha algo en caution, pos eso
-        if (
-            nutrition.nutriscore === 'd' ||
-            nutrition.nutriscore === 'c' ||
-            nutrition.novascore === 3 ||
-            nutrition.novascore === 2
-        ) {
+        if (nutrition.nutriscore === 'd' || nutrition.nutriscore === 'c') {
             return 1
         }
 
@@ -186,7 +181,47 @@ export default function Reviews({
                         <View style={styles.nutrition_container}>
                             <View style={styles.nutriscore_container}>
                                 {nutrition.nutriscore ? (
-                                    <Nutriscore grade={nutrition.nutriscore} />
+                                    <>
+                                        <Nutriscore
+                                            grade={nutrition.nutriscore}
+                                        />
+                                        <View
+                                            style={styles.novascore_description}
+                                        >
+                                            <Text style={Texts.smallTitle}>
+                                                {t(
+                                                    nutrition.nutriscore === 'a'
+                                                        ? 'nutriscore_a_title'
+                                                        : nutrition.nutriscore ===
+                                                            'b'
+                                                          ? 'nutriscore_b_title'
+                                                          : nutrition.nutriscore ===
+                                                              'c'
+                                                            ? 'nutriscore_c_title'
+                                                            : nutrition.nutriscore ===
+                                                                'd'
+                                                              ? 'nutriscore_d_title'
+                                                              : 'nutriscore_e_title'
+                                                )}
+                                            </Text>
+                                            <Text>
+                                                {t(
+                                                    nutrition.nutriscore === 'a'
+                                                        ? 'nutriscore_a_description'
+                                                        : nutrition.nutriscore ===
+                                                            'b'
+                                                          ? 'nutriscore_b_description'
+                                                          : nutrition.nutriscore ===
+                                                              'c'
+                                                            ? 'nutriscore_c_description'
+                                                            : nutrition.nutriscore ===
+                                                                'd'
+                                                              ? 'nutriscore_d_description'
+                                                              : 'nutriscore_e_description'
+                                                )}
+                                            </Text>
+                                        </View>
+                                    </>
                                 ) : (
                                     <Text>
                                         {t('nutrition_nutriscore_missing')}
@@ -195,7 +230,42 @@ export default function Reviews({
                             </View>
                             <View style={styles.novascore_container}>
                                 {nutrition.novascore ? (
-                                    <Novascore grade={nutrition.novascore} />
+                                    <>
+                                        <Novascore
+                                            grade={nutrition.novascore}
+                                        />
+
+                                        <View
+                                            style={styles.novascore_description}
+                                        >
+                                            <Text style={Texts.smallTitle}>
+                                                {t(
+                                                    nutrition.novascore === 1
+                                                        ? 'novascore_1_title'
+                                                        : nutrition.novascore ===
+                                                            2
+                                                          ? 'novascore_2_title'
+                                                          : nutrition.novascore ===
+                                                              3
+                                                            ? 'novascore_3_title'
+                                                            : 'novascore_4_title'
+                                                )}
+                                            </Text>
+                                            <Text>
+                                                {t(
+                                                    nutrition.novascore === 1
+                                                        ? 'novascore_1_description'
+                                                        : nutrition.novascore ===
+                                                            2
+                                                          ? 'novascore_2_description'
+                                                          : nutrition.novascore ===
+                                                              3
+                                                            ? 'novascore_3_description'
+                                                            : 'novascore_4_description'
+                                                )}
+                                            </Text>
+                                        </View>
+                                    </>
                                 ) : (
                                     <Text>
                                         {t('nutrition_novascore_missing')}
@@ -206,7 +276,9 @@ export default function Reviews({
                     ) : (
                         <Text>{t('nutrition_missing')}</Text>
                     )}
-                    <Text>{t('nutrition_popup_description')}</Text>
+                    {/* <View style={styles.nutrition_description}>
+                        <Text>{t('nutrition_popup_description')}</Text>
+                    </View> */}
                 </View>
             )}
         </>
@@ -264,20 +336,32 @@ const styles = StyleSheet.create({
         borderRadius: 10,
     },
     nutrition_container: {
-        flexDirection: 'row',
-        alignItems: 'center',
         gap: 10,
     },
     nutriscore_container: {
         flex: 1,
         flexDirection: 'row',
+        backgroundColor: Palette.background,
+        borderRadius: 10,
+        padding: 10,
         alignItems: 'center',
         gap: 10,
     },
     novascore_container: {
         flex: 1,
         flexDirection: 'row',
+        backgroundColor: Palette.background,
+        borderRadius: 10,
+        padding: 10,
         alignItems: 'center',
         gap: 10,
+    },
+    novascore_description: {
+        flexDirection: 'column',
+    },
+    nutrition_description: {
+        borderRadius: 10,
+        backgroundColor: Palette.background,
+        padding: 10,
     },
 })

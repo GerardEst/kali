@@ -49,4 +49,31 @@ export default {
     scanner_firstTimeInstructions_2:
         '¡Bien! Los productos que escanees se guardarán aquí, mientras que arriba puedes ver tu opinión y la opinión general sobre el producto.',
     filter_by_sentiment: 'Filtrar por sentimiento',
+    nutriscore_a_title: 'Saludable y equilibrado',
+    nutriscore_a_description:
+        'Alt contenido en nutrientes esenciales, bajo en grasas y azúcares',
+    nutriscore_b_title: 'Buena elección',
+    nutriscore_b_description:
+        'Buena calidad nutricional, nivel moderado de grasas y azúcares, consumo generalmente recomendado',
+    nutriscore_c_title: 'Nivel medio',
+    nutriscore_c_description:
+        'Grasas y azúcares moderados, consumir equilibradamente para evitar excesos diarios',
+    nutriscore_d_title: 'Alerta nutricional',
+    nutriscore_d_description:
+        'Elevado contenido de grasas, azúcares o sal, consumir ocasionalmente para evitar riesgos de salud',
+    nutriscore_e_title: 'Riesgo alto',
+    nutriscore_e_description:
+        'Alto en grasas saturadas, azúcares y sal, no es aconsejable consumirlo frecuentemente',
+    novascore_1_title: 'Alimentos no procesados o mínimamente procesados',
+    novascore_1_description:
+        'Alimentos naturales consumidos tal cual o sometidos a procesos simples de conservación o preparación',
+    novascore_2_title: 'Ingredientes culinarios procesados',
+    novascore_2_description:
+        'Sustancias extraídas de alimentos naturales, como aceites, azúcares y sal, utilizadas para cocinar y condimentar',
+    novascore_3_title: 'Alimentos procesados',
+    novascore_3_description:
+        'Alimentos naturales modificados con ingredientes del grupo 2 para mejorar la conservación, el sabor',
+    novascore_4_title: 'Alimentos ultraprocesados',
+    novascore_4_description:
+        'Productos industriales fabricados mayoritariamente de sustancias derivadas de alimentos y aditivos, diseñados para ser altamente atractivos y rentables',
 }
