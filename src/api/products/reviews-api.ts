@@ -1,4 +1,4 @@
-import { Review, ProductReview } from '@/src/shared/interfaces/Review'
+import { Review } from '@/src/shared/interfaces/Review'
 import { supabase } from '@/src/core/supabase'
 
 export const getProductAverageScores = async (productBarcode: string) => {
@@ -139,7 +139,7 @@ export const getReviewsByUser = async (userId: string) => {
         if (error) throw error
 
         // @ts-ignore
-        return data as ProductReview[]
+        return data as Review[]
     } catch (error) {
         console.error(error)
         throw new Error('Error getting reviews by user')

@@ -1,16 +1,16 @@
 import { create } from 'zustand'
-import { ProductReview } from '../shared/interfaces/Review'
+import { Review } from '../shared/interfaces/Review'
 
 interface UserReviewsState {
-    reviews: ProductReview[]
-    setUserReviews: (reviews: ProductReview[]) => void
-    updateUserReviewFromReviewsList: (review: ProductReview) => void
+    reviews: Review[]
+    setUserReviews: (reviews: Review[]) => void
+    updateUserReviewFromReviewsList: (review: Review) => void
 }
 
 export const useUserReviewsState = create<UserReviewsState>((set) => ({
     reviews: [],
 
-    setUserReviews: (reviews: ProductReview[]) => {
+    setUserReviews: (reviews: Review[]) => {
         set(() => {
             return {
                 reviews: reviews,
@@ -18,11 +18,11 @@ export const useUserReviewsState = create<UserReviewsState>((set) => ({
         })
     },
 
-    updateUserReviewFromReviewsList: (review: ProductReview) => {
+    updateUserReviewFromReviewsList: (review: Review) => {
         set((state) => {
             const previousReviewRemoved = state.reviews.filter(
                 (previousReview) =>
-                    previousReview.product.barcode !== review.product.barcode
+                    previousReview.product?.barcode !== review.product?.barcode
             )
 
             return {

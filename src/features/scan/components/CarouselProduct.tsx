@@ -21,14 +21,12 @@ import { Link } from 'expo-router'
 import { EmojiRank } from '@/src/shared/components/emojiRank'
 
 interface CarouselProductProps {
-    onUpdateProductInfo: (barcode: string) => void
     onAddNote: (barcode: string) => void
     onOpenReview: (barcode: string) => void
     product: Product
 }
 
 export const CarouselProduct = ({
-    onUpdateProductInfo,
     onAddNote,
     onOpenReview,
     product,
@@ -61,20 +59,6 @@ export const CarouselProduct = ({
                     </Link>
 
                     <View style={styles.buttonContainer}>
-                        {user?.isAdmin && (
-                            <GenericButton
-                                icon={
-                                    <PencilIcon
-                                        size={20}
-                                        color={Palette.primary}
-                                    />
-                                }
-                                noBorder
-                                action={() =>
-                                    onUpdateProductInfo(product.barcode)
-                                }
-                            ></GenericButton>
-                        )}
                         <Link asChild href={`/${product.barcode}`}>
                             <Pressable>
                                 <GenericButton

@@ -1,22 +1,22 @@
 import { View, Image, StyleSheet } from 'react-native'
 import { Text } from './Typography'
-import { ProductReview as ProductReviewType } from '../interfaces/Review'
+import { Review } from '../interfaces/Review'
 import { Palette } from '@/styles/colors'
 import { EmojiRank } from './emojiRank'
 import { Texts } from '@/styles/common'
 
-export const ProductReview = ({ review }: { review: ProductReviewType }) => {
+export const ProductReview = ({ review }: { review: Review }) => {
     return (
         <View style={styles.container}>
             <View style={styles.content}>
-                {review.product.image_url && (
+                {review.product?.image_url && (
                     <Image
                         source={{ uri: review.product.image_url }}
                         style={{ width: 100, height: 100 }}
                     />
                 )}
                 <View style={styles.contentText}>
-                    <Text style={Texts.title}>{review.product.name}</Text>
+                    <Text style={Texts.title}>{review.product?.name}</Text>
                     <Text>{review.product_comment}</Text>
                 </View>
             </View>

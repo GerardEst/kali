@@ -28,7 +28,6 @@ export default function HomeScreen() {
 
     const { hasPermission } = useCameraPermission()
     const { products } = useScannedProductsState()
-    const [infoModalVisible, setInfoModalVisible] = useState(false)
     const [noteModalVisible, setNoteModalVisible] = useState(false)
     const [reviewFormVisible, setReviewFormVisible] = useState(false)
     const [isModalOpen, setIsModalOpen] = useState(false)
@@ -51,12 +50,12 @@ export default function HomeScreen() {
     }, [products])
 
     useEffect(() => {
-        if (reviewFormVisible || noteModalVisible || infoModalVisible) {
+        if (reviewFormVisible || noteModalVisible) {
             setIsModalOpen(true)
         } else {
             setIsModalOpen(false)
         }
-    }, [reviewFormVisible, noteModalVisible, infoModalVisible])
+    }, [reviewFormVisible, noteModalVisible])
 
     useEffect(() => {
         const subscription = AppState.addEventListener(
@@ -133,11 +132,6 @@ export default function HomeScreen() {
                         product={activeProduct}
                         onClose={() => setNoteModalVisible(false)}
                     ></AddProductNoteModal>
-                    <UpdateProductInfoModal
-                        visible={infoModalVisible}
-                        product={activeProduct}
-                        onClose={() => setInfoModalVisible(false)}
-                    ></UpdateProductInfoModal>
                     <ReviewFormModal
                         visible={reviewFormVisible}
                         product={activeProduct}
@@ -199,9 +193,6 @@ export default function HomeScreen() {
                                 } else {
                                     setActiveProduct(product)
                                 }
-                            }}
-                            onUpdateProductInfo={() => {
-                                setInfoModalVisible(true)
                             }}
                             onAddNote={() => {
                                 setNoteModalVisible(true)

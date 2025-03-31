@@ -5,7 +5,6 @@ import {
     Novascore_3,
     Novascore_4,
 } from '@/src/shared/icons/novascore'
-import { StyleSheet } from 'react-native'
 interface NovascoreProps {
     grade: 1 | 2 | 3 | 4
 }
@@ -13,21 +12,14 @@ interface NovascoreProps {
 export const Novascore: React.FC<NovascoreProps> = ({ grade }) => {
     switch (grade.toString()) {
         case '1':
-            return <Novascore_1 style={styles.icon} />
+            return <Novascore_1 width={28} height={60} />
         case '2':
-            return <Novascore_2 style={styles.icon} />
+            return <Novascore_2 width={28} height={60} />
         case '3':
-            return <Novascore_3 style={styles.icon} />
+            return <Novascore_3 width={28} height={60} />
         case '4':
-            return <Novascore_4 style={styles.icon} />
+            return <Novascore_4 width={28} height={60} />
         default:
             return null
     }
 }
-
-const styles = StyleSheet.create({
-    icon: {
-        width: 20,
-        height: 20,
-    },
-})
