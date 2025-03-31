@@ -58,7 +58,7 @@ export default function Notes() {
                     <View style={styles.notesList}>
                         <FlatList
                             data={filteredReviews}
-                            keyExtractor={(review) => review.product.barcode}
+                            keyExtractor={(review) => review.product!.barcode}
                             renderItem={({ item }) => (
                                 <Link
                                     asChild
