@@ -46,4 +46,5 @@ export default {
         'Apunta con la cámara a cualquier código de barras para ver información, comentarios y tus notas privadas',
     scanner_firstTimeInstructions_2:
         '¡Bien! Los productos que escanees se guardarán aquí, mientras que arriba puedes ver tu opinión y la opinión general sobre el producto.',
+    filter_by_sentiment: 'Filtrar por sentimiento',
 }

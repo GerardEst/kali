@@ -45,5 +45,6 @@ export default {
     scanner_firstTimeInstructions_1:
         'Apunta amb la càmara a qualsevol codi de barres per veure informació, comentaris i les teves notes privades',
     scanner_firstTimeInstructions_2:
-        'Molt bé! Els productes que escanegis s\’aniran guardant aquí sota, mentre a dalt pots veure la teva opinió i la opinió general sobre el producte.',
+        "Molt bé! Els productes que escanegis s'aniran guardant aquí sota, mentre a dalt pots veure la teva opinió i la opinió general sobre el producte.",
+    filter_by_sentiment: 'Filtra per sentiment',
 }

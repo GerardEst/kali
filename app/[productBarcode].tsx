@@ -1,10 +1,7 @@
 import { View, StyleSheet, Text, Image } from 'react-native'
 import { Stack, useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
-import {
-    getProductInfoWithUserData,
-    getProductInfoBasic,
-} from '@/src/api/products/products-api'
+import { getProductInfoWithUserData } from '@/src/api/products/products-api'
 import { Product } from '@/src/shared/interfaces/Product'
 import { useAuthState } from '@/src/store/authState'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
@@ -17,22 +14,17 @@ export default function ProductBarcodeScreen() {
     const { user } = useAuthState()
 
     useEffect(() => {
-        if (user) {
-            const product = products.find((p) => p.barcode === productBarcode)
-            if (product) {
-                setProduct(product)
-            } else {
-                getProductInfoWithUserData(
-                    productBarcode as string,
-                    user?.id
-                ).then((product) => {
-                    setProduct(product)
-                })
-            }
+        if (!user) return
+
+        const product = products.find((p) => p.barcode === productBarcode)
+        if (product) {
+            setProduct(product)
         } else {
-            getProductInfoBasic(productBarcode as string).then((product) => {
-                setProduct(product)
-            })
+            getProductInfoWithUserData(productBarcode as string, user?.id).then(
+                (product) => {
+                    setProduct(product)
+                }
+            )
         }
     }, [])
 

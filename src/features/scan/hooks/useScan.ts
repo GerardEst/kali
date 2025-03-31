@@ -4,7 +4,6 @@ import { checkTimes } from '../scanParameters'
 import { Code } from 'react-native-vision-camera'
 import {
     createNewProductFromBarcode,
-    getProductInfoBasic,
     getProductInfoWithUserData,
     updateProduct,
 } from '@/src/api/products/products-api'
@@ -33,30 +32,46 @@ export const useScan = () => {
         if (
             productInfo.name ||
             productInfo.image_url ||
+            productInfo.brands ||
             productInfo.nutriscore_grade ||
             productInfo.novascore_grade
         ) {
             const productInfoOpenfood = await getProductInfo(
                 productInfo.barcode
             )
+
             if (!productInfoOpenfood) return productInfo
-            if (
+
+            const thereIsNewInfoThatWeShouldUpdate =
                 (productInfoOpenfood.productName && !productInfo.name) ||
                 (productInfoOpenfood.imageUrl && !productInfo.image_url) ||
+                (productInfoOpenfood.brands && !productInfo.brands) ||
                 (productInfoOpenfood.nutriscore_grade &&
                     !productInfo.nutriscore_grade) ||
                 (productInfoOpenfood.novascore_grade &&
                     !productInfo.novascore_grade)
-            ) {
-                // Hem de passar a updateProduct el que ens arriba nou
-                // i sobreescriure amb lo nostre, que és prioritari
-                const newInfo = {
-                    ...productInfoOpenfood,
-                    ...productInfo,
-                }
-                try {
-                    const updated = await updateProduct(newInfo as Product)
 
+            if (thereIsNewInfoThatWeShouldUpdate) {
+                // But we should prioritize our info, so don't just replace everything
+
+                const newInfo = {
+                    barcode: productInfo.barcode,
+                    name: productInfo.name || productInfoOpenfood.productName,
+                    brands: productInfo.brands || productInfoOpenfood.brands,
+                    image_url:
+                        productInfo.image_url || productInfoOpenfood.imageUrl,
+                    novascore_grade:
+                        productInfo.novascore_grade ||
+                        productInfoOpenfood.novascore_grade,
+                    nutriscore_grade:
+                        productInfo.nutriscore_grade ||
+                        productInfoOpenfood.nutriscore_grade,
+                }
+
+                try {
+                    const updated = await updateProduct(newInfo)
+
+                    console.log({ updated })
                     // Un cop fet l'update, necessitem mantenir també el que teniem abans però cambiant
                     // les coses noves
                     return { ...productInfo, ...updated }
@@ -69,20 +84,18 @@ export const useScan = () => {
     }
 
     async function scan(code: Code) {
+        if (!user) return
         const scannedCode = checkMultipleTimes(code)
         if (!scannedCode?.value) return
 
         vibrate()
 
         let productInfo
-        if (user?.id) {
-            productInfo = await getProductInfoWithUserData(
-                scannedCode.value,
-                user.id
-            )
-        } else {
-            productInfo = await getProductInfoBasic(scannedCode.value)
-        }
+
+        productInfo = await getProductInfoWithUserData(
+            scannedCode.value,
+            user.id
+        )
 
         if (productInfo) {
             productInfo = await tryTofillUnknownProductInfo(productInfo)

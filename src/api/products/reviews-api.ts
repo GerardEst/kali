@@ -138,8 +138,6 @@ export const getReviewsByUser = async (userId: string) => {
 
         if (error) throw error
 
-        console.log(data)
-
         // @ts-ignore
         return data as ProductReview[]
     } catch (error) {

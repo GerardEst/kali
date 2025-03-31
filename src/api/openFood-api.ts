@@ -5,8 +5,8 @@ interface OpenFoodProduct {
     productName: string
     imageUrl: string
     brands: string
-    nutriscore_grade: string | null
-    novascore_grade: string | null
+    nutriscore_grade: 'a' | 'b' | 'c' | 'd' | 'e'
+    novascore_grade: 1 | 2 | 3 | 4
 }
 
 export async function getProductInfo(
@@ -34,8 +34,9 @@ export async function getProductInfo(
                     ? response?.product.nutriscore_grade
                     : null
                 : null
+
         const novascore =
-            response?.product.nova_group.length === 1
+            response?.product.nova_group.toString().length === 1
                 ? response?.product.nova_group
                 : null
 

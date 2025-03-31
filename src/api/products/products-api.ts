@@ -9,8 +9,8 @@ export const createNewProduct = async (
     productName: string | null = null,
     imageUrl: string | null = null,
     brands: string | null = null,
-    nutriscore_grade: string | null = null,
-    novascore_grade: string | null = null,
+    nutriscore_grade: 'a' | 'b' | 'c' | 'd' | 'e' | null = null,
+    novascore_grade: 1 | 2 | 3 | 4 | null = null,
     userId: string
 ) => {
     try {
@@ -54,6 +54,8 @@ export const updateProduct = async (product: Product) => {
                     brands: product.brands,
                     tags: product.tags,
                     image_url: product.image_url,
+                    novascore_grade: product.novascore_grade,
+                    nutriscore_grade: product.nutriscore_grade,
                 },
             ])
             .select()
@@ -64,45 +66,6 @@ export const updateProduct = async (product: Product) => {
     } catch (error) {
         console.error(error)
         throw new Error('Error creating a new product')
-    }
-}
-
-export const getProductInfoBasic = async (barcode: string) => {
-    try {
-        console.warn('api-call - getProductInfoBasic')
-
-        const [{ data: product, error }, scannedProductAverageScores] =
-            await Promise.all([
-                supabase
-                    .from('products')
-                    .select(
-                        `
-                        name,
-                        barcode,
-                        brands,
-                        short_description,
-                        tags,
-                        image_url,
-                        nutriscore_grade,
-                        novascore_grade
-                    `
-                    )
-                    .eq('barcode', barcode)
-                    .maybeSingle(),
-                getProductAverageScores(barcode),
-            ])
-
-        if (error) throw error
-
-        if (!product) return null
-
-        return {
-            ...product,
-            product_score_avg: scannedProductAverageScores.productScore,
-        } as Product
-    } catch (error) {
-        console.error(error)
-        throw new Error('Error getting product info')
     }
 }
 
@@ -121,7 +84,6 @@ export const getProductInfoWithUserData = async (
         if (error) throw error
         if (!data.barcode) return null
 
-        console.log(data)
         return data as Product
     } catch (error) {
         console.error(error)

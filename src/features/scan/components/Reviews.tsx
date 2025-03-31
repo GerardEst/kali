@@ -70,6 +70,7 @@ export default function Reviews({
     }
 
     const calculateWarning = () => {
+        console.log({ nutrition })
         // Primer, si no hi ha res de res, ràpidament tornem desconegut
         if (!nutrition) {
             return null
