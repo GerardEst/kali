@@ -3,7 +3,7 @@ import { useAuthState } from '@/src/store/authState'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { Pages, Texts } from '@/styles/common'
 import { useEffect } from 'react'
-import { getSavedProductsForUser } from '@/src/api/products/lists-api'
+//import { getSavedProductsForUser } from '@/src/api/products/lists-api'
 import { useListsState } from '@/src/store/listsState'
 import { ProductInList } from '@/src/features/saved-page/components/ProductInList'
 import { useTranslation } from 'react-i18next'
@@ -20,9 +20,9 @@ export default function Saved() {
         const userId = user?.id
         if (!userId) return
 
-        getSavedProductsForUser(userId).then((data) => {
-            setUserFavs(data)
-        })
+        //getSavedProductsForUser(userId).then((data) => {
+        //    setUserFavs(data)
+        //})
     }, [user])
 
     return (

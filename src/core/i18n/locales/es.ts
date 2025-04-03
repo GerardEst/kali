@@ -78,6 +78,6 @@ export default {
         'Productos industriales fabricados mayoritariamente de sustancias derivadas de alimentos y aditivos, diseñados para ser altamente atractivos y rentables',
     product_addToList: 'Añadir a una lista',
     lists_create: 'Crear una lista',
-    lists_new_save: 'Crear',
+    lists_new_save: 'Crear la lista',
     lists_save: 'Hecho',
 }

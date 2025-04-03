@@ -37,6 +37,8 @@ export const getProductLists = async (
 
         if (error) throw error
 
+        console.log('data', data)
+
         return data
     } catch (error) {
         console.error(error)
@@ -50,7 +52,7 @@ export const createList = async (listName: string, userId: string) => {
 
         const { data, error } = await supabase
             .from('lists')
-            .insert([{ name: listName, profile_id: userId }])
+            .insert([{ list_name: listName, profile_id: userId }])
             .select()
 
         if (error) throw error
@@ -102,123 +104,124 @@ export const removeProductFromList = async (
         throw new Error('Error removing product from list')
     }
 }
-export const getSavedProductsForUser = async (userId: string) => {
-    try {
-        console.warn('api-call - getSavedProductsForUser')
 
-        const { data, error } = await supabase
-            .from('user_listed_products')
-            .select(
-                'list_id, barcode, list_name, name, image_url, brands, short_description'
-            )
-            .eq('profile_id', userId)
-            .eq('list_name', 'favs')
+// export const getSavedProductsForUser = async (userId: string) => {
+//     try {
+//         console.warn('api-call - getSavedProductsForUser')
 
-        if (error) throw error
+//         const { data, error } = await supabase
+//             .from('user_listed_products')
+//             .select(
+//                 'list_id, barcode, list_name, name, image_url, brands, short_description'
+//             )
+//             .eq('profile_id', userId)
+//             .eq('list_name', 'favs')
 
-        return data.map((savedProduct) => {
-            return { ...savedProduct, is_fav: true }
-        })
-    } catch (error) {
-        console.error(error)
-        throw new Error('Error geting favorite products')
-    }
-}
+//         if (error) throw error
 
-export const saveProductForUser = async (
-    userId: string,
-    productBarcode: string
-) => {
-    try {
-        console.warn('api-call - saveProductForUser')
+//         return data.map((savedProduct) => {
+//             return { ...savedProduct, is_fav: true }
+//         })
+//     } catch (error) {
+//         console.error(error)
+//         throw new Error('Error geting favorite products')
+//     }
+// }
 
-        // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
-        let favListId = lists_ids.favs || (await getUserFavListId(userId))
+// export const saveProductForUser = async (
+//     userId: string,
+//     productBarcode: string
+// ) => {
+//     try {
+//         console.warn('api-call - saveProductForUser')
 
-        // Si l'usuari encara no té llista per favs, li creem de 0
-        favListId ??= await createFavListForUser(userId)
+//         // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
+//         let favListId = lists_ids.favs || (await getUserFavListId(userId))
 
-        // Guardem l'id de la llista en local per no fer calls cada vegada
-        saveFavListIdLocally(favListId)
+//         // Si l'usuari encara no té llista per favs, li creem de 0
+//         favListId ??= await createFavListForUser(userId)
 
-        // Afegim el producte a la llista de favs
-        const { data, error } = await supabase
-            .from('lists_products')
-            .insert([
-                {
-                    product_id: productBarcode,
-                    list_id: favListId,
-                },
-            ])
-            .select()
+//         // Guardem l'id de la llista en local per no fer calls cada vegada
+//         saveFavListIdLocally(favListId)
 
-        if (error) throw error
+//         // Afegim el producte a la llista de favs
+//         const { data, error } = await supabase
+//             .from('lists_products')
+//             .insert([
+//                 {
+//                     product_id: productBarcode,
+//                     list_id: favListId,
+//                 },
+//             ])
+//             .select()
 
-        return data
-    } catch (error) {
-        console.error(error)
-        throw new Error('Error saving product to favorites')
-    }
-}
+//         if (error) throw error
 
-export const unsaveProductForUser = async (
-    userId: string,
-    productBarcode: string
-) => {
-    try {
-        console.warn('api-call - unsaveProductForUser')
+//         return data
+//     } catch (error) {
+//         console.error(error)
+//         throw new Error('Error saving product to favorites')
+//     }
+// }
 
-        // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
-        let favListId = lists_ids.favs || (await getUserFavListId(userId))
+// export const unsaveProductForUser = async (
+//     userId: string,
+//     productBarcode: string
+// ) => {
+//     try {
+//         console.warn('api-call - unsaveProductForUser')
 
-        // Guardem l'id de la llista en local per no fer calls cada vegada
-        saveFavListIdLocally(favListId)
+//         // Si tenim l'id de la llista favs de l'usuari bé, sino el busquem
+//         let favListId = lists_ids.favs || (await getUserFavListId(userId))
 
-        // Treiem el producte de la llista de favs
-        const { data, error } = await supabase
-            .from('lists_products')
-            .delete()
-            .eq('list_id', favListId)
-            .eq('product_id', productBarcode)
+//         // Guardem l'id de la llista en local per no fer calls cada vegada
+//         saveFavListIdLocally(favListId)
 
-        if (error) throw error
+//         // Treiem el producte de la llista de favs
+//         const { data, error } = await supabase
+//             .from('lists_products')
+//             .delete()
+//             .eq('list_id', favListId)
+//             .eq('product_id', productBarcode)
 
-        return { unsavedProduct: productBarcode }
-    } catch (error) {
-        console.error(error)
-        throw new Error('Error unsaving product from favorites')
-    }
-}
+//         if (error) throw error
 
-const getUserFavListId = async (userId: string) => {
-    try {
-        console.warn('api-call - getUserFavListId')
-        const { data, error } = await supabase
-            .from('lists')
-            .select('id')
-            .eq('profile_id', userId)
-            .eq('name', 'favs')
+//         return { unsavedProduct: productBarcode }
+//     } catch (error) {
+//         console.error(error)
+//         throw new Error('Error unsaving product from favorites')
+//     }
+// }
 
-        if (error) throw error
+// const getUserFavListId = async (userId: string) => {
+//     try {
+//         console.warn('api-call - getUserFavListId')
+//         const { data, error } = await supabase
+//             .from('lists')
+//             .select('id')
+//             .eq('profile_id', userId)
+//             .eq('name', 'favs')
 
-        return data[0]?.id
-    } catch (error) {
-        console.error('getUserFavListId error', error)
-    }
-}
+//         if (error) throw error
 
-const createFavListForUser = async (userId: string) => {
-    try {
-        console.warn('api-call - createFavListForUser')
-        const { data, error } = await supabase
-            .from('lists')
-            .insert([{ name: 'favs', profile_id: userId }])
-            .select()
+//         return data[0]?.id
+//     } catch (error) {
+//         console.error('getUserFavListId error', error)
+//     }
+// }
 
-        if (error) throw error
+// const createFavListForUser = async (userId: string) => {
+//     try {
+//         console.warn('api-call - createFavListForUser')
+//         const { data, error } = await supabase
+//             .from('lists')
+//             .insert([{ name: 'favs', profile_id: userId }])
+//             .select()
 
-        return data[0]?.id
-    } catch (error) {
-        console.error('createFavListForUser error', error)
-    }
-}
+//         if (error) throw error
+
+//         return data[0]?.id
+//     } catch (error) {
+//         console.error('createFavListForUser error', error)
+//     }
+// }

@@ -34,15 +34,12 @@ export default function EditListsModal({
     const [selectedLists, setSelectedLists] = useState<List[]>([])
 
     useEffect(() => {
+        if (!product || !visible) return
+
         // Get the user lists and check if the product is inside some of the lists
         async function getLists() {
             const userLists = await getUserLists(user!.id)
             setUserLists(userLists)
-
-            // Tinc les llistes, pero nomes el nom i l'id
-            // Tinc el producte, pero no a quines llistes pertany
-            // Potser hauria de pillar les llistes del producte quan s'obre aixo
-            // No avera pude no, segur clar
 
             const userListsWithProdcut = await getProductLists(
                 product,
@@ -54,12 +51,13 @@ export default function EditListsModal({
         }
 
         getLists()
-    }, [])
+    }, [visible])
 
     const saveList = async () => {
         if (listName.length === 0) {
             return
         }
+        console.log('saveList', listName)
 
         const newList = await createList(listName, user!.id)
 
