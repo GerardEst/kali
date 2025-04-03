@@ -11,6 +11,7 @@ import { useManageNote } from '../usecases/manageNote'
 import { CheckIcon, TrashIcon } from '@/src/shared/icons/icons'
 import { Colors } from '@/styles/colors'
 import { useTranslation } from 'react-i18next'
+
 export function AddProductNoteModal({
     visible,
     product,

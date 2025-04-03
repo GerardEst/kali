@@ -11,9 +11,7 @@ import {
     BookmarkSlashIcon,
     BookmarkIcon,
     ReviewIcon,
-    OpenIcon,
     CommentIcon,
-    PencilIcon,
     InfoIcon,
 } from '@/src/shared/icons/icons'
 import { Palette } from '@/styles/colors'
@@ -23,12 +21,14 @@ import { EmojiRank } from '@/src/shared/components/emojiRank'
 interface CarouselProductProps {
     onAddNote: (barcode: string) => void
     onOpenReview: (barcode: string) => void
+    onAddToList: (barcode: string) => void
     product: Product
 }
 
 export const CarouselProduct = ({
     onAddNote,
     onOpenReview,
+    onAddToList,
     product,
 }: CarouselProductProps) => {
     const { user } = useAuthState()
@@ -40,6 +40,15 @@ export const CarouselProduct = ({
     }
 
     const handleAdd = async (product: Product) => {
+        // Obrir les llistes
+        // Per defecte seleccionades les que tingui, no serà fàcil fer-ho de manera eficient
+        // Pots afegir o treure de tantes llistes com vulguis, i a dalt, separada de les altres, hi ha la llista de Guardats que ve per defecte
+        // Pots crear una llista des d'aquí, però no borrar
+        // Al crear una llista, s'obre una altra modal perquè potser posaré opcions de llista compartida o algo?
+        // De moment no, per tant que només s'afegeixi un camp a sota, s'obri el teclat, posis un nom i ja, sense marxar del context
+        // El botó d'afegir a una llista pot ser sempre igual, quan l'obres ja veus si està en alguna o no. No crec que faci falta saber,
+        // al moment d'escanejar, a quines llistes pertany. Potser com a molt podria posar el bookmark pintat si està a alguna llista, només
+        // per tenir un indicador que no molesta. Però potser fa que et pensis que si el pitges ho treus, per tant cuidado.
         await addFav(product)
     }
 
@@ -162,7 +171,8 @@ export const CarouselProduct = ({
                                             color={Palette.primary}
                                         />
                                     }
-                                    action={() => handleAdd(product)}
+                                    text={t('product_addToList')}
+                                    action={() => onAddToList(product.barcode)}
                                 ></GenericButton>
                             )}
                         </View>

@@ -8,7 +8,7 @@ import {
 import Text from '@/src/shared/components/Typography'
 import { useState, useEffect, useRef, act } from 'react'
 import { useScannedProductsState } from '@/src/store/scannedProductsState'
-import { UpdateProductInfoModal } from '@/src/features/fillProduct/modals/UpdateProductInfo'
+import EditListsModal from '@/src/features/scan/components/EditListsModal'
 import { ReviewFormModal } from '@/src/features/evaluateProduct/modals/ReviewFormModal'
 import { supportedBarcodeTypes } from '@/src/features/scan/scanParameters'
 import { useScan } from '@/src/features/scan/hooks/useScan'
@@ -36,6 +36,7 @@ export default function HomeScreen() {
     const { scan } = useScan()
     const appState = useRef(AppState.currentState)
     const [showInstructions_1, setShowInstructions_1] = useState(false)
+    const [listsModalOpen, setListsModalOpen] = useState(false)
 
     useEffect(() => {
         // If products from scannedProducts store change,
@@ -127,6 +128,11 @@ export default function HomeScreen() {
         <View style={styles.scanner}>
             {activeProduct && (
                 <>
+                    <EditListsModal
+                        visible={listsModalOpen}
+                        product={activeProduct.barcode}
+                        onClose={() => setListsModalOpen(false)}
+                    />
                     <AddProductNoteModal
                         visible={noteModalVisible}
                         product={activeProduct}
@@ -193,6 +199,9 @@ export default function HomeScreen() {
                                 } else {
                                     setActiveProduct(product)
                                 }
+                            }}
+                            onAddToList={() => {
+                                setListsModalOpen(true)
                             }}
                             onAddNote={() => {
                                 setNoteModalVisible(true)

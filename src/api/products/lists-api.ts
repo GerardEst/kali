@@ -1,9 +1,27 @@
 import { supabase } from '@/src/core/supabase'
-
+import { List } from '@/src/shared/interfaces/List'
 const lists_ids: { favs: string | null } = {
     favs: null,
 }
 const saveFavListIdLocally = (favListId: string) => (lists_ids.favs = favListId)
+
+export const getUserLists = async (userId: string): Promise<List[]> => {
+    try {
+        console.warn('api-call - getUserLists')
+
+        const { data, error } = await supabase
+            .from('lists')
+            .select('id, name')
+            .eq('profile_id', userId)
+
+        if (error) throw error
+
+        return data
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting user lists')
+    }
+}
 
 export const getSavedProductsForUser = async (userId: string) => {
     try {

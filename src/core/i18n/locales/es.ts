@@ -76,4 +76,5 @@ export default {
     novascore_4_title: 'Alimentos ultraprocesados',
     novascore_4_description:
         'Productos industriales fabricados mayoritariamente de sustancias derivadas de alimentos y aditivos, diseñados para ser altamente atractivos y rentables',
+    product_addToList: 'Añadir a una lista',
 }

@@ -76,4 +76,5 @@ export default {
     novascore_4_title: 'Aliments ultraprocessats',
     novascore_4_description:
         "Productes industrials fets majoritàriament de substàncies derivades d'aliments i aditius, dissenyats per ser altament atractius i rentables",
+    product_addToList: 'Afegir a una llista',
 }
