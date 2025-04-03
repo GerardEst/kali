@@ -105,6 +105,23 @@ export const removeProductFromList = async (
     }
 }
 
+export const getListProducts = async (listId: string) => {
+    try {
+        console.warn('api-call - getListProducts')
+        const { data, error } = await supabase
+            .from('user_listed_products')
+            .select('*')
+            .eq('list_id', listId)
+
+        if (error) throw error
+
+        return data
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting list products')
+    }
+}
+
 // export const getSavedProductsForUser = async (userId: string) => {
 //     try {
 //         console.warn('api-call - getSavedProductsForUser')
