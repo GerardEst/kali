@@ -77,4 +77,7 @@ export default {
     novascore_4_description:
         "Productes industrials fets majoritàriament de substàncies derivades d'aliments i aditius, dissenyats per ser altament atractius i rentables",
     product_addToList: 'Afegir a una llista',
+    lists_create: 'Crear una llista',
+    lists_new_save: 'Fet',
+    lists_save: 'Guardar',
 }

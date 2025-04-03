@@ -1,4 +1,4 @@
 export interface List {
-    id: string
-    name: string
+    list_id: string
+    list_name: string
 }

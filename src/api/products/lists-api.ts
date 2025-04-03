@@ -11,7 +11,7 @@ export const getUserLists = async (userId: string): Promise<List[]> => {
 
         const { data, error } = await supabase
             .from('lists')
-            .select('id, name')
+            .select('list_id, list_name')
             .eq('profile_id', userId)
 
         if (error) throw error
@@ -23,6 +23,85 @@ export const getUserLists = async (userId: string): Promise<List[]> => {
     }
 }
 
+export const getProductLists = async (
+    productBarcode: string,
+    userId: string
+) => {
+    try {
+        console.warn('api-call - getProductLists')
+        const { data, error } = await supabase
+            .from('user_listed_products')
+            .select('list_id, list_name')
+            .eq('barcode', productBarcode)
+            .eq('profile_id', userId)
+
+        if (error) throw error
+
+        return data
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error getting product lists')
+    }
+}
+
+export const createList = async (listName: string, userId: string) => {
+    try {
+        console.warn('api-call - createList')
+
+        const { data, error } = await supabase
+            .from('lists')
+            .insert([{ name: listName, profile_id: userId }])
+            .select()
+
+        if (error) throw error
+
+        return data[0]
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error creating list')
+    }
+}
+
+export const addProductToList = async (
+    listId: string,
+    productBarcode: string
+) => {
+    try {
+        console.warn('api-call - addProductToList')
+        const { data, error } = await supabase
+            .from('lists_products')
+            .insert([{ list_id: listId, product_id: productBarcode }])
+            .select()
+
+        if (error) throw error
+
+        return data
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error adding product to list')
+    }
+}
+
+export const removeProductFromList = async (
+    listId: string,
+    productBarcode: string
+) => {
+    try {
+        console.warn('api-call - removeProductFromList')
+        const { data, error } = await supabase
+            .from('lists_products')
+            .delete()
+            .eq('list_id', listId)
+            .eq('product_id', productBarcode)
+
+        if (error) throw error
+
+        return true
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error removing product from list')
+    }
+}
 export const getSavedProductsForUser = async (userId: string) => {
     try {
         console.warn('api-call - getSavedProductsForUser')
