@@ -20,8 +20,8 @@ export default function Saved() {
         if (!userId) return
 
         getUserLists(userId).then((data) => {
+            console.log('userLists', data)
             setUserLists(data)
-            console.log('userLists', userLists)
         })
     }, [user])
 
@@ -29,14 +29,14 @@ export default function Saved() {
         <SafeAreaView style={Pages}>
             {user ? (
                 <>
-                    <Text style={Texts.title}>{t('saved_title')}</Text>
+                    <Text style={Texts.title}>{t('lists_title')}</Text>
                     <View style={styles.savedList}>
                         <FlatList
                             data={userLists}
                             keyExtractor={(list) => list.list_id}
                             renderItem={({ item }) => (
                                 <Link asChild href={`/${item.list_id}`}>
-                                    <Pressable>
+                                    <Pressable style={styles.listItem}>
                                         <Text>{item.list_name}</Text>
                                     </Pressable>
                                 </Link>
@@ -58,5 +58,10 @@ const styles = StyleSheet.create({
     savedList: {
         marginTop: 30,
         paddingBottom: 85,
+    },
+    listItem: {
+        padding: 10,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ccc',
     },
 })

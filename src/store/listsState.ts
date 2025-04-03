@@ -1,34 +1,40 @@
 import { Product } from '@/src/shared/interfaces/Product'
 import { create } from 'zustand'
 
-// INFO - De moment serveix només pels favs, quan tingui llistes adaptar-ho
 export const useListsState = create<any>((set) => ({
-    favs: [],
+    //favs: [],
+    userLists: [],
 
-    setUserFavs: (favs: any) => {
+    setUserLists: (userLists: any) => {
         set(() => {
-            return { favs: favs }
+            return { userLists: userLists }
         })
     },
 
-    removeUserFav: (removeProduct: Product) => {
-        //@ts-ignore
-        set((state) => {
-            return {
-                favs: state.favs.filter(
-                    (product: Product) =>
-                        product.barcode !== removeProduct.barcode
-                ),
-            }
-        })
-    },
+    // setUserFavs: (favs: any) => {
+    //     set(() => {
+    //         return { favs: favs }
+    //     })
+    // },
 
-    addUserFav: (product: Product) => {
-        //@ts-ignore
-        set((state) => {
-            return {
-                favs: [product, ...state.favs],
-            }
-        })
-    },
+    // removeUserFav: (removeProduct: Product) => {
+    //     //@ts-ignore
+    //     set((state) => {
+    //         return {
+    //             favs: state.favs.filter(
+    //                 (product: Product) =>
+    //                     product.barcode !== removeProduct.barcode
+    //             ),
+    //         }
+    //     })
+    // },
+
+    // addUserFav: (product: Product) => {
+    //     //@ts-ignore
+    //     set((state) => {
+    //         return {
+    //             favs: [product, ...state.favs],
+    //         }
+    //     })
+    // },
 }))
