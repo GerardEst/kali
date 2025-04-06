@@ -7,17 +7,22 @@ import { useEffect, useState } from 'react'
 import { useListsState } from '@/src/store/listsState'
 import { ProductInList } from '@/src/features/saved-page/components/ProductInList'
 import { useTranslation } from 'react-i18next'
-import { Link, useLocalSearchParams } from 'expo-router'
+import { Link, Stack, useLocalSearchParams } from 'expo-router'
 import { CallToSubscribe } from '@/src/shared/components/callToSubscribe'
 import React from 'react'
 import { Product } from '@/src/shared/interfaces/Product'
 import { getListProducts } from '@/src/api/products/lists-api'
+import AntDesign from '@expo/vector-icons/AntDesign'
+import { Colors } from '@/styles/colors'
+import { List } from '@/src/shared/interfaces/List'
 
 export default function Saved() {
     const { user } = useAuthState()
     const { t } = useTranslation()
     const { listId } = useLocalSearchParams()
     const [listProducts, setListProducts] = useState<Product[]>([])
+    const { userLists } = useListsState()
+    const currentList = userLists.find((list: List) => list.list_id === listId)
 
     useEffect(() => {
         const userId = user?.id
@@ -35,6 +40,25 @@ export default function Saved() {
         <SafeAreaView style={Pages}>
             {user ? (
                 <>
+                    <View style={styles.breadcrumb}>
+                        <Link href="/lists-page" asChild>
+                            <Pressable style={styles.breadcrumbItem}>
+                                <AntDesign
+                                    name="left"
+                                    size={16}
+                                    color={Colors.gray}
+                                />
+                                <Text style={styles.breadcrumbText}>
+                                    {t('lists_title')}
+                                </Text>
+                            </Pressable>
+                        </Link>
+                        <Text style={styles.breadcrumbSeparator}>/</Text>
+                        <Text style={styles.breadcrumbText}>
+                            {currentList?.list_name}
+                        </Text>
+                    </View>
+
                     <Text style={Texts.title}>{t('saved_title')}</Text>
                     <View style={styles.savedList}>
                         <FlatList
@@ -43,7 +67,7 @@ export default function Saved() {
                                 product.barcode.toString()
                             }
                             renderItem={({ item }) => (
-                                <Link asChild href={`/${item.barcode}`}>
+                                <Link asChild href={`/product/${item.barcode}`}>
                                     <Pressable>
                                         <ProductInList
                                             product={item}
@@ -68,5 +92,23 @@ const styles = StyleSheet.create({
     savedList: {
         marginTop: 30,
         paddingBottom: 85,
+    },
+    breadcrumb: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 16,
+    },
+    breadcrumbItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+    },
+    breadcrumbText: {
+        fontSize: 16,
+        color: Colors.gray,
+    },
+    breadcrumbSeparator: {
+        marginHorizontal: 8,
+        color: Colors.gray,
     },
 })

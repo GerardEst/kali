@@ -15,7 +15,6 @@ export interface Product {
     comments_amount?: number
     user_note?: Note
     user_review?: Review
-    is_fav?: Boolean
     nutriscore_grade?: 'a' | 'b' | 'c' | 'd' | 'e'
     novascore_grade?: 1 | 2 | 3 | 4
 }

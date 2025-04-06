@@ -3,7 +3,6 @@ import { Text } from '@/src/shared/components/Typography'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { Texts } from '@/styles/common'
 import { useAuthState } from '@/src/store/authState'
-import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { Product } from '@/src/shared/interfaces/Product'
 import React from 'react'
 import { useTranslation } from 'react-i18next'
@@ -31,26 +30,7 @@ export const CarouselProduct = ({
     onAddToList,
     product,
 }: CarouselProductProps) => {
-    const { user } = useAuthState()
-    const { removeFav, addFav } = useFavoriteActions()
     const { t } = useTranslation()
-
-    const handleRemove = async (product: Product) => {
-        await removeFav(product)
-    }
-
-    const handleAdd = async (product: Product) => {
-        // Obrir les llistes
-        // Per defecte seleccionades les que tingui, no serà fàcil fer-ho de manera eficient
-        // Pots afegir o treure de tantes llistes com vulguis, i a dalt, separada de les altres, hi ha la llista de Guardats que ve per defecte
-        // Pots crear una llista des d'aquí, però no borrar
-        // Al crear una llista, s'obre una altra modal perquè potser posaré opcions de llista compartida o algo?
-        // De moment no, per tant que només s'afegeixi un camp a sota, s'obri el teclat, posis un nom i ja, sense marxar del context
-        // El botó d'afegir a una llista pot ser sempre igual, quan l'obres ja veus si està en alguna o no. No crec que faci falta saber,
-        // al moment d'escanejar, a quines llistes pertany. Potser com a molt podria posar el bookmark pintat si està a alguna llista, només
-        // per tenir un indicador que no molesta. Però potser fa que et pensis que si el pitges ho treus, per tant cuidado.
-        await addFav(product)
-    }
 
     return (
         <View style={styles.slideContent}>
@@ -68,7 +48,7 @@ export const CarouselProduct = ({
                     </Link>
 
                     <View style={styles.buttonContainer}>
-                        <Link asChild href={`/${product.barcode}`}>
+                        <Link asChild href={`/product/${product.barcode}`}>
                             <Pressable>
                                 <GenericButton
                                     nonPressable
@@ -151,30 +131,17 @@ export const CarouselProduct = ({
                                 }
                                 action={() => onAddNote(product.barcode)}
                             ></GenericButton>
-                            {product.is_fav ? (
-                                <GenericButton
-                                    noBorder
-                                    icon={
-                                        <BookmarkSlashIcon
-                                            size={20}
-                                            color={Palette.primary}
-                                        />
-                                    }
-                                    action={() => handleRemove(product)}
-                                ></GenericButton>
-                            ) : (
-                                <GenericButton
-                                    noBorder
-                                    icon={
-                                        <BookmarkIcon
-                                            size={20}
-                                            color={Palette.primary}
-                                        />
-                                    }
-                                    text={t('product_addToList')}
-                                    action={() => onAddToList(product.barcode)}
-                                ></GenericButton>
-                            )}
+                            <GenericButton
+                                noBorder
+                                icon={
+                                    <BookmarkIcon
+                                        size={20}
+                                        color={Palette.primary}
+                                    />
+                                }
+                                text={t('product_addToList')}
+                                action={() => onAddToList(product.barcode)}
+                            ></GenericButton>
                         </View>
                     </View>
                 </View>

@@ -89,6 +89,12 @@ export default function RootLayout() {
     return (
         <ThemeProvider value={DefaultTheme}>
             <Stack>
+                <Stack.Screen
+                    name="product/[productBarcode]"
+                    options={{
+                        headerShown: false,
+                    }}
+                />
                 <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
                 <Stack.Screen
                     name="register"

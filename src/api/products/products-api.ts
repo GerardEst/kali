@@ -76,6 +76,9 @@ export const getProductInfoWithUserData = async (
     try {
         console.warn('api-call - getProductInfoWithUserData')
 
+        console.log('barcode', barcode)
+        console.log('userId', userId)
+
         const { data, error } = await supabase.rpc('get_product_details', {
             p_barcode: barcode,
             p_user_id: userId,
@@ -116,7 +119,6 @@ export const createNewProductFromBarcode = async (
 
         return {
             ...createdProduct,
-            is_fav: false,
             reviews: [],
             product_score_avg: -1,
         } as Product

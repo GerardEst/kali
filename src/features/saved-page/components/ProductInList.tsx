@@ -2,19 +2,13 @@ import { StyleSheet, View, Text, Image } from 'react-native'
 import React from 'react'
 import { Product } from '@/src/shared/interfaces/Product'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
-import { useFavoriteActions } from '@/src/shared/usecases/useFavoritesActions'
 import { useTranslation } from 'react-i18next'
 import { Texts } from '@/styles/common'
 import { BookmarkSlashIcon, CloseIcon } from '@/src/shared/icons/icons'
 import { Palette } from '@/styles/colors'
 
 export const ProductInList = ({ product }: { product: Product }) => {
-    const { removeFav } = useFavoriteActions()
     const { t } = useTranslation()
-
-    const handleRemove = async (product: Product) => {
-        await removeFav(product)
-    }
 
     return (
         <View style={styles.productContainer}>
@@ -38,14 +32,12 @@ export const ProductInList = ({ product }: { product: Product }) => {
                 )}
             </View>
             <View style={styles.productActions}>
-                {product.is_fav && (
-                    <GenericButton
-                        icon={<BookmarkSlashIcon size={20} />}
-                        noBorder
-                        fill={false}
-                        action={() => handleRemove(product)}
-                    ></GenericButton>
-                )}
+                <GenericButton
+                    icon={<BookmarkSlashIcon size={20} />}
+                    noBorder
+                    fill={false}
+                    action={() => {}}
+                ></GenericButton>
             </View>
         </View>
     )

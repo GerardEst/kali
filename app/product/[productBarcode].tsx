@@ -1,7 +1,7 @@
-import { View, StyleSheet, Image, Pressable, FlatList } from 'react-native'
+import { View, StyleSheet, Image, FlatList } from 'react-native'
 import Text from '@/src/shared/components/Typography'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { Stack, useLocalSearchParams } from 'expo-router'
+import { useLocalSearchParams } from 'expo-router'
 import { useEffect, useState } from 'react'
 import { getProductInfoWithUserData } from '@/src/api/products/products-api'
 import { Product } from '@/src/shared/interfaces/Product'
@@ -17,6 +17,7 @@ import { Texts } from '@/styles/common'
 import { EmojiRank } from '@/src/shared/components/emojiRank'
 import { getProductReviews } from '@/src/api/products/reviews-api'
 import { Review } from '@/src/shared/interfaces/Review'
+
 export default function ProductBarcodeScreen() {
     const { productBarcode } = useLocalSearchParams()
     const { products } = useScannedProductsState()
@@ -46,12 +47,6 @@ export default function ProductBarcodeScreen() {
 
     return (
         <SafeAreaView>
-            <Stack.Screen
-                options={{
-                    headerShown: false,
-                }}
-            />
-
             {product && (
                 <>
                     <Header

@@ -39,7 +39,7 @@ export default function TabLayout() {
             }}
         >
             <Tabs.Screen
-                name="lists-page"
+                name="(tabs)"
                 options={{
                     title: t('tabs_saved'),
                     tabBarActiveTintColor: Palette.accent,
