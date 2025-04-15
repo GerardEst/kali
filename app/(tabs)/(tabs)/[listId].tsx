@@ -22,7 +22,7 @@ export default function Saved() {
     const { listId } = useLocalSearchParams()
     const [listProducts, setListProducts] = useState<Product[]>([])
     const { userLists } = useListsState()
-    const currentList = userLists.find((list: List) => list.list_id === listId)
+    const currentList = userLists.find((list: List) => list.list_id == listId)
 
     useEffect(() => {
         const userId = user?.id
@@ -34,6 +34,10 @@ export default function Saved() {
         //getSavedProductsForUser(userId).then((data) => {
         //    setUserFavs(data)
         //})
+
+        console.log('listId', listId)
+        console.log('userLists', userLists)
+        console.log('currentList', currentList)
     }, [user])
 
     return (
@@ -59,7 +63,7 @@ export default function Saved() {
                         </Text>
                     </View>
 
-                    <Text style={Texts.title}>{t('saved_title')}</Text>
+                    <Text style={Texts.title}>{currentList?.list_name}</Text>
                     <View style={styles.savedList}>
                         <FlatList
                             data={listProducts}

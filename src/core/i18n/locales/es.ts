@@ -17,7 +17,7 @@ export default {
     caroussel_addNote: 'Añadir una nota privada al producto',
     caroussel_addReview:
         'Da tu opinión más sincera y ayuda a otros a decidir y hacer una mejor compra',
-    tabs_saved: 'Guardados',
+    tabs_saved: 'Listas',
     tabs_reviews: 'Opiniones',
     tabs_search: 'Escáner',
     tabs_options: 'Opciones',
