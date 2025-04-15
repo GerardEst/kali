@@ -48,7 +48,6 @@ export default {
         'Apunta amb la càmara a qualsevol codi de barres per veure informació, comentaris i les teves notes privades',
     scanner_firstTimeInstructions_2:
         "Molt bé! Els productes que escanegis s'aniran guardant aquí sota, mentre a dalt pots veure la teva opinió i la opinió general sobre el producte.",
-    filter_by_sentiment: 'Filtra per sentiment',
     nutriscore_a_title: 'Saludable i equilibrat',
     nutriscore_a_description:
         'Alt contingut en nutrients essencials, baix en grasses i sucres',
@@ -84,4 +83,8 @@ export default {
     lists_edit_title: 'Llistes',
     lists_create_placeholder: 'Nom de la llista',
     lists_stop_creating: 'Enrere',
+    lists_delete: 'Eliminar llista',
+    lists_delete_confirmation: 'Estàs segur que vols eliminar aquesta llista?',
+    lists_delete_confirm: 'Sí, eliminar',
+    lists_delete_cancel: 'Cancel·lar',
 }

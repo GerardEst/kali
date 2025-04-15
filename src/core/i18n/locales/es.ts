@@ -48,7 +48,6 @@ export default {
         'Apunta con la cámara a cualquier código de barras para ver información, comentarios y tus notas privadas',
     scanner_firstTimeInstructions_2:
         '¡Bien! Los productos que escanees se guardarán aquí, mientras que arriba puedes ver tu opinión y la opinión general sobre el producto.',
-    filter_by_sentiment: 'Filtrar por sentimiento',
     nutriscore_a_title: 'Saludable y equilibrado',
     nutriscore_a_description:
         'Alt contenido en nutrientes esenciales, bajo en grasas y azúcares',
@@ -84,4 +83,8 @@ export default {
     lists_edit_title: 'Listas',
     lists_create_placeholder: 'Nombre de la lista',
     lists_stop_creating: 'Atrás',
+    lists_delete: 'Eliminar lista',
+    lists_delete_confirmation: '¿Estás seguro que quieres eliminar esta lista?',
+    lists_delete_confirm: 'Sí, eliminar',
+    lists_delete_cancel: 'Cancelar',
 }

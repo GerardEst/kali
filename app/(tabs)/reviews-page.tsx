@@ -42,9 +42,6 @@ export default function Notes() {
                 <>
                     <Text style={Texts.title}>{t('reviews_title')}</Text>
                     <View style={styles.filterContainer}>
-                        <Text style={styles.filterLabel}>
-                            {t('filter_by_sentiment')}
-                        </Text>
                         <SentimentSelector
                             sentiment={selectedSentiment ?? -1}
                             onSelectedSentiment={(value) =>
@@ -86,7 +83,6 @@ export default function Notes() {
 
 const styles = StyleSheet.create({
     notesList: {
-        marginTop: 20,
         paddingBottom: 85,
     },
     userNote: {

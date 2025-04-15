@@ -121,3 +121,44 @@ export const getListProducts = async (listId: string) => {
         throw new Error('Error getting list products')
     }
 }
+
+export const deleteList = async (listId: string) => {
+    try {
+        console.warn('api-call - deleteList')
+
+        // First check if this is the favs list - retrieve the list to check its name
+        const { data: listData, error: listError } = await supabase
+            .from('lists')
+            .select('list_name')
+            .eq('list_id', listId)
+            .single()
+
+        if (listError) throw listError
+
+        // If this is the favs list, don't allow deletion
+        if (listData && listData.list_name.toLowerCase() === 'favs') {
+            throw new Error('Cannot delete the favs list')
+        }
+
+        // First delete all products from the list
+        const { error: deleteProductsError } = await supabase
+            .from('lists_products')
+            .delete()
+            .eq('list_id', listId)
+
+        if (deleteProductsError) throw deleteProductsError
+
+        // Then delete the list itself
+        const { error } = await supabase
+            .from('lists')
+            .delete()
+            .eq('list_id', listId)
+
+        if (error) throw error
+
+        return true
+    } catch (error) {
+        console.error(error)
+        throw new Error('Error deleting list')
+    }
+}
