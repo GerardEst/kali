@@ -82,4 +82,6 @@ export default {
     lists_save: 'Hecho',
     lists_title: 'Mis listas',
     lists_edit_title: 'Listas',
+    lists_create_placeholder: 'Nombre de la lista',
+    lists_stop_creating: 'Atrás',
 }

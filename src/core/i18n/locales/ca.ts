@@ -82,4 +82,6 @@ export default {
     lists_save: 'Fet',
     lists_title: 'Les meves llistes',
     lists_edit_title: 'Llistes',
+    lists_create_placeholder: 'Nom de la llista',
+    lists_stop_creating: 'Enrere',
 }

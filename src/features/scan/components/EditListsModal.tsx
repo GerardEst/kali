@@ -1,6 +1,7 @@
 import { FlatList, StyleSheet, TextInput, View } from 'react-native'
 import Text from '@/src/shared/components/Typography'
 import { useEffect, useState } from 'react'
+import React from 'react'
 import {
     addProductToList,
     createList,
@@ -94,31 +95,49 @@ export default function EditListsModal({
                         />
                     )}
                 />
+
                 {isCreatingList && (
-                    <View>
-                        <TextInput
-                            value={listName}
-                            onChangeText={setListName}
-                        />
-                        <GenericButton
-                            text={t('lists_new_save')}
-                            action={() => saveList()}
-                            icon={<PlusIcon />}
-                        />
-                    </View>
-                )}
-                {!isCreatingList && (
-                    <GenericButton
-                        text={t('lists_create')}
-                        action={() => setIsCreatingList(true)}
-                        icon={<PlusIcon />}
+                    <TextInput
+                        value={listName}
+                        onChangeText={setListName}
+                        autoFocus
+                        style={styles.textInput}
+                        placeholder={t('lists_create_placeholder')}
                     />
                 )}
-                <GenericButton
-                    text={t('lists_save')}
-                    action={() => onClose()}
-                    icon={<CheckIcon />}
-                />
+
+                <View style={styles.buttonsContainer}>
+                    {isCreatingList && (
+                        <>
+                            <GenericButton
+                                text={t('lists_stop_creating')}
+                                action={() => {
+                                    setIsCreatingList(false)
+                                    setListName('')
+                                }}
+                            />
+                            <GenericButton
+                                text={t('lists_new_save')}
+                                action={() => saveList()}
+                                icon={<PlusIcon />}
+                            />
+                        </>
+                    )}
+                    {!isCreatingList && (
+                        <>
+                            <GenericButton
+                                text={t('lists_create')}
+                                action={() => setIsCreatingList(true)}
+                                icon={<PlusIcon />}
+                            />
+                            <GenericButton
+                                text={t('lists_save')}
+                                action={() => onClose()}
+                                icon={<CheckIcon />}
+                            />
+                        </>
+                    )}
+                </View>
             </View>
         </CustomModal>
     )
@@ -134,5 +153,20 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'column',
         gap: 10,
+        paddingBottom: 20,
+    },
+    buttonsContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 10,
+        justifyContent: 'space-between',
+    },
+    textInput: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        borderRadius: 5,
+        padding: 10,
+        marginBottom: 10,
+        backgroundColor: '#fff',
     },
 })
