@@ -81,4 +81,5 @@ export default {
     lists_new_save: 'Crear la lista',
     lists_save: 'Hecho',
     lists_title: 'Mis listas',
+    lists_edit_title: 'Listas',
 }

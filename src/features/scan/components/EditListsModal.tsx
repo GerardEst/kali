@@ -14,9 +14,8 @@ import CustomModal from '@/src/shared/components/customModal'
 import { Texts } from '@/styles/common'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { PlusIcon, CheckIcon } from '@/src/shared/icons/icons'
-import BouncyCheckbox from 'react-native-bouncy-checkbox'
 import { useTranslation } from 'react-i18next'
-
+import { Checklist } from '@/src/shared/components/checklist'
 export default function EditListsModal({
     visible,
     product,
@@ -57,58 +56,42 @@ export default function EditListsModal({
         if (listName.length === 0) {
             return
         }
-        console.log('saveList', listName)
-
         const newList = await createList(listName, user!.id)
 
         setUserLists([...userLists, newList])
         setIsCreatingList(false)
     }
 
+    const onPressItem = async (item: List) => {
+        // If item is selected, remove it from the list
+        // If it's not, add to the list
+        if (selectedLists.some((list) => list.list_id === item.list_id)) {
+            setSelectedLists(
+                selectedLists.filter((list) => list.list_id !== item.list_id)
+            )
+            await removeProductFromList(item.list_id, product)
+        } else {
+            setSelectedLists([...selectedLists, item])
+            await addProductToList(item.list_id, product)
+        }
+    }
+
     return (
         <CustomModal visible={visible} onClose={onClose}>
             <View style={styles.listsContainer}>
-                <Text style={Texts.title}>Edit Lists</Text>
+                <Text style={Texts.title}>{t('lists_edit_title')}</Text>
                 <FlatList
                     data={userLists}
+                    keyExtractor={(item) => item.list_id.toString()}
+                    style={styles.lists}
                     renderItem={({ item }) => (
-                        <View style={styles.listItem}>
-                            <Text>{item.list_name}</Text>
-                            <BouncyCheckbox
-                                isChecked={selectedLists.some(
-                                    (list) => list.list_id === item.list_id
-                                )}
-                                onPress={async () => {
-                                    if (
-                                        selectedLists.some(
-                                            (list) =>
-                                                list.list_id === item.list_id
-                                        )
-                                    ) {
-                                        setSelectedLists(
-                                            selectedLists.filter(
-                                                (list) =>
-                                                    list.list_id !==
-                                                    item.list_id
-                                            )
-                                        )
-                                        await removeProductFromList(
-                                            item.list_id,
-                                            product
-                                        )
-                                    } else {
-                                        setSelectedLists([
-                                            ...selectedLists,
-                                            item,
-                                        ])
-                                        await addProductToList(
-                                            item.list_id,
-                                            product
-                                        )
-                                    }
-                                }}
-                            />
-                        </View>
+                        <Checklist
+                            text={item.list_name}
+                            checked={selectedLists.some(
+                                (list) => list.list_id === item.list_id
+                            )}
+                            onPress={() => onPressItem(item)}
+                        />
                     )}
                 />
                 {isCreatingList && (
@@ -146,9 +129,10 @@ const styles = StyleSheet.create({
         padding: 16,
         borderRadius: 10,
     },
-    listItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
+    lists: {
+        marginTop: 16,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 10,
     },
 })
