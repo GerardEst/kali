@@ -9,7 +9,7 @@ import { useTranslation } from 'react-i18next'
 import { Link } from 'expo-router'
 import { CallToSubscribe } from '@/src/shared/components/callToSubscribe'
 import React from 'react'
-
+import { Palette } from '@/styles/colors'
 export default function Saved() {
     const { user } = useAuthState()
     const { userLists, setUserLists } = useListsState()
@@ -35,9 +35,15 @@ export default function Saved() {
                             data={userLists}
                             keyExtractor={(list) => list.list_id}
                             renderItem={({ item }) => (
-                                <Link asChild href={`/${item.list_id}`}>
-                                    <Pressable style={styles.listItem}>
-                                        <Text>{item.list_name}</Text>
+                                <Link
+                                    style={styles.listItem}
+                                    asChild
+                                    href={`/${item.list_id}`}
+                                >
+                                    <Pressable>
+                                        <Text style={Texts.regular}>
+                                            {item.list_name}
+                                        </Text>
                                     </Pressable>
                                 </Link>
                             )}
@@ -60,8 +66,9 @@ const styles = StyleSheet.create({
         paddingBottom: 85,
     },
     listItem: {
-        padding: 10,
-        borderBottomWidth: 1,
-        borderBottomColor: '#ccc',
+        padding: 20,
+        backgroundColor: Palette.background,
+        borderRadius: 10,
+        marginBottom: 10,
     },
 })
