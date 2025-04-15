@@ -7,7 +7,13 @@ import { Texts } from '@/styles/common'
 import { BookmarkSlashIcon, CloseIcon } from '@/src/shared/icons/icons'
 import { Palette } from '@/styles/colors'
 
-export const ProductInList = ({ product }: { product: Product }) => {
+export const ProductInList = ({
+    product,
+    onRemoveProduct,
+}: {
+    product: Product
+    onRemoveProduct: (product: Product) => void
+}) => {
     const { t } = useTranslation()
 
     return (
@@ -36,7 +42,7 @@ export const ProductInList = ({ product }: { product: Product }) => {
                     icon={<BookmarkSlashIcon size={20} />}
                     noBorder
                     fill={false}
-                    action={() => {}}
+                    action={() => onRemoveProduct(product)}
                 ></GenericButton>
             </View>
         </View>

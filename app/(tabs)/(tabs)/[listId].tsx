@@ -11,7 +11,10 @@ import { Link, Stack, useLocalSearchParams } from 'expo-router'
 import { CallToSubscribe } from '@/src/shared/components/callToSubscribe'
 import React from 'react'
 import { Product } from '@/src/shared/interfaces/Product'
-import { getListProducts } from '@/src/api/products/lists-api'
+import {
+    getListProducts,
+    removeProductFromList,
+} from '@/src/api/products/lists-api'
 import AntDesign from '@expo/vector-icons/AntDesign'
 import { Colors } from '@/styles/colors'
 import { List } from '@/src/shared/interfaces/List'
@@ -31,14 +34,14 @@ export default function Saved() {
         getListProducts(listId as string).then((data) => {
             setListProducts(data)
         })
-        //getSavedProductsForUser(userId).then((data) => {
-        //    setUserFavs(data)
-        //})
-
-        console.log('listId', listId)
-        console.log('userLists', userLists)
-        console.log('currentList', currentList)
     }, [user])
+
+    const removeProduct = (product: Product) => {
+        removeProductFromList(currentList?.list_id, product.barcode)
+        setListProducts(
+            listProducts.filter((p) => p.barcode !== product.barcode)
+        )
+    }
 
     return (
         <SafeAreaView style={Pages}>
@@ -58,12 +61,15 @@ export default function Saved() {
                             </Pressable>
                         </Link>
                         <Text style={styles.breadcrumbSeparator}>/</Text>
-                        <Text style={styles.breadcrumbText}>
+                        <Text
+                            style={[
+                                styles.breadcrumbText,
+                                { fontFamily: 'Sora-ExtraBold' },
+                            ]}
+                        >
                             {currentList?.list_name}
                         </Text>
                     </View>
-
-                    <Text style={Texts.title}>{currentList?.list_name}</Text>
                     <View style={styles.savedList}>
                         <FlatList
                             data={listProducts}
@@ -75,6 +81,9 @@ export default function Saved() {
                                     <Pressable>
                                         <ProductInList
                                             product={item}
+                                            onRemoveProduct={() => {
+                                                removeProduct(item)
+                                            }}
                                         ></ProductInList>
                                     </Pressable>
                                 </Link>
