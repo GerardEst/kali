@@ -17,6 +17,7 @@ import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import { PlusIcon, CheckIcon } from '@/src/shared/icons/icons'
 import { useTranslation } from 'react-i18next'
 import { Checklist } from '@/src/shared/components/checklist'
+import TextInputWithFocus from '@/src/shared/components/TextInputWithFocus'
 export default function EditListsModal({
     visible,
     product,
@@ -31,6 +32,7 @@ export default function EditListsModal({
     const [isCreatingList, setIsCreatingList] = useState(false)
     const [listName, setListName] = useState('')
     const { t } = useTranslation()
+
     const [selectedLists, setSelectedLists] = useState<List[]>([])
 
     useEffect(() => {
@@ -64,8 +66,7 @@ export default function EditListsModal({
     }
 
     const onPressItem = async (item: List) => {
-        // If item is selected, remove it from the list
-        // If it's not, add to the list
+        console.log('onPressItem', item)
         if (selectedLists.some((list) => list.list_id === item.list_id)) {
             setSelectedLists(
                 selectedLists.filter((list) => list.list_id !== item.list_id)
@@ -97,10 +98,9 @@ export default function EditListsModal({
                 />
 
                 {isCreatingList && (
-                    <TextInput
+                    <TextInputWithFocus
                         value={listName}
                         onChangeText={setListName}
-                        autoFocus
                         style={styles.textInput}
                         placeholder={t('lists_create_placeholder')}
                     />

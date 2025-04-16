@@ -25,6 +25,7 @@ import { TrashIcon, PlusIcon } from '@/src/shared/icons/icons'
 import { GenericButton } from '@/src/shared/components/buttons/GenericButton'
 import DeleteConfirmationModal from '@/src/shared/components/DeleteConfirmationModal'
 import CustomModal from '@/src/shared/components/customModal'
+import TextInputWithFocus from '@/src/shared/components/TextInputWithFocus'
 import { List } from '@/src/shared/interfaces/List'
 
 export default function Saved() {
@@ -147,38 +148,40 @@ export default function Saved() {
                         cancelText={t('lists_delete_cancel')}
                     />
 
-                    <CustomModal
-                        visible={createModalVisible}
-                        onClose={() => {
-                            setCreateModalVisible(false)
-                            setNewListName('')
-                        }}
-                    >
-                        <View style={styles.createModalContainer}>
-                            <Text style={Texts.title}>{t('lists_create')}</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                value={newListName}
-                                onChangeText={setNewListName}
-                                placeholder={t('lists_create_placeholder')}
-                                autoFocus
-                            />
-                            <View style={styles.modalButtons}>
-                                <GenericButton
-                                    text={t('lists_delete_cancel')}
-                                    action={() => {
-                                        setCreateModalVisible(false)
-                                        setNewListName('')
-                                    }}
+                    {createModalVisible && (
+                        <CustomModal
+                            onClose={() => {
+                                setCreateModalVisible(false)
+                                setNewListName('')
+                            }}
+                        >
+                            <View style={styles.createModalContainer}>
+                                <Text style={Texts.title}>
+                                    {t('lists_create')}
+                                </Text>
+                                <TextInputWithFocus
+                                    style={styles.textInput}
+                                    value={newListName}
+                                    onChangeText={setNewListName}
+                                    placeholder={t('lists_create_placeholder')}
                                 />
-                                <GenericButton
-                                    text={t('lists_new_save')}
-                                    icon={<PlusIcon size={20} />}
-                                    action={handleCreateList}
-                                />
+                                <View style={styles.modalButtons}>
+                                    <GenericButton
+                                        text={t('lists_delete_cancel')}
+                                        action={() => {
+                                            setCreateModalVisible(false)
+                                            setNewListName('')
+                                        }}
+                                    />
+                                    <GenericButton
+                                        text={t('lists_new_save')}
+                                        icon={<PlusIcon size={20} />}
+                                        action={handleCreateList}
+                                    />
+                                </View>
                             </View>
-                        </View>
-                    </CustomModal>
+                        </CustomModal>
+                    )}
                 </>
             ) : (
                 <CallToSubscribe />

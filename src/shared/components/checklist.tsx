@@ -1,5 +1,4 @@
-import { View, StyleSheet, Touchable, Pressable } from 'react-native'
-import BouncyCheckbox from 'react-native-bouncy-checkbox'
+import { StyleSheet, Pressable } from 'react-native'
 import Text from './Typography'
 
 export const Checklist = ({
@@ -14,7 +13,7 @@ export const Checklist = ({
     return (
         <Pressable style={styles.listItem} onPress={onPress}>
             <Text>{text}</Text>
-            <BouncyCheckbox isChecked={checked} />
+            <Text>{checked ? '✅' : '☑️'}</Text>
         </Pressable>
     )
 }

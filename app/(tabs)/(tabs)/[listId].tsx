@@ -23,18 +23,27 @@ export default function Saved() {
     const { user } = useAuthState()
     const { t } = useTranslation()
     const { listId } = useLocalSearchParams()
-    const [listProducts, setListProducts] = useState<Product[]>([])
     const { userLists } = useListsState()
     const currentList = userLists.find((list: List) => list.list_id == listId)
 
+    // Component state
+    const [listProducts, setListProducts] = useState<Product[]>([])
+
     useEffect(() => {
+        // Clean products from list
+        setListProducts(currentList?.products || [])
+
+        // Check user to prevent strange issues
         const userId = user?.id
         if (!userId) return
 
+        // Get the products from list
+        // TODO - Potser guardar un estat local amb els continguts de les llistes per no estar fent calls cada vegada, però en principi la gent no està
+        // tot el rato obrint i tancant llistes diferents en una mateixa sessió per tant no és urgent
         getListProducts(listId as string).then((data) => {
             setListProducts(data)
         })
-    }, [user])
+    }, [user, listId])
 
     const removeProduct = (product: Product) => {
         removeProductFromList(currentList?.list_id, product.barcode)

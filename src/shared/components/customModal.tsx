@@ -11,11 +11,11 @@ import {
 
 export default function CustomModal({
     children,
-    visible,
+    visible = true,
     onClose,
 }: {
     children: React.ReactNode
-    visible: boolean
+    visible?: boolean
     onClose: () => void
 }) {
     const fadeInAnim = useAnimatedValue(50)
