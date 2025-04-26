@@ -128,7 +128,10 @@ export function UpdateProductInfoModal({
                             placeholder="Nom"
                             editable
                             onChangeText={(text) =>
-                                setFormProduct({ ...formProduct, name: text })
+                                setFormProduct({
+                                    ...formProduct,
+                                    name: text.toLowerCase().trim(),
+                                })
                             }
                             style={styles.opinion}
                         />

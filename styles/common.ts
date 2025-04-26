@@ -23,6 +23,7 @@ export const Texts = StyleSheet.create({
     lightTitle: {
         fontSize: 14,
         fontFamily: 'Sora-Medium',
+        textTransform: 'capitalize',
     },
     regular: {
         fontSize: 14,
