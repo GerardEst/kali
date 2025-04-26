@@ -2,6 +2,7 @@ import { Product } from '@/src/shared/interfaces/Product'
 import { supabase } from '@/src/core/supabase'
 import { getProductInfo } from '../openFood-api'
 import { getProductAverageScores } from './reviews-api'
+import { ADMIN_ID } from '@/src/constants'
 
 export const createNewProduct = async (
     barcode: string,
@@ -27,7 +28,7 @@ export const createNewProduct = async (
                     brands: brands,
                     nutriscore_grade: nutriscore_grade,
                     novascore_grade: novascore_grade,
-                    created_by: userId,
+                    created_by: userId === ADMIN_ID ? null : userId,
                 },
             ])
             .select()
