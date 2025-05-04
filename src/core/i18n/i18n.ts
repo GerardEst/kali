@@ -3,6 +3,7 @@ import { initReactI18next } from 'react-i18next'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import ca from './locales/ca'
 import es from './locales/es'
+import en from './locales/en'
 import { getLocales } from 'react-native-localize'
 
 const LANGUAGE_DETECTOR = {
@@ -18,12 +19,12 @@ const LANGUAGE_DETECTOR = {
 
             // Get device language using react-native-localize
             const locales = getLocales()
-            
+
             if (locales.length > 0) {
                 // Get the first preferred language
                 const deviceLanguage = locales[0].languageCode.toLowerCase()
                 // Check if the language is supported, otherwise fallback to 'ca'
-                const supportedLanguages = ['ca', 'es']
+                const supportedLanguages = ['ca', 'es', 'en']
                 const finalLanguage = supportedLanguages.includes(
                     deviceLanguage
                 )
@@ -57,6 +58,9 @@ i18n.use(LANGUAGE_DETECTOR)
             },
             es: {
                 translation: es,
+            },
+            en: {
+                translation: en,
             },
         },
         fallbackLng: 'ca',

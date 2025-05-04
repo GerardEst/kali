@@ -16,14 +16,14 @@ export const LanguageSelector = () => {
                 <Pressable
                     style={[
                         styles.option,
-                        i18n.language === 'en' && styles.selectedOption,
+                        i18n.language === 'ca' && styles.selectedOption,
                     ]}
-                    onPress={() => changeLanguage('en')}
+                    onPress={() => changeLanguage('ca')}
                 >
                     <Text
                         style={[
                             styles.optionText,
-                            i18n.language === 'en' && styles.selectedOptionText,
+                            i18n.language === 'ca' && styles.selectedOptionText,
                         ]}
                     >
                         {t('settings_catalan')}
@@ -43,6 +43,22 @@ export const LanguageSelector = () => {
                         ]}
                     >
                         {t('settings_spanish')}
+                    </Text>
+                </Pressable>
+                <Pressable
+                    style={[
+                        styles.option,
+                        i18n.language === 'en' && styles.selectedOption,
+                    ]}
+                    onPress={() => changeLanguage('en')}
+                >
+                    <Text
+                        style={[
+                            styles.optionText,
+                            i18n.language === 'en' && styles.selectedOptionText,
+                        ]}
+                    >
+                        {t('settings_english')}
                     </Text>
                 </Pressable>
             </View>
